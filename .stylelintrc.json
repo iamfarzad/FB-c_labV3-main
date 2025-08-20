@@ -1,0 +1,63 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-tailwindcss"
+  ],
+  "plugins": [
+    "stylelint-declaration-block-no-ignored-properties"
+  ],
+  "rules": {
+    "color-hex-length": "long",
+    "color-no-hex": true,
+    "declaration-property-value-disallowed-list": {
+      "color": ["/^#/", "/^rgb/", "/^rgba/", "/^hsl/", "/^hsla/"],
+      "background-color": ["/^#/", "/^rgb/", "/^rgba/", "/^hsl/", "/^hsla/"],
+      "border-color": ["/^#/", "/^rgb/", "/^rgba/", "/^hsl/", "/^hsla/"],
+      "box-shadow": ["/px$/"],
+      "margin": ["/px$/"],
+      "padding": ["/px$/"],
+      "width": ["/px$/"],
+      "height": ["/px$/"],
+      "font-size": ["/px$/"],
+      "border-radius": ["/px$/"]
+    },
+    "property-disallowed-list": [
+      "style"
+    ],
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "layer"
+        ]
+      }
+    ],
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": [
+          "theme",
+          "screen",
+          "hsl",
+          "var",
+          "calc",
+          "rgb",
+          "rgba"
+        ]
+      }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": [
+          "global"
+        ]
+      }
+    ]
+  }
+}
