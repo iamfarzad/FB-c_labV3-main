@@ -367,6 +367,7 @@ export async function POST(req: NextRequest) {
 
     // Parse and validate request
     const rawData = await req.json();
+    console.info(`[CHAT_TIMING] request-json-parsed +${Date.now() - startTime}ms`, { correlationId })
     console.info('📥 Chat API Request:', {
       messageCount: rawData.messages?.length,
       sessionId: rawData.sessionId,
@@ -384,6 +385,7 @@ export async function POST(req: NextRequest) {
       }), { status: 400 });
     }
 
+    console.info(`[CHAT_TIMING] validation-done +${Date.now() - startTime}ms`, { correlationId })
     const { messages, data = {} } = validation.data;
     const enhancedData = data as EnhancedChatData;
     const { 
@@ -413,6 +415,7 @@ export async function POST(req: NextRequest) {
     if (!consentAllow && !publicChatAllow) {
       return new Response(JSON.stringify({ error: 'CONSENT_REQUIRED' }), { status: 403 })
     }
+    console.info(`[CHAT_TIMING] consent-checked +${Date.now() - startTime}ms`, { correlationId })
 
     // Sanitize messages
     const sanitizedMessages = messages.map((message: Message) => ({
@@ -443,6 +446,7 @@ export async function POST(req: NextRequest) {
     
     const intelligenceEnabled = process.env.INTELLIGENCE_ENABLED !== 'false'
     if (enableLeadGeneration && intelligenceEnabled && (conversationSessionId || sessionId)) {
+      console.info(`[CHAT_TIMING] intelligence-start +${Date.now() - startTime}ms`, { correlationId })
       try {
         const effectiveSessionId = conversationSessionId || sessionId || `session-${Date.now()}`;
         
@@ -497,6 +501,7 @@ export async function POST(req: NextRequest) {
           intelligenceResult,
           leadData: leadData
         });
+        console.info(`[CHAT_TIMING] intelligence-done +${Date.now() - startTime}ms`, { correlationId })
         
         // Trigger company research if needed (legacy fallback)
         if (leadData?.email && !leadData?.company_context) {
@@ -514,16 +519,20 @@ export async function POST(req: NextRequest) {
     // Process URL context if enabled
     let urlContext = '';
     if (enableUrlContext) {
+      console.info(`[CHAT_TIMING] url-context-start +${Date.now() - startTime}ms`, { correlationId })
       urlContext = await processUrlContext(currentMessage, correlationId);
+      console.info(`[CHAT_TIMING] url-context-done +${Date.now() - startTime}ms`, { correlationId })
     }
 
     // Process Google Search if enabled
     let searchResultsText = ''
     let searchSources: Array<{ url: string; title?: string }> = []
     if (enableGoogleSearch) {
+      console.info(`[CHAT_TIMING] search-start +${Date.now() - startTime}ms`, { correlationId })
       const r = await processGoogleSearch(currentMessage, leadContext, correlationId)
       searchResultsText = r.text
       searchSources = r.sources
+      console.info(`[CHAT_TIMING] search-done +${Date.now() - startTime}ms`, { correlationId })
     }
 
     // Derive candidate URLs for Gemini urlContext tool (with env gating)
@@ -667,12 +676,14 @@ ${intelligenceResult.output?.suggestions?.map((s: any) => `- ${s.label}`).join('
       content: msg.content
     }));
 
+    console.info(`[CHAT_TIMING] optimize-start +${Date.now() - startTime}ms`, { correlationId })
     const optimizedContent = await optimizeConversation(
       conversationMessages,
       systemPrompt,
       sessionId || 'default',
       4000
     );
+    console.info(`[CHAT_TIMING] optimize-done +${Date.now() - startTime}ms`, { correlationId })
 
     // Create optimized generation config with token limits
     const funPersona = ((process.env.PERSONALITY || process.env.PERSONA || '').toLowerCase() === 'farzad') || process.env.PERSONA_FUN === 'true'
@@ -690,6 +701,7 @@ ${intelligenceResult.output?.suggestions?.map((s: any) => `- ${s.label}`).join('
     actualInputTokens = optimizedContent.estimatedTokens
     const contents = optimizedContent.contents
 
+    console.info(`[CHAT_TIMING] provider-call-start (${provider}) +${Date.now() - startTime}ms`, { correlationId })
     if (provider === 'mock') {
       // Cheap mock stream for dev/preview
       async function *gen() {
@@ -752,6 +764,7 @@ ${intelligenceResult.output?.suggestions?.map((s: any) => `- ${s.label}`).join('
     } else {
       throw new Error(`Unsupported provider: ${provider}`)
     }
+    console.info(`[CHAT_TIMING] provider-call-done (${provider}) +${Date.now() - startTime}ms`, { correlationId })
 
     // Usage tracking is now handled client-side with the simplified demo session system
 
