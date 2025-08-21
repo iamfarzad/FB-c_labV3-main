@@ -1,0 +1,106 @@
+---
+alwaysApply: false
+description: Quick reference for BrowserTools setup and usage
+---
+
+# BrowserTools Quick Reference
+
+## 🎯 Key Tasks → BrowserTools Commands
+
+### UI/UX Analysis & Layout
+- "Analyze the current page's UI and UX" → `runNextJSAudit` for comprehensive analysis
+- "Analyze layout" → `runNextJSAudit` for layout and structural review
+- "Check responsive design" → `runNextJSAudit` for mobile/tablet testing
+
+### Screenshots & Visual Capture
+- "Take a screenshot of this page" → `takeScreenshot` to capture current page
+- "Capture the current view" → `takeScreenshot` with viewport settings
+
+### Console & Error Monitoring
+- "Check for console errors on this page" → `getConsoleErrors` for JavaScript errors
+- "Debug console issues" → `getConsoleLogs` for all console output
+- "Check for runtime errors" → `getConsoleErrors` for runtime issues
+
+### Network Request Monitoring
+- "Monitor network requests in real-time" → `getNetworkLogs` for HTTP tracking
+- "Check API calls" → `getNetworkLogs` for API request/response monitoring
+- "Watch network traffic" → `getNetworkLogs` for real-time network activity
+
+### User Interactions & Testing
+- "Click buttons" → `runNextJSAudit` with interaction testing
+- "Test user interactions" → `runNextJSAudit` for interaction feedback
+- "Click the submit button" → `runNextJSAudit` for form testing
+
+### Component Analysis & Design
+- "Analyze components" → `runNextJSAudit` for component structure
+- "Check component behavior" → `runNextJSAudit` for interaction testing
+- "Examine UI patterns" → `runNextJSAudit` for design consistency
+- "Check accessibility" → `runNextJSAudit` for accessibility compliance
+
+## 🚀 Quick Setup
+
+```bash
+# 1. Start Bridge (Terminal 1)
+pnpm mcp:bridge
+
+# 2. Start MCP Server (Terminal 2)
+pnpm mcp:server
+
+# 3. Load Extension
+# - Go to chrome://extensions/
+# - Enable Developer mode
+# - Load unpacked: chrome-extension/ folder
+
+# 4. Verify Connection
+curl -s http://localhost:3025  # Should return HTML
+```
+
+## 🔧 MCP Configuration (in mcp.json)
+
+```json
+{
+  "github.com/AgentDeskAI/browser-tools-mcp": {
+    "command": "pnpm",
+    "args": ["dlx", "@agentdeskai/browser-tools-mcp@1.2.0"],
+    "env": { "BROWSER_TOOLS_SERVER_URL": "http://localhost:3025" },
+    "disabled": false,
+    "autoApprove": [
+      "getConsoleLogs",
+      "getConsoleErrors",
+      "getNetworkLogs",
+      "takeScreenshot",
+      "runNextJSAudit"
+    ],
+    "timeout": 1800
+  }
+}
+```
+
+## ✅ Success Indicators
+
+- Bridge: `curl -s http://localhost:3025` returns HTML (not connection refused)
+- MCP: Logs show "Successfully discovered server at 127.0.0.1:3025"
+- Extension: DevTools shows "BrowserTools" tab
+- Connection: Green status in BrowserTools DevTools panel
+
+## 🎮 Usage Examples
+
+**UI/UX Analysis:**
+```
+Analyze the current page's UI and UX. Identify layout issues, spacing inconsistencies, visual hierarchy problems, and accessibility concerns. Suggest improvements based on modern design principles.
+```
+
+**Screenshot:**
+```
+Take a screenshot of this page and analyze the visual elements.
+```
+
+**Console Errors:**
+```
+Check for console errors on this page and provide details about any JavaScript runtime errors.
+```
+
+**Network Monitoring:**
+```
+Monitor network requests in real-time and report on API calls, response times, and potential performance issues.
+```

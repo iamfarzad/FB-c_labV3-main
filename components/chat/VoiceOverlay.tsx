@@ -126,7 +126,7 @@ export function VoiceOverlay({ open, onCancel, onAccept }: VoiceOverlayProps) {
           <div className="h-full w-full flex flex-col items-center justify-center gap-10 px-6">
             {/* Connection status */}
             <div className="absolute top-6 right-6 inline-flex items-center gap-2 rounded-full border bg-card/70 px-3 py-1 text-xs">
-              <span className={`h-2 w-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-yellow-500'}`} />
+              <span className={`h-2 w-2 rounded-full ${isConnected ? 'bg-[hsl(var(--chart-success))]' : 'bg-[hsl(var(--chart-warning))]'}`} />
               {isConnected ? (isRecording ? 'Listening…' : 'Connected') : 'Connecting…'}
             </div>
             {/* Orb */}

@@ -55,8 +55,8 @@ const thinkingConfigs: Record<AIThinkingContext, ThinkingConfig> = {
       scale: [1, 1.05, 1]
     },
     message: "Analyzing your document...",
-    color: "text-blue-600",
-    bgColor: "bg-blue-50"
+    color: "text-[hsl(var(--accent))]",
+    bgColor: "bg-[hsl(var(--accent)/0.1)]"
   },
   searching_web: {
     icon: FileSearch,
@@ -65,8 +65,8 @@ const thinkingConfigs: Record<AIThinkingContext, ThinkingConfig> = {
       rotate: [0, 180, 360] 
     },
     message: "Searching for information...",
-    color: "text-green-600",
-    bgColor: "bg-green-50"
+    color: "text-[hsl(var(--chart-success))]",
+    bgColor: "bg-[hsl(var(--chart-success)/0.1)]"
   },
   calculating_roi: {
     icon: Calculator,
@@ -75,8 +75,8 @@ const thinkingConfigs: Record<AIThinkingContext, ThinkingConfig> = {
       rotate: [0, 10, -10, 0]
     },
     message: "Calculating ROI metrics...",
-    color: "text-purple-600",
-    bgColor: "bg-purple-50"
+    color: "text-[hsl(var(--accent))]",
+    bgColor: "bg-[hsl(var(--accent)/0.1)]"
   },
   processing_image: {
     icon: ImageIcon,
@@ -95,8 +95,8 @@ const thinkingConfigs: Record<AIThinkingContext, ThinkingConfig> = {
       scale: [1, 1.1, 1]
     },
     message: "Generating code solution...",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-50"
+    color: "text-[hsl(var(--chart-warning))]",
+    bgColor: "bg-[hsl(var(--chart-warning)/0.1)]"
   },
   researching_leads: {
     icon: TrendingUp,
@@ -125,8 +125,8 @@ const thinkingConfigs: Record<AIThinkingContext, ThinkingConfig> = {
       opacity: [0.6, 1, 0.6]
     },
     message: "Processing voice input...",
-    color: "text-red-600",
-    bgColor: "bg-red-50"
+    color: "text-[hsl(var(--destructive))]",
+    bgColor: "bg-[hsl(var(--destructive)/0.1)]"
   },
   screen_analysis: {
     icon: Monitor,

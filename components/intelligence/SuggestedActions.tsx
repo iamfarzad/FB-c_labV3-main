@@ -19,6 +19,18 @@ interface Props {
 }
 
 export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 'suggested' }: Props) {
+  // Basic render debugging
+  console.log('🟢 SuggestedActions component called with:', { sessionId, stage, mode })
+
+  // Early return for SSR safety
+  if (typeof window === 'undefined') {
+    return (
+      <div className="mt-2 p-2 border border-dashed border-muted-foreground/30 rounded text-xs text-muted-foreground">
+        SuggestedActions loading...
+      </div>
+    )
+  }
+
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [finishOpen, setFinishOpen] = useState(false)
@@ -60,8 +72,35 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
     return () => { cancelled = true }
   }, [sessionId, stage, refreshTick, mode])
 
-  if (!sessionId) return null
-  if (mode !== 'static' && isLoading && suggestions.length === 0) return null
+  // Debug logging for visibility issues
+  console.log('SuggestedActions Debug:', {
+    sessionId,
+    mode,
+    suggestionsCount: suggestions.length,
+    isLoading
+  })
+
+  // For now, allow rendering without sessionId for debugging
+  // TODO: Fix session management
+  // if (!sessionId) {
+  //   console.log('SuggestedActions: No sessionId, showing fallback')
+  //   return (
+  //     <div className="mt-2 flex flex-wrap gap-2">
+  //       <Button
+  //         size="sm"
+  //         variant="outline"
+  //         disabled
+  //       >
+  //         <FileText className="h-4 w-4 mr-2" />
+  //         Waiting for session...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
+  if (mode !== 'static' && isLoading && suggestions.length === 0) {
+    console.log('SuggestedActions: Not static mode and loading, returning null')
+    return null
+  }
 
   // Only surface PDF-related CTAs as chips; all other tools (search, video2app, etc.)
   // Persona hint: show a playful nudge when persona is farzad
@@ -80,16 +119,20 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
     if (s.capability === 'meeting') return true
     return false
   })
+
+  // Debug logging after visible is defined
+  console.log('SuggestedActions visible items:', visible.length, visible.map(v => ({ id: v.id, label: v.label, capability: v.capability })))
   if (mode !== 'static' && visible.length === 0) return null
 
   const outlineCtaClasses = "w-full sm:w-auto whitespace-nowrap border-[hsl(var(--accent)/0.30)] hover:border-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.10)]"
 
-  if (mode === 'static') {
+    if (mode === 'static') {
+    console.log('🟢 SuggestedActions rendering static mode')
     return (
-      <div className="mt-2 w-full">
+      <div className="mt-2 w-full" data-debug="suggested-actions-static">
         {/* Desktop/Tablet: full buttons */}
         <div className="hidden sm:flex items-center justify-end gap-2">
-          <DropdownMenu>
+         <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
@@ -252,8 +295,26 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
     )
   }
 
+  // Debug logging for visibility issues
+  console.log('SuggestedActions Debug:', {
+    sessionId,
+    mode,
+    suggestionsCount: suggestions.length,
+    visibleCount: visible.length,
+    visibleActions: visible.map(v => ({ id: v.id, label: v.label, capability: v.capability }))
+  })
+
+  // Early return with debug info if no visible actions
+  if (visible.length === 0) {
+    return (
+      <div className="mt-2 p-2 border border-dashed border-muted-foreground/30 rounded text-xs text-muted-foreground" data-debug="suggested-actions-empty">
+        No actions available (sessionId: {sessionId || 'null'}, mode: {mode})
+      </div>
+    )
+  }
+
   return (
-    <div className="mt-2 flex flex-wrap gap-2">
+    <div className="mt-2 flex flex-wrap gap-2" data-debug="suggested-actions">
       {visible.map(s => (
         <Button
           key={s.id}

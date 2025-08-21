@@ -6,8 +6,8 @@ import { Camera, CameraOff, Mic, MicOff, Video, VideoOff, RotateCcw, Download, S
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
-import { cn } from "@/lib/utils"
+import { useToast } from "@/components/ui/use-toast"
+import { cn, formatTime } from "@/lib/utils"
 import type { WebcamCaptureProps, WebcamState, InputMode } from "./WebcamCapture.types"
 
 interface AnalysisResult {
@@ -195,12 +195,6 @@ export function WebcamCapture({
     }
   }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
-  }
-
   useEffect(() => {
     if (!stream) {
       startCamera()
@@ -226,7 +220,7 @@ export function WebcamCapture({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center text-white">
+              <div className="text-center text-accent-foreground">
                 <CameraOff className="w-16 h-16 mx-auto mb-4 text-slate-400" />
                 <p className="text-lg">Camera is off</p>
               </div>
@@ -235,7 +229,7 @@ export function WebcamCapture({
 
           {/* Video Controls Overlay */}
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
+            <div className="flex items-center gap-3 bg-background/50 backdrop-blur-sm rounded-full px-4 py-2">
               <Button
                 variant={isAudioOn ? "secondary" : "destructive"}
                 size="sm"
@@ -273,7 +267,7 @@ export function WebcamCapture({
           {isRecording && (
             <div className="absolute top-4 left-4">
               <Badge variant="destructive" className="animate-pulse">
-                <div className="w-2 h-2 bg-white rounded-full mr-2"></div>
+                <div className="w-2 h-2 bg-accent-foreground rounded-full mr-2"></div>
                 Recording {formatTime(recordingTime)}
               </Badge>
             </div>
@@ -282,7 +276,7 @@ export function WebcamCapture({
       </div>
 
       {/* Sidebar */}
-      <div className="w-80 bg-white border-l border-slate-200 p-4 space-y-4">
+      <div className="w-80 bg-card border-l border-border p-4 space-y-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -305,18 +299,18 @@ export function WebcamCapture({
                   </div>
                 </div>
                 <div className="flex gap-1">
-                  <div className={`w-4 h-4 rounded ${participant.isVideoOn ? "bg-green-500" : "bg-red-500"}`}>
+                  <div className={`w-4 h-4 rounded ${participant.isVideoOn ? "bg-[hsl(var(--chart-success))]" : "bg-[hsl(var(--destructive))]"}`}>
                     {participant.isVideoOn ? (
-                      <Camera className="w-3 h-3 text-white m-0.5" />
+                      <Camera className="w-3 h-3 text-accent-foreground m-0.5" />
                     ) : (
-                      <CameraOff className="w-3 h-3 text-white m-0.5" />
+                      <CameraOff className="w-3 h-3 text-accent-foreground m-0.5" />
                     )}
                   </div>
-                  <div className={`w-4 h-4 rounded ${participant.isAudioOn ? "bg-green-500" : "bg-red-500"}`}>
+                  <div className={`w-4 h-4 rounded ${participant.isAudioOn ? "bg-[hsl(var(--chart-success))]" : "bg-[hsl(var(--destructive))]"}`}>
                     {participant.isAudioOn ? (
-                      <Mic className="w-3 h-3 text-white m-0.5" />
+                      <Mic className="w-3 h-3 text-accent-foreground m-0.5" />
                     ) : (
-                      <MicOff className="w-3 h-3 text-white m-0.5" />
+                      <MicOff className="w-3 h-3 text-accent-foreground m-0.5" />
                     )}
                   </div>
                 </div>

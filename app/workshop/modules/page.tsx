@@ -59,15 +59,15 @@ export default function ModulesPage() {
                       <motion.div key={module.slug} className={`relative pl-12 ${!isAvailable ? 'opacity-60' : ''}`}
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: isAvailable ? 1 : 0.6, y: 0 }} transition={{ duration: 0.4 }}>
                         <div className="absolute left-4 top-1 -ml-[9px]">
-                          {isCompleted ? <CheckCircle className="h-5 w-5 text-green-500" /> : isAvailable ? <Circle className="h-5 w-5 text-blue-500" /> : <Lock className="h-5 w-5 text-muted-foreground" />}
+                          {isCompleted ? <CheckCircle className="h-5 w-5 text-[hsl(var(--chart-success))]" /> : isAvailable ? <Circle className="h-5 w-5 text-[hsl(var(--accent))]" /> : <Lock className="h-5 w-5 text-muted-foreground" />}
                         </div>
-                        <div className={`bg-card border rounded-xl p-6 shadow-sm ${isCompleted ? 'border-green-500/30' : ''}`}>
+                        <div className={`bg-card border rounded-xl p-6 shadow-sm ${isCompleted ? 'border-[hsl(var(--chart-success)/0.3)]' : ''}`}>
                           <div className="flex justify-between items-start mb-4">
                             <div>
                               <h3 className="text-xl font-bold">{module.title}</h3>
                               <p className="text-muted-foreground">{module.description}</p>
                             </div>
-                            {isCompleted && <div className="bg-green-500/20 text-green-500 text-xs px-2 py-1 rounded-full">Completed</div>}
+                            {isCompleted && <div className="bg-[hsl(var(--chart-success)/0.2)] text-[hsl(var(--chart-success))] text-xs px-2 py-1 rounded-full">Completed</div>}
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="text-sm"><span className="font-medium">Interaction:</span> {module.interaction}</div>

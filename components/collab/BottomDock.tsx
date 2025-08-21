@@ -53,7 +53,7 @@ export function BottomDock({ value, onChange, onSend, disabled, quick = [], clas
         </div>
       </PromptInput>
       {status === 'error' && errorMessage ? (
-        <div role="status" aria-live="polite" className="px-3 pb-2 text-xs text-red-600">{errorMessage}</div>
+        <div role="status" aria-live="polite" className="px-3 pb-2 text-xs text-[hsl(var(--destructive))]">{errorMessage}</div>
       ) : null}
     </div>
   )

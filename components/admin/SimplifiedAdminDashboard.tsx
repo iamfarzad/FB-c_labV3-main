@@ -9,9 +9,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Eye, Mail, Building, Calendar, TrendingUp, LogOut } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { formatRelativeTime } from "@/lib/utils"
 import { useAdminAuth } from "@/hooks/useAdminAuth"
-import { useAdminErrorHandler } from "@/components/admin/AdminErrorBoundary"
+import { useErrorHandler } from "@/components/error-boundary"
 
 interface Lead {
   id: string
@@ -36,7 +36,7 @@ interface DashboardStats {
 
 export function SimplifiedAdminDashboard() {
   const { user, logout } = useAdminAuth()
-  const { handleError, handleAsyncError } = useAdminErrorHandler()
+  const { handleError, handleAsyncError } = useErrorHandler()
   const [leads, setLeads] = useState<Lead[]>([])
   const [stats, setStats] = useState<DashboardStats>({
     totalLeads: 0,
@@ -261,7 +261,7 @@ export function SimplifiedAdminDashboard() {
                     <TableCell>{getStatusBadge(lead.status)}</TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
+                        {formatRelativeTime(new Date(lead.created_at))}
                       </div>
                     </TableCell>
                     <TableCell>

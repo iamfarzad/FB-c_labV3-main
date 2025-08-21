@@ -3,7 +3,7 @@
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import { Calculator, ArrowRight, ArrowLeft, Check, X, Maximize2, Minimize2 } from "@/lib/icon-mapping"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -224,7 +224,7 @@ export function ROICalculator({
                     <div className="text-xs text-muted-foreground">Payback (mo)</div>
                   </div>
                   <div className="text-center p-3 rounded-md bg-accent/5">
-                    <div className={`text-lg font-bold ${result.netProfit > 0 ? 'text-green-600' : 'text-red-600'}`}>${result.netProfit?.toLocaleString()}</div>
+                    <div className={`text-lg font-bold ${result.netProfit > 0 ? 'text-[hsl(var(--chart-success))]' : 'text-[hsl(var(--destructive))]'}`}>${result.netProfit?.toLocaleString()}</div>
                     <div className="text-xs text-muted-foreground">Net Profit</div>
                   </div>
                 </div>

@@ -1,0 +1,158 @@
+---
+alwaysApply: true
+description: Enforce mandatory use of BrowserTools for browser analysis, screenshots, console monitoring, and network requests
+---
+
+# BrowserTools Usage Enforcement
+
+## 🚨 CRITICAL: Always Use BrowserTools for Browser Tasks
+
+**MANDATORY**: When the user requests any of the following tasks, you **MUST** use BrowserTools via MCP integration:
+
+### 🔍 UI/UX Analysis
+- "Analyze the current page's UI and UX"
+- "Analyze the UI/UX of this page"
+- "Review the design of this page"
+- "Check the visual design"
+- "Evaluate the user interface"
+- Any request for UI/UX analysis, design review, or visual assessment
+
+### 📸 Screenshots
+- "Take a screenshot of this page"
+- "Capture the current page"
+- "Screenshot this website"
+- "Get a visual snapshot"
+- "Capture the current view"
+- Any request for screenshots or visual captures
+
+### 🐛 Console Error Checking
+- "Check for console errors on this page"
+- "Look for JavaScript errors"
+- "Check browser console"
+- "Find console errors"
+- "Debug console issues"
+- "Check for runtime errors"
+- Any request for console error detection or JavaScript debugging
+
+### 🌐 Network Monitoring
+- "Monitor network requests in real-time"
+- "Track network activity"
+- "Check network requests"
+- "Monitor API calls"
+- "Watch network traffic"
+- "Check HTTP requests"
+- Any request for network monitoring, API tracking, or HTTP request analysis
+
+### 🖱️ User Interaction & Testing
+- "Click buttons"
+- "Click on this element"
+- "Interact with the page"
+- "Test user interactions"
+- "Click the submit button"
+- "Navigate through the interface"
+- Any request for user interaction simulation or button clicking
+
+### 📐 Layout & Component Analysis
+- "Analyze layout"
+- "Check component structure"
+- "Analyze page structure"
+- "Review layout consistency"
+- "Examine component hierarchy"
+- "Check responsive design"
+- "Analyze spacing and alignment"
+- Any request for layout analysis, component inspection, or structural review
+
+### 🎨 Design System & Visual Testing
+- "Analyze components"
+- "Check design consistency"
+- "Review visual elements"
+- "Test component behavior"
+- "Examine UI patterns"
+- "Check accessibility"
+- Any request for component analysis, visual testing, or design system evaluation
+
+## 🛠️ How to Use BrowserTools
+
+### Prerequisites Check
+**BEFORE** attempting any browser task, verify BrowserTools is ready:
+
+1. **Bridge Server**: Must be running on port 3025
+   ```bash
+   curl -s http://localhost:3025
+   ```
+
+2. **MCP Server**: Must be connected and discoverable
+   ```bash
+   # Should show: "Successfully discovered server at 127.0.0.1:3025"
+   ```
+
+3. **Chrome Extension**: Should be loaded in browser
+   - Navigate to `chrome://extensions/`
+   - Enable Developer mode
+   - Load unpacked extension from `chrome-extension/` folder
+
+### Required Setup Commands
+```bash
+# Terminal 1: Start BrowserTools Bridge
+pnpm mcp:bridge
+
+# Terminal 2: Start BrowserTools MCP Server
+pnpm mcp:server
+
+# Terminal 3: Start your app
+pnpm dev:all
+```
+
+### BrowserTools MCP Configuration
+Your `mcp.json` should include:
+```json
+{
+  "mcpServers": {
+    "github.com/AgentDeskAI/browser-tools-mcp": {
+      "command": "pnpm",
+      "args": ["dlx", "@agentdeskai/browser-tools-mcp@1.2.0"],
+      "env": { "BROWSER_TOOLS_SERVER_URL": "http://localhost:3025" },
+      "disabled": false,
+      "autoApprove": [
+        "getConsoleLogs",
+        "getConsoleErrors",
+        "getNetworkLogs",
+        "takeScreenshot",
+        "runNextJSAudit"
+      ],
+      "timeout": 1800
+    }
+  }
+}
+```
+
+## ❌ NEVER Use Alternatives
+
+**DO NOT** use:
+- Playwright for these tasks
+- Puppeteer for these tasks
+- Manual browser inspection
+- Simulated browser environments
+- Generic screenshot tools
+- Console.log scraping
+- Network monitoring tools
+
+**ALWAYS** use BrowserTools MCP integration for these specific tasks.
+
+## 🏥 Health Checks
+
+Before using BrowserTools, run these checks:
+
+1. **Bridge Health**: `curl -s http://localhost:3025` (should return HTML, not connection refused)
+2. **MCP Discovery**: Check logs show "Successfully discovered server at 127.0.0.1:3025"
+3. **Extension Status**: DevTools should show "BrowserTools" tab
+
+## 🚨 Enforcement
+
+If BrowserTools is not available:
+1. **STOP** and inform the user
+2. **DO NOT** proceed with alternative methods
+3. **REQUIRE** user to set up BrowserTools properly
+4. **PROVIDE** setup instructions if needed
+
+**This rule takes precedence over all other methods for these specific tasks.**

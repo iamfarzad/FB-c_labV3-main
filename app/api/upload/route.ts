@@ -4,6 +4,7 @@ import { join } from "path"
 import { existsSync } from "fs"
 // Import supabase
 import { createClient } from '@supabase/supabase-js'
+import { withApiMiddleware, API_CONFIGS, type MiddlewareContext } from "@/lib/api-middleware"
 
 export const dynamic = "force-dynamic"
 
@@ -25,26 +26,29 @@ const ALLOWED_TYPES = [
   'application/xml'
 ]
 
-export async function POST(request: NextRequest) {
+// Upload handler with middleware
+async function handleFileUpload(context: MiddlewareContext): Promise<NextResponse> {
+  const { req } = context
+
   try {
-    const formData = await request.formData()
+    const formData = await req.formData()
     const file = formData.get('file') as File
-    
+
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ 
-        error: `File size exceeds maximum limit of ${MAX_FILE_SIZE / (1024 * 1024)}MB` 
+      return NextResponse.json({
+        error: `File size exceeds maximum limit of ${MAX_FILE_SIZE / (1024 * 1024)}MB`
       }, { status: 400 })
     }
 
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json({ 
-        error: `File type ${file.type} not allowed. Allowed types: ${ALLOWED_TYPES.join(', ')}` 
+      return NextResponse.json({
+        error: `File type ${file.type} not allowed. Allowed types: ${ALLOWED_TYPES.join(', ')}`
       }, { status: 400 })
     }
 
@@ -67,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     // Return file info
     const fileUrl = `/uploads/${filename}`
-    
+
     // Log upload to Supabase if configured
     try {
       if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -79,8 +83,8 @@ export async function POST(request: NextRequest) {
           type: file.type,
           url: fileUrl,
           uploaded_at: new Date().toISOString(),
-          session_id: request.headers.get('x-intelligence-session-id') || null,
-          user_id: request.headers.get('x-user-id') || null
+          session_id: req.headers.get('x-intelligence-session-id') || null,
+          user_id: req.headers.get('x-user-id') || null
         })
         if (logError) console.error('Failed to log upload:', logError)
       }
@@ -88,7 +92,7 @@ export async function POST(request: NextRequest) {
       console.error('Database logging error:', dbError)
       // Don't fail the upload if logging fails
     }
-    
+
     return NextResponse.json({
       success: true,
       url: fileUrl,
@@ -101,11 +105,15 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('[Upload API Error]', error)
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: error instanceof Error ? error.message : 'Unknown error',
       details: process.env.NODE_ENV === 'development' ? error : undefined
     }, { status: 500 })
   }
+}
+
+export async function POST(request: NextRequest) {
+  return withApiMiddleware(request, API_CONFIGS.public, handleFileUpload)
 }
 
 export async function GET() {

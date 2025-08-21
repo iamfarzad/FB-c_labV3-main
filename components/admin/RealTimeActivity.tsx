@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Activity, MessageSquare, User, Zap, Clock, MapPin, Globe } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { formatRelativeTime } from "@/lib/utils"
 import { supabase } from "@/lib/supabase/client"
 
 interface RealTimeActivityItem {
@@ -183,7 +183,7 @@ export function RealTimeActivity() {
                         {getActivityBadge(activity.type)}
                         <span className="text-xs text-muted-foreground flex items-center">
                           <Clock className="w-3 h-3 mr-1" />
-                          {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
+                          {formatRelativeTime(new Date(activity.timestamp))}
                         </span>
                       </div>
                     </div>

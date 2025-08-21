@@ -44,7 +44,7 @@ export default function ConsultingPage() {
           maxOpacity={0.03}
           duration={6}
           repeatDelay={3}
-          className="absolute inset-0 fill-orange-accent/5 stroke-orange-accent/5"
+          className="absolute inset-0 fill-[hsl(var(--accent)/0.05)] stroke-[hsl(var(--accent)/0.05)]"
         />
         <div className="relative z-10">
           <PageHeader
@@ -77,7 +77,7 @@ export default function ConsultingPage() {
               <ul className="space-y-3">
                 {consultingServices.map((service, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-[hsl(var(--chart-success))] mt-1 flex-shrink-0" />
                     <span className="text-muted-foreground">{service}</span>
                   </li>
                 ))}

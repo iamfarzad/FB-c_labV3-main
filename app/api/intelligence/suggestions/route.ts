@@ -3,7 +3,7 @@ import type { ToolRunResult } from '@/types/intelligence'
 import { z } from 'zod'
 import { ContextStorage } from '@/lib/context/context-storage'
 import type { ContextSnapshot, IntentResult } from '@/types/intelligence'
-import { suggestTools } from '@/lib/intelligence/tool-suggestion-engine'
+import { ConversationalIntelligence } from '@/lib/intelligence/conversational-intelligence'
 import { withApiGuard } from '@/lib/api/withApiGuard'
 
 const contextStorage = new ContextStorage()
@@ -13,6 +13,8 @@ const Body = z.object({ sessionId: z.string().min(1), stage: z.string().optional
 export const POST = withApiGuard({ schema: Body, requireSession: false, rateLimit: { windowMs: 3000, max: 5 }, handler: async ({ body }) => {
   const raw = await contextStorage.get(body.sessionId)
   if (!raw) return NextResponse.json({ ok: false, error: 'Context not found' } satisfies ToolRunResult, { status: 404 })
+
+  const intelligence = new ConversationalIntelligence()
   const snapshot: ContextSnapshot = {
     lead: { email: raw.email, name: raw.name },
     company: raw.company_context ?? undefined,
@@ -23,7 +25,9 @@ export const POST = withApiGuard({ schema: Body, requireSession: false, rateLimi
     capabilities: raw.ai_capabilities_shown || [],
   }
   const intent: IntentResult = snapshot.intent || { type: 'other', confidence: 0.4, slots: {} }
-  const suggestions = suggestTools(snapshot, intent)
+  const stage = body.stage || 'INTENT'
+  const suggestions = await intelligence.suggestTools(snapshot, intent, stage)
+
   // Heuristic: if last user input (stored in context) contained a YouTube URL, ensure video2app suggestion is present
   try {
     const lastUser = (raw?.last_user_message || '').toString()

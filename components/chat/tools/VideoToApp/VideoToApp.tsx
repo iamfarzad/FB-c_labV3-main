@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
 import type { VideoToAppProps } from "./VideoToApp.types"
 
@@ -196,20 +196,20 @@ export function VideoToApp({
                     <div className="bg-slate-50 p-4 rounded-lg">
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'analyze' ? 'bg-blue-500 animate-pulse' : progress !== 'idle' ? 'bg-green-500' : 'bg-slate-300')}></span>
-                          <span className={progress === 'analyze' ? 'text-blue-600 font-medium' : progress !== 'idle' ? 'text-green-600' : 'text-slate-500'}>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'analyze' ? 'bg-[hsl(var(--accent))] animate-pulse' : progress !== 'idle' ? 'bg-[hsl(var(--chart-success))]' : 'bg-muted')}></span>
+                          <span className={progress === 'analyze' ? 'text-[hsl(var(--accent))] font-medium' : progress !== 'idle' ? 'text-[hsl(var(--chart-success))]' : 'text-muted-foreground'}>
                             Analyze Video
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'spec' ? 'bg-blue-500 animate-pulse' : ['code', 'ready'].includes(progress) ? 'bg-green-500' : 'bg-slate-300')}></span>
-                          <span className={progress === 'spec' ? 'text-blue-600 font-medium' : ['code', 'ready'].includes(progress) ? 'text-green-600' : 'text-slate-500'}>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'spec' ? 'bg-[hsl(var(--accent))] animate-pulse' : ['code', 'ready'].includes(progress) ? 'bg-[hsl(var(--chart-success))]' : 'bg-muted')}></span>
+                          <span className={progress === 'spec' ? 'text-[hsl(var(--accent))] font-medium' : ['code', 'ready'].includes(progress) ? 'text-[hsl(var(--chart-success))]' : 'text-muted-foreground'}>
                             Generate Spec
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'code' ? 'bg-blue-500 animate-pulse' : progress === 'ready' ? 'bg-green-500' : 'bg-slate-300')}></span>
-                          <span className={progress === 'code' ? 'text-blue-600 font-medium' : progress === 'ready' ? 'text-green-600' : 'text-slate-500'}>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'code' ? 'bg-[hsl(var(--accent))] animate-pulse' : progress === 'ready' ? 'bg-[hsl(var(--chart-success))]' : 'bg-muted')}></span>
+                          <span className={progress === 'code' ? 'text-[hsl(var(--accent))] font-medium' : progress === 'ready' ? 'text-[hsl(var(--chart-success))]' : 'text-muted-foreground'}>
                             Generate App
                           </span>
                         </div>
@@ -245,7 +245,7 @@ export function VideoToApp({
             
             {/* App Controls Overlay */}
             <div className="absolute top-4 right-4">
-              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2">
+              <div className="flex items-center gap-2 bg-background/50 backdrop-blur-sm rounded-lg px-3 py-2">
                 <Button variant="secondary" size="sm" onClick={() => window.open(generatedAppUrl, '_blank')}>
                   <Link className="w-4 h-4 mr-2" /> Open
                 </Button>
@@ -263,7 +263,7 @@ export function VideoToApp({
       </div>
 
       {/* Sidebar */}
-      <div className="w-80 bg-white border-l border-slate-200 p-4 space-y-4">
+      <div className="w-80 bg-card border-l border-border p-4 space-y-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -274,7 +274,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>Video Analysis</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'bg-[hsl(var(--chart-success)/0.1)] text-[hsl(var(--chart-success))]' : 'bg-muted/10 text-muted-foreground'
                 )}>
                   {['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'Complete' : 'Pending'}
                 </span>
@@ -282,7 +282,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>App Specification</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['spec', 'code', 'ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['spec', 'code', 'ready'].includes(progress) ? 'bg-[hsl(var(--chart-success)/0.1)] text-[hsl(var(--chart-success))]' : 'bg-muted/10 text-muted-foreground'
                 )}>
                   {['spec', 'code', 'ready'].includes(progress) ? 'Complete' : 'Pending'}
                 </span>
@@ -290,7 +290,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>Code Generation</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['ready'].includes(progress) ? 'bg-[hsl(var(--chart-success)/0.1)] text-[hsl(var(--chart-success))]' : 'bg-muted/10 text-muted-foreground'
                 )}>
                   {progress === 'ready' ? 'Complete' : 'Pending'}
                 </span>
@@ -411,7 +411,7 @@ export function VideoToApp({
         {(
           <div className="flex h-10 items-center justify-between border-b px-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="h-2 w-2 rounded-full bg-[hsl(var(--chart-success))]" />
               <span>Video → App</span>
             </div>
             <div className="flex items-center gap-2">

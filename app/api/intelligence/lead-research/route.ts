@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { ToolRunResult } from '@/types/intelligence'
-import { LeadResearchService } from '@/lib/intelligence/lead-research'
+import { ConversationalIntelligence } from '@/lib/intelligence/conversational-intelligence'
 import { ContextStorage } from '@/lib/context/context-storage'
 import { embedTexts } from '@/lib/embeddings/gemini'
 import { upsertEmbeddings } from '@/lib/embeddings/query'
 
-const leadResearchService = new LeadResearchService()
+const conversationalIntelligence = new ConversationalIntelligence()
 const contextStorage = new ContextStorage()
 
 export async function POST(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Perform lead research
-    const researchResult = await leadResearchService.researchLead(email, name, companyUrl)
+    const researchResult = await conversationalIntelligence.researchLead({ sessionId, email, name, companyUrl })
 
     // Store in context
     await contextStorage.update(sessionId, {

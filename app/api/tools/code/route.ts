@@ -1,31 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { recordCapabilityUsed } from '@/lib/context/capabilities'
+import { withApiMiddleware, API_CONFIGS, type MiddlewareContext } from '@/lib/api-middleware'
 
-const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { expires: number; body: any }>()
-function checkRate(key: string, max: number, windowMs: number) {
-  const now = Date.now()
-  const rec = rl.get(key)
-  if (!rec || rec.reset < now) { rl.set(key, { count: 1, reset: now + windowMs }); return true }
-  if (rec.count >= max) return false
-  rec.count++; return true
-}
+// Code generation handler with middleware
+async function handleCodeGeneration(context: MiddlewareContext): Promise<NextResponse> {
+  const { req, sessionId } = context
 
-// Minimal code/blueprint stub: echoes a blueprint string and records usage
-export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
     const { spec } = body || {}
-    const sessionId = req.headers.get('x-intelligence-session-id') || body?.sessionId || undefined
-    const idemKey = req.headers.get('x-idempotency-key') || undefined
-
-    const rlKey = `code:${sessionId || 'anon'}`
-    if (!checkRate(rlKey, 10, 60_000)) return NextResponse.json({ ok: false, error: 'Rate limit exceeded' }, { status: 429 })
-    if (sessionId && idemKey) {
-      const k = `${sessionId}:${idemKey}`
-      const cached = idem.get(k)
-      if (cached && cached.expires > Date.now()) return NextResponse.json(cached.body)
-    }
 
     const blueprint = typeof spec === 'string' && spec.trim().length > 0
       ? spec.trim().slice(0, 8000)
@@ -37,15 +20,20 @@ export async function POST(req: NextRequest) {
       try { await recordCapabilityUsed(String(sessionId), 'code', { size: blueprint.length }) } catch {}
     }
 
-    if (sessionId && idemKey) {
-      const k = `${sessionId}:${idemKey}`
-      idem.set(k, { expires: Date.now() + 5 * 60_000, body: response })
-    }
-
     return NextResponse.json(response)
   } catch (error: any) {
     return NextResponse.json({ ok: false, error: error?.message || 'Unknown error' }, { status: 500 })
   }
+}
+
+export async function POST(req: NextRequest) {
+  // Use high-volume config since code generation can be resource intensive
+  return withApiMiddleware(req, {
+    rateLimit: { maxRequests: 10, windowMs: 60000, keyPrefix: 'code' },
+    auth: 'none',
+    idempotency: true, // Enable idempotency for code generation
+    logging: true
+  }, handleCodeGeneration)
 }
 
 

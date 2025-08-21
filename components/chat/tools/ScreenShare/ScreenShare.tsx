@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
 import type { ScreenShareProps, ScreenShareState } from "./ScreenShare.types"
 
@@ -241,8 +241,8 @@ export function ScreenShare({
             
             {/* Status Badge */}
             <div className="absolute top-4 left-4">
-              <Badge variant={screenState === "sharing" ? "default" : "destructive"} className="bg-red-600">
-                <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+              <Badge variant={screenState === "sharing" ? "default" : "destructive"} className="bg-[hsl(var(--destructive))]">
+                <div className="w-2 h-2 bg-accent-foreground rounded-full mr-2 animate-pulse"></div>
                 {screenState === "sharing" ? "Live" : screenState}
               </Badge>
             </div>
@@ -250,7 +250,7 @@ export function ScreenShare({
             {/* Analysis Button */}
             {screenState === 'sharing' && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                <div className="flex items-center gap-3 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
+                <div className="flex items-center gap-3 bg-background/50 backdrop-blur-sm rounded-full px-4 py-2">
                   <Button
                     onClick={captureScreenshot}
                     disabled={isAnalyzing}
@@ -276,7 +276,7 @@ export function ScreenShare({
       </div>
 
       {/* Sidebar */}
-      <div className="w-80 bg-white border-l border-slate-200 p-4 space-y-4">
+      <div className="w-80 bg-card border-l border-border p-4 space-y-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -363,9 +363,9 @@ export function ScreenShare({
         </Card>
 
         {error && (
-          <Card className="border-red-200 bg-red-50">
+          <Card className="border-[hsl(var(--destructive)/0.2)] bg-[hsl(var(--destructive)/0.1)]">
             <CardContent className="pt-4">
-              <p className="text-red-600 text-sm">{error}</p>
+              <p className="text-[hsl(var(--destructive))] text-sm">{error}</p>
             </CardContent>
           </Card>
         )}
@@ -403,7 +403,7 @@ export function ScreenShare({
       <div className="flex h-full w-full flex-col overflow-hidden">
         <div className="flex h-10 items-center justify-between border-b px-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-green-500" />
+                          <span className="h-2 w-2 rounded-full bg-[hsl(var(--chart-success))]" />
             <span>Screen Share</span>
           </div>
           <div className="flex items-center gap-2">

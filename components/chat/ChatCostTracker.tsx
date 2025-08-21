@@ -204,7 +204,7 @@ export default function ChatCostTracker({ sessionId, className }: ChatCostTracke
 
           <Progress
             value={dailyBudget.percentage}
-            className={`h-2 ${isOverBudget ? "bg-red-100" : isNearLimit ? "bg-yellow-100" : ""}`}
+            className={`h-2 ${isOverBudget ? "bg-[hsl(var(--destructive)/0.1)]" : isNearLimit ? "bg-[hsl(var(--chart-warning)/0.1)]" : ""}`}
           />
 
           <div className="flex justify-between text-xs text-muted-foreground">
@@ -213,7 +213,7 @@ export default function ChatCostTracker({ sessionId, className }: ChatCostTracke
           </div>
 
           {isOverBudget && (
-            <p className="text-xs text-red-600">
+            <p className="text-xs text-[hsl(var(--destructive))]">
               Over budget by {TokenCostCalculator.formatCost(dailyBudget.spent - dailyBudget.limit)}
             </p>
           )}

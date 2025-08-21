@@ -20,8 +20,8 @@ import {
 import { Response } from '@/components/ai-elements/response'
 import { Reasoning, ReasoningTrigger, ReasoningContent } from '@/components/ai-elements/reasoning'
 import { Sources, SourcesTrigger, SourcesContent, Source } from '@/components/ai-elements/source'
-import { Suggestions, Suggestion } from '@/components/ai-elements/suggestion'
-import { Actions, Action } from '@/components/ai-elements/actions'
+import { Actions, Action, Suggestions, Suggestion } from '@/components/ai-elements/actions'
+import { AiActivityMonitor } from '@/components/chat/activity/AiActivityMonitor'
 import { 
   PromptInput, 
   PromptInputToolbar, 
@@ -38,6 +38,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import CitationDisplay from '@/components/chat/CitationDisplay'
 import { ActivityChip } from '@/components/chat/activity/ActivityChip'
+import { ContextDisplay } from './ContextDisplay'
 import type { Options } from 'react-markdown'
 
 // Types
@@ -67,6 +68,7 @@ export interface UnifiedChatInterfaceProps {
   messages: UnifiedMessage[]
   isLoading?: boolean
   sessionId?: string | null
+  context?: any
   mode?: 'full' | 'dock'
   onSendMessage?: (message: string) => void
   onClearMessages?: () => void
@@ -77,6 +79,18 @@ export interface UnifiedChatInterfaceProps {
   stickyHeaderSlot?: React.ReactNode
   // Optional slot rendered directly above the composer, pinned with it
   composerTopSlot?: React.ReactNode
+  // Activity log for AI activity monitoring
+  activityLog?: Array<{
+    id: string
+    type: string
+    label: string
+    timestamp: string
+    status: 'pending' | 'completed' | 'error'
+  }>
+  // 7-Stage conversation flow
+  stages?: Array<{ id: string; label: string; done?: boolean; current?: boolean }>
+  currentStage?: string
+  stageProgress?: number
 }
 
 // Message Component with memoization
@@ -289,12 +303,12 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
               size="sm"
               onClick={handleCopy}
             >
-              {copiedMessageId === message.id ? 
-                <Check className="w-3 h-3 text-green-600" /> : 
+              {copiedMessageId === message.id ?
+                <Check className="w-3 h-3 text-[hsl(var(--chart-success))]" /> :
                 <Copy className="w-3 h-3" />
               }
             </Action>
-            
+
             {message.role === 'user' && (
               <Action
                 tooltip="Edit"
@@ -306,7 +320,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                 <Edit className="w-3 h-3" />
               </Action>
             )}
-            
+
             {message.role === 'assistant' && (
               <Action
                 tooltip={isTranslating ? 'Translating…' : 'Translate'}
@@ -446,6 +460,7 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
   messages,
   isLoading = false,
   sessionId,
+  context,
   mode = 'full',
   onSendMessage,
   onClearMessages,
@@ -453,10 +468,17 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
   className,
   stickyHeaderSlot,
   composerTopSlot,
-  onAssistantInject
+  onAssistantInject,
+  activityLog = [],
+  stages,
+  currentStage,
+  stageProgress
 }) => {
   const [input, setInput] = useState('')
   const isDock = mode === 'dock'
+
+  // Debug composerTopSlot
+  console.log('🔵 UnifiedChatInterface composerTopSlot:', !!composerTopSlot)
   const [isRoiOpen, setIsRoiOpen] = useState(false)
   const [localMessages, setLocalMessages] = useState<UnifiedMessage[]>(messages)
 
@@ -554,8 +576,28 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
               )}
             </ConversationContent>
             <ConversationScrollButton className="bg-accent hover:bg-accent/90 text-accent-foreground backdrop-blur" />
+
           </Conversation>
         </div>
+
+        {/* AI Activity Monitor - Shows real-time AI processing activities */}
+        {activityLog && activityLog.length > 0 && (
+          <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50" data-debug="activity-monitor">
+            <AiActivityMonitor
+              activities={activityLog.map(activity => ({
+                id: activity.id,
+                type: activity.type,
+                title: activity.label,
+                description: activity.label,
+                status: activity.status === 'error' ? 'failed' : activity.status === 'completed' ? 'completed' : 'pending',
+                timestamp: new Date(activity.timestamp)
+              }))}
+              stages={stages}
+              currentStage={currentStage}
+              stageProgress={stageProgress}
+            />
+          </div>
+        )}
         
         {/* Composer */}
         <div className={cn(
@@ -566,7 +608,7 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
         )}>
           <div className="mx-auto max-w-3xl px-4 pb-4 pt-2">
             {composerTopSlot && (
-              <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="mb-2 flex items-center justify-between gap-3" data-debug="composer-top-slot">
                 {composerTopSlot}
               </div>
             )}
@@ -582,9 +624,7 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
                   onVideoToApp={() => onToolAction?.('video')}
                   comingSoon={['webcam','screen','video']}
                 />
-                <Badge className="ml-2 text-[11px] bg-accent/10 text-accent border-accent/20">
-                  Context Aware
-                </Badge>
+                <ContextDisplay context={context} />
               </PromptInputTools>
               {isDock && (
                 <Button

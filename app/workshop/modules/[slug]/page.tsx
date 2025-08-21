@@ -118,7 +118,7 @@ export default function WorkshopModulePage() {
                       ))}
                     </div>
                     {quizSubmitted && quizAnswers[q.id] !== q.correctKey && (
-                      <div className="text-xs text-red-600">Try again.</div>
+                      <div className="text-xs text-[hsl(var(--destructive))]">Try again.</div>
                     )}
                   </div>
                 ))}

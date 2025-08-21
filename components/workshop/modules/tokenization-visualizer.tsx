@@ -39,7 +39,7 @@ export default function TokenizationVisualizer() {
               <div className="bg-card border rounded-xl p-6 shadow-sm">
                 <div className="flex flex-wrap gap-2">
                   {tokens.map((tok, i) => (
-                    <span key={`${tok}-${i}`} className="px-2 py-1 rounded bg-blue-500/20 text-blue-700 dark:text-blue-300 text-sm border border-blue-500/30">{tok}</span>
+                    <span key={`${tok}-${i}`} className="px-2 py-1 rounded bg-[hsl(var(--accent)/0.2)] text-[hsl(var(--accent))] text-sm border border-[hsl(var(--accent)/0.3)]">{tok}</span>
                   ))}
                 </div>
                 <div className="mt-4 text-sm text-muted-foreground">Tokens: {tokens.length} • Approx. chars: {text.length}</div>
@@ -78,9 +78,9 @@ export default function TokenizationVisualizer() {
               ) : (
                 <div className="space-y-2">
                   {quizAnswer === 'b' ? (
-                    <div className="text-green-600">Correct — tokens are units of text the model processes.</div>
+                    <div className="text-[hsl(var(--chart-success))]">Correct — tokens are units of text the model processes.</div>
                   ) : (
-                    <div className="text-red-600">Not quite. A token here is a small piece of text (like a word or subword).</div>
+                    <div className="text-[hsl(var(--destructive))]">Not quite. A token here is a small piece of text (like a word or subword).</div>
                   )}
                   <Button className="mt-2" onClick={() => setShowQuiz(false)}>Close</Button>
                 </div>

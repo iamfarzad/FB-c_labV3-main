@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
+import { withApiMiddleware, API_CONFIGS, type MiddlewareContext } from "@/lib/api-middleware"
 
-export async function POST(request: NextRequest) {
+// Contact form handler with middleware
+async function handleContactForm(context: MiddlewareContext): Promise<NextResponse> {
+  const { req } = context
+
   try {
-    const body = await request.json()
+    const body = await req.json()
     const { name, email, company, subject, message } = body
 
     // Validate required fields
@@ -70,4 +74,8 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+}
+
+export async function POST(request: NextRequest) {
+  return withApiMiddleware(request, API_CONFIGS.public, handleContactForm)
 }

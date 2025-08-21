@@ -17,7 +17,7 @@ import {
   DrawerDescription,
   DrawerFooter,
 } from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/use-is-mobile"
 import { cn } from "@/lib/utils"
 
 interface ModalProps {

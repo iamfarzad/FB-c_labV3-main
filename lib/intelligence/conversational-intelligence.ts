@@ -1,18 +1,20 @@
 import { GoogleGroundingProvider } from './providers/search/google-grounding'
-import { LeadResearchService } from './lead-research'
-import { detectRole } from './role-detector'
 import type { ContextSnapshot } from '@/lib/context/context-schema'
 import { getContextSnapshot, updateContext } from '@/lib/context/context-manager'
 import type { IntentResult, Suggestion } from '@/types/intelligence'
-import { suggestTools } from './tool-suggestion-engine'
 
 export class ConversationalIntelligence {
   private grounding = new GoogleGroundingProvider()
-  private research = new LeadResearchService()
 
   async initSession(input: { sessionId: string; email: string; name?: string; companyUrl?: string }): Promise<ContextSnapshot | null> {
     const { sessionId, email, name, companyUrl } = input
-    const researchResult = await this.research.researchLead(email, name, companyUrl, sessionId)
+    
+    // Import services dynamically to avoid circular dependencies
+    const { LeadResearchService } = await import('./lead-research')
+    const { detectRole } = await import('./role-detector')
+    
+    const research = new LeadResearchService()
+    const researchResult = await research.researchLead(email, name, companyUrl, sessionId)
     const role = await detectRole({
       company: { summary: researchResult.company?.summary, industry: researchResult.company?.industry },
       person: { role: researchResult.person?.role, seniority: researchResult.person?.seniority },
@@ -28,10 +30,13 @@ export class ConversationalIntelligence {
   }
 
   async researchLead(input: { sessionId: string; email: string; name?: string; companyUrl?: string }) {
-    return this.research.researchLead(input.email, input.name, input.companyUrl, input.sessionId)
+    const { LeadResearchService } = await import('./lead-research')
+    const research = new LeadResearchService()
+    return research.researchLead(input.email, input.name, input.companyUrl, input.sessionId)
   }
 
   async detectRoleFromResearch(research: any) {
+    const { detectRole } = await import('./role-detector')
     return detectRole(research)
   }
 
@@ -42,6 +47,7 @@ export class ConversationalIntelligence {
   }
 
   async suggestTools(context: ContextSnapshot, intent: IntentResult, stage: string): Promise<Suggestion[]> {
+    const { suggestTools } = await import('./tool-suggestion-engine')
     return suggestTools(context, intent)
   }
 }

@@ -4,7 +4,7 @@ import { queryTopK } from '@/lib/embeddings/query'
 import { streamPerplexity } from '@/lib/providers/perplexity';
 import { getSupabase } from '@/lib/supabase/server';
 import type { NextRequest } from 'next/server';
-import { chatRequestSchema, validateRequest, sanitizeString } from '@/lib/validation';
+import { chatRequestSchema, validateRequest, sanitizeString } from '@/lib/utils';
 import { logServerActivity } from '@/lib/server-activity-logger';
 // Legacy imports removed - using new Conversational Intelligence system
 import { checkDevelopmentConfig } from '@/lib/config';
@@ -15,6 +15,7 @@ import URLContextService from '@/lib/services/url-context-service';
 import GoogleSearchService from '@/lib/services/google-search-service';
 import { createOptimizedConfig, optimizeConversation, type ConversationMessage } from '@/lib/gemini-config-enhanced';
 import { shouldUseMockForRequest, createMockRedirectResponse, logApiRouting } from '@/lib/api-router';
+import { withApiMiddleware, API_CONFIGS, type MiddlewareContext } from '@/lib/api-middleware';
 
 // Force dynamic rendering and disable caching
 export const dynamic = 'force-dynamic'
@@ -71,9 +72,9 @@ async function authenticateRequest(req: NextRequest): Promise<{ success: boolean
 
     const token = authHeader.substring(7);
     const supabase = getSupabase();
-    
+
     const { data: { user }, error } = await supabase.auth.getUser(token);
-    
+
     if (error || !user) {
       return { success: false, error: 'Invalid or expired token' };
     }
@@ -93,7 +94,7 @@ function logConsoleActivity(level: 'info' | 'warn' | 'error', message: string, m
     correlationId,
     ...metadata
   };
-  
+
   console.info(JSON.stringify(logEntry));
   return correlationId;
 }
@@ -503,11 +504,8 @@ export async function POST(req: NextRequest) {
         });
         console.info(`[CHAT_TIMING] intelligence-done +${Date.now() - startTime}ms`, { correlationId })
         
-        // Trigger company research if needed (legacy fallback)
-        if (leadData?.email && !leadData?.company_context) {
-          console.info('🔍 Triggering company research for:', leadData.email);
-          // This will be handled by the Google Search processing below
-        }
+        // Company research is now handled by the intelligence system
+        // No additional fallback needed
         
       } catch (error) {
         console.error('❌ Conversation state management error:', error);

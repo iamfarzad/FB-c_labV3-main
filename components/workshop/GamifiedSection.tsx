@@ -7,7 +7,7 @@ import { ProgressTracker } from "@/components/experience/progress-tracker"
 import { cn } from "@/lib/utils"
 import type { WorkshopModule, WorkshopStep } from "./education-modules"
 import { QuizQuestion } from "./education-modules"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 
 type Props = {
   module: WorkshopModule
@@ -115,7 +115,7 @@ export function GamifiedSection({ module, sessionId, className, onAskAI }: Props
           </div>
           <div className="flex items-center gap-2">
             {module.steps.length > 0 && completedIds.size >= module.steps.length && (
-              <div className="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-[11px] text-green-600">Completed</div>
+              <div className="rounded-full border border-[hsl(var(--chart-success)/0.3)] bg-[hsl(var(--chart-success)/0.1)] px-2 py-1 text-[11px] text-[hsl(var(--chart-success))]">Completed</div>
             )}
             <ProgressTracker />
             <div className="rounded-full border border-border/40 px-2 py-1 text-xs text-muted-foreground">XP {moduleXp}</div>

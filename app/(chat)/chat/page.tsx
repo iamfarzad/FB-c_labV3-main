@@ -16,10 +16,26 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import ErrorBoundary from "@/components/common/ErrorBoundary"
-// Add missing AI activity components
-import { AIThinkingIndicator } from "@/components/chat/AIThinkingIndicator"
+import { ErrorBoundary } from "@/components/error-boundary"
+// Removed unused AiActivityMonitor import
 import { MobileStageProgress } from "@/components/collab/MobileStageProgress"
+
+// Chat Error Fallback Component
+function ChatErrorFallback({ error, resetError }: { error: Error; resetError: () => void }) {
+  if (!error) return null
+
+  return (
+    <div className="mx-auto max-w-3xl p-4">
+      <div className="rounded-lg border bg-card p-6">
+        <p className="font-medium mb-2">Something went wrong in the chat.</p>
+        <p className="text-sm text-muted-foreground mb-4">{error.message}</p>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={resetError}>Retry</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Finish & Email Button Component
 function FinishAndEmailButton({ sessionId }: { sessionId: string | null }) {
@@ -119,6 +135,28 @@ export default function ChatPage() {
   // AI Activity State
   const [aiActivity, setAiActivity] = useState<string>('default')
   const [stageProgress, setStageProgress] = useState(1)
+  const [activityLog, setActivityLog] = useState<Array<{
+    id: string
+    type: string
+    label: string
+    timestamp: string
+    status: 'pending' | 'completed' | 'error'
+  }>>([
+    {
+      id: 'session-init-test',
+      type: 'ai_thinking',
+      label: 'Initializing intelligence session',
+      timestamp: new Date().toISOString(),
+      status: 'completed'
+    },
+    {
+      id: 'research-test',
+      type: 'google_search',
+      label: 'Researching company information',
+      timestamp: new Date().toISOString(),
+      status: 'completed'
+    }
+  ])
   
   // Stage progression configuration
   const stages = [
@@ -141,13 +179,25 @@ export default function ChatPage() {
   // Prevent duplicate fetches
   const fetchedOnceRef = useRef(false)
 
+  // Add sample activity log for testing
+  const addActivity = (type: string, label: string, status: 'pending' | 'completed' | 'error' | 'in_progress' = 'completed') => {
+    setActivityLog(prev => [...prev, {
+      id: `${type}-${Date.now()}`,
+      type,
+      label,
+      timestamp: new Date().toISOString(),
+      status: status === 'in_progress' ? 'completed' : status // Convert in_progress to completed for storage
+    }])
+  }
+
   // Conversational Intelligence
-  const { 
-    context, 
-    isLoading: contextLoading, 
-    fetchContextFromLocalSession, 
-    clearContextCache, 
-    generatePersonalizedGreeting 
+  const {
+    context,
+    isLoading: isContextLoading,
+    error: contextError,
+    fetchContextFromLocalSession,
+    clearContextCache,
+    generatePersonalizedGreeting
   } = useConversationalIntelligence()
 
   const leadContextData = useMemo(() => {
@@ -160,6 +210,15 @@ export default function ChatPage() {
       industry: context?.company?.industry,
     }
   }, [context])
+
+  const currentStages = useMemo(() => {
+    const currentIndex = stages.findIndex(s => s.id === stage)
+    return stages.map((s, i) => ({
+      ...s,
+      done: i < currentIndex,
+      current: i === currentIndex
+    }))
+  }, [stage])
 
   // Message persistence (by sessionId)
   const STORAGE_PREFIX = 'fbc:chat:messages:'
@@ -274,6 +333,28 @@ export default function ChatPage() {
     setConsentAllowed(false)
   }
 
+  async function handleStartDemo() {
+    try {
+      const res = await fetch('/api/intelligence/session-init-demo', {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('demo session init failed');
+      
+      const data = await res.json();
+      if (data.sessionId) {
+        localStorage.setItem('intelligence-session-id', data.sessionId);
+        setSessionId(data.sessionId);
+        setConsentAllowed(true);
+        setConsentDenied(false);
+        clearContextCache();
+        await fetchContextFromLocalSession({ force: true });
+      }
+    } catch (error) {
+      console.error('Demo session init failed:', error);
+      alert('Unable to start demo session. Please try again.');
+    }
+  }
+
   const handleSendMessage = async (message: string) => {
     // Add user message
     const userMessage: UnifiedMessage = {
@@ -288,6 +369,9 @@ export default function ChatPage() {
     setMessages(prev => [...prev, userMessage])
     setIsLoading(true)
     setError(null)
+
+    // Add AI thinking activity
+    addActivity('ai_thinking', 'AI is processing your message', 'pending')
 
     try {
       // Send to API with lead context
@@ -379,12 +463,16 @@ export default function ChatPage() {
                 const content = data.content.toLowerCase()
                 if (content.includes('researching') || content.includes('searching')) {
                   setAiActivity('searching_web')
+                  addActivity('google_search', 'Searching for information', 'pending')
                 } else if (content.includes('calculating') || content.includes('roi')) {
                   setAiActivity('calculating_roi')
+                  addActivity('roi_calculation', 'Calculating ROI', 'pending')
                 } else if (content.includes('analyzing') || content.includes('document')) {
                   setAiActivity('analyzing_document')
+                  addActivity('doc_analysis', 'Analyzing document', 'pending')
                 } else if (content.includes('generating') || content.includes('code')) {
                   setAiActivity('generating_code')
+                  addActivity('generate', 'Generating code', 'pending')
                 } else {
                   setAiActivity('default')
                 }
@@ -412,8 +500,12 @@ export default function ChatPage() {
     } catch (err) {
       console.error('Chat error:', err)
       setError(err as Error)
+      // Mark AI thinking as failed
+      addActivity('ai_thinking', 'AI processing failed', 'error')
     } finally {
       setIsLoading(false)
+      // Mark AI thinking as completed
+      addActivity('ai_thinking', 'AI response completed', 'completed')
     }
   }
 
@@ -567,6 +659,12 @@ export default function ChatPage() {
                     No thanks
                   </Button>
                   <Button 
+                    variant="ghost" 
+                    onClick={handleStartDemo}
+                  >
+                    Start Demo
+                  </Button>
+                  <Button 
                     onClick={handleAllowConsent}
                     className="bg-accent hover:bg-accent/90 text-accent-foreground"
                   >
@@ -593,41 +691,34 @@ export default function ChatPage() {
           )}
 
 
-
           {/* Main Chat Interface */}
-          <ErrorBoundary fallback={(e, reset) => (
-            <div className="mx-auto max-w-3xl p-4">
-              <div className="rounded-lg border bg-card p-6">
-                <p className="font-medium mb-2">Something went wrong in the chat.</p>
-                <p className="text-sm text-muted-foreground mb-4">{e.message}</p>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={reset}>Retry</Button>
-                  <Button variant="outline" onClick={handleClearMessages}>Reset Conversation</Button>
-                </div>
-              </div>
-            </div>
-          )}>
+          <ErrorBoundary fallback={ChatErrorFallback}>
             <UnifiedChatInterface
-              messages={messages}
-              isLoading={isLoading}
-              sessionId={sessionId}
-              mode="full"
-              onSendMessage={handleSendMessage}
-              onClearMessages={handleClearMessages}
-              onToolAction={handleToolAction}
-              className={!consentAllowed ? "pointer-events-none opacity-50" : ""}
-              stickyHeaderSlot={undefined}
-              composerTopSlot={
-                <div className="flex items-center justify-end gap-2 w-full">
-                  <SuggestedActions 
-                    sessionId={sessionId} 
-                    stage={stage as any} 
-                    onRun={handleSuggestionRun}
-                    mode="static"
-                  />
-                </div>
-              }
-            />
+            messages={messages}
+            isLoading={isLoading}
+            sessionId={sessionId}
+            context={context}
+            onSendMessage={handleSendMessage}
+            onClearMessages={handleClearMessages}
+            onToolAction={handleToolAction}
+            className={!consentAllowed ? "pointer-events-none opacity-50" : ""}
+            stickyHeaderSlot={<MobileStageProgress stages={currentStages} />}
+            activityLog={activityLog}
+            stages={currentStages}
+            currentStage={stage}
+            stageProgress={stageProgress}
+
+            composerTopSlot={
+              <div className="flex items-center justify-end gap-2 w-full">
+                <SuggestedActions
+                  sessionId={sessionId}
+                  stage={stage as any}
+                  onRun={handleSuggestionRun}
+                  mode="static"
+                />
+              </div>
+            }
+          />
           </ErrorBoundary>
 
           {/* Voice Overlay */}

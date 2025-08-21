@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ContextStorage } from '@/lib/context/context-storage'
-import { LeadResearchService } from '@/lib/intelligence/lead-research'
+import { ConversationalIntelligence } from '@/lib/intelligence/conversational-intelligence'
 import { getSupabase } from '@/lib/supabase/server'
 
 const contextStorage = new ContextStorage()
-const leadResearchService = new LeadResearchService()
+const conversationalIntelligence = new ConversationalIntelligence()
 
 // In-flight dedupe for concurrent research per session (best-effort, dev-friendly)
 const researchInFlight = new Map<string, Promise<any>>()
@@ -99,14 +99,20 @@ export async function POST(req: NextRequest) {
       if (!hasResearch(existing)) {
         console.info('🔍 Starting lead research for:', email)
         if (!researchInFlight.has(sessionId)) {
-          const p = leadResearchService
-            .researchLead(email, name, companyUrl, sessionId)
+          const p = conversationalIntelligence
+            .initSession({ sessionId, email, name, companyUrl })
+            .then(result => ({
+              company: result?.company,
+              person: result?.person,
+              role: result?.role,
+              confidence: result?.roleConfidence
+            }))
             .finally(() => researchInFlight.delete(sessionId))
           researchInFlight.set(sessionId, p)
         }
         researchResult = await researchInFlight.get(sessionId)!
       }
-      
+
       // Update context with research results when available
       if (researchResult) {
         await contextStorage.update(sessionId, {

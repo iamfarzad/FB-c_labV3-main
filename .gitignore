@@ -102,3 +102,6 @@ localhost-key.pem
 /industry-ai-education./
 /Documents_progress_overtime/
 /evidence/
+
+# Browser extension files (keep locally but don't commit)
+/chrome-extension/

@@ -1,0 +1,95 @@
+---
+alwaysApply: true
+description: "Enforce changelog creation and maintenance for all changes and fixes"
+---
+# Changelog Management Rule
+
+## Overview
+Every change or fix must be documented in a changelog to maintain proper project history and communication.
+
+## Changelog Location
+- **File**: `CHANGELOG.md` (root of project)
+- **Format**: Keep a Changelog format (https://keepachangelog.com/en/1.0.0/)
+
+## When to Update Changelog
+Update the changelog for **every** change, including:
+- New features
+- Bug fixes
+- Breaking changes
+- Performance improvements
+- Security updates
+- Documentation changes
+- Dependency updates
+
+## Changelog Entry Format
+```markdown
+## [Unreleased]
+
+### Added
+- New features and functionality
+
+### Changed
+- Modifications to existing functionality
+
+### Fixed
+- Bug fixes and patches
+
+### Removed
+- Deprecated features or removed functionality
+
+### Security
+- Security-related changes
+```
+
+## Process
+1. **Before making changes**: Review if the change needs changelog documentation
+2. **During development**: Keep track of changes made
+3. **After completion**: Add appropriate entry to CHANGELOG.md
+4. **Commit message**: Reference changelog update in commit message
+
+## Examples
+
+### Feature Addition
+```markdown
+### Added
+- Real-time collaboration features for chat interface
+- Voice message support in [WebcamCapture](mdc:components/chat/tools/WebcamCapture/WebcamCapture.tsx)
+- AI activity monitoring in [AiActivityMonitor](mdc:components/chat/activity/AiActivityMonitor.tsx)
+```
+
+### Bug Fix
+```markdown
+### Fixed
+- Resolved WebSocket connection issues in live-server.ts
+- Fixed memory leak in activity monitoring components
+- Corrected TypeScript type definitions in admin dashboard
+```
+
+### Breaking Change
+```markdown
+### Changed
+- [BREAKING] Updated API endpoints structure in `/api/export-summary/route.ts`
+- Refactored component architecture in workshop modules
+- Modified authentication flow requiring updated configurations
+```
+
+## Git Workflow Integration
+- **Branch naming**: Include change type (feat/, fix/, docs/, etc.)
+- **Pull requests**: Require changelog review
+- **Release process**: Move unreleased changes to version sections
+
+## Automation
+Consider using tools to automatically:
+- Generate changelog entries from commit messages
+- Validate changelog format in CI/CD
+- Generate release notes from changelog entries
+
+## Version Management
+- Use semantic versioning (MAJOR.MINOR.PATCH)
+- Document version changes in changelog
+- Tag releases in git with version numbers
+
+## References
+- [Keep a Changelog](https://keepachangelog.com/)
+- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)

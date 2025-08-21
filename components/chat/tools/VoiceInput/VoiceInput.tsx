@@ -7,7 +7,7 @@ import { useVoiceRecorder } from '@/hooks/use-voice-recorder';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { X, Volume2, Mic, MicOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { FbcVoiceOrb } from './FbcVoiceOrb';
 
@@ -249,13 +249,13 @@ export function VoiceInput({ onClose, mode = 'modal', onTranscript }: VoiceInput
   };
 
   const getStatusColor = () => {
-    if (hasPermission === false) return "text-red-500";
-    if (hasPermission === null) return "text-yellow-500";
-    if (!isConnected && connectionAttempts > 0) return "text-red-500";
-    if (!isConnected) return "text-yellow-500";
-    if (isRecording) return "text-green-500";
-    if (isProcessing) return "text-blue-500";
-    if (transcript) return "text-green-500";
+    if (hasPermission === false) return "text-[hsl(var(--destructive))]";
+    if (hasPermission === null) return "text-[hsl(var(--chart-warning))]";
+    if (!isConnected && connectionAttempts > 0) return "text-[hsl(var(--destructive))]";
+    if (!isConnected) return "text-[hsl(var(--chart-warning))]";
+    if (isRecording) return "text-[hsl(var(--chart-success))]";
+    if (isProcessing) return "text-[hsl(var(--accent))]";
+    if (transcript) return "text-[hsl(var(--chart-success))]";
     return "text-muted-foreground";
   };
 
@@ -272,9 +272,9 @@ export function VoiceInput({ onClose, mode = 'modal', onTranscript }: VoiceInput
   const VolumeIndicator = () => {
     if (!isRecording) return null;
     return (
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-red-500 transition-all duration-100"
+      <div className="w-full h-2 bg-muted/30 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-[hsl(var(--destructive))] transition-all duration-100"
           style={{ width: `${Math.min(volume * 100, 100)}%` }}
         />
       </div>
@@ -315,7 +315,7 @@ export function VoiceInput({ onClose, mode = 'modal', onTranscript }: VoiceInput
 
             <p className={cn("text-xs text-center", getStatusColor())}>{getStatusText()}</p>
             {!hasPermission && (
-              <div className="text-xs text-yellow-500 text-center">
+              <div className="text-xs text-[hsl(var(--chart-warning))] text-center">
                 Microphone access denied. Click the mic and allow access in the browser prompt.
               </div>
             )}
@@ -376,7 +376,7 @@ export function VoiceInput({ onClose, mode = 'modal', onTranscript }: VoiceInput
 
           <p className={cn("text-sm text-center", getStatusColor())}>{getStatusText()}</p>
           {!hasPermission && (
-            <div className="text-xs text-yellow-500 text-center">
+            <div className="text-xs text-[hsl(var(--chart-warning))] text-center">
               Microphone access denied. Click the mic and allow access in the browser prompt.
             </div>
           )}
