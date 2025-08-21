@@ -1,0 +1,12 @@
+// Environment variables for testing
+process.env.NODE_ENV = 'test'
+process.env.GEMINI_API_KEY = 'test-gemini-key'
+process.env.PERPLEXITY_API_KEY = 'test-perplexity-key'
+process.env.SUPABASE_URL = 'https://test.supabase.co'
+process.env.SUPABASE_ANON_KEY = 'test-anon-key'
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
+process.env.PUBLIC_CHAT_ALLOW = 'true'
+process.env.INTELLIGENCE_ENABLED = 'true'
+process.env.EMBEDDINGS_ENABLED = 'false'
+process.env.PROVIDER = 'gemini'
