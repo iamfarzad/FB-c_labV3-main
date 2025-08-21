@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
+  "engines": {
+    "node": "22.12.0",
+    "pnpm": ">=9.0.0"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
@@ -184,6 +188,7 @@
     "jest-environment-jsdom": "^30.0.5",
     "jscpd": "^4.0.5",
     "jsonwebtoken": "^9.0.2",
+    "knip": "^5.63.0",
     "madge": "^8.0.0",
     "next": "15.4.4",
     "playwright": "^1.54.2",
