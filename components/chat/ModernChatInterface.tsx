@@ -25,17 +25,17 @@ export function ModernChatInterface({
   const [currentMode, setCurrentMode] = useState<'public' | 'admin'>(mode)
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  
+
   const { messages, isLoading, error, send, clear } = useChat({ 
     mode: currentMode,
     onError: (err) => console.error('Chat error:', err),
-    onFinish: (msg) => console.log('Message completed:', msg.content.substring(0, 50) + '...')
+    onFinish: (msg) => console.log('Message finished:', msg)
   })
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, isLoading])
+  }, [messages])
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return
@@ -52,162 +52,175 @@ export function ModernChatInterface({
 
   return (
     <div className={cn(
-      'flex flex-col h-full max-h-[600px] w-full max-w-4xl mx-auto',
+      'flex flex-col h-full bg-background',
+      'bg-gradient-to-br from-background via-background to-background/95',
       className
     )}>
-      {/* Header */}
-      <Card variant="glass" padding="sm" className="mb-4">
-        <CardHeader padding="sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-accent/80 flex items-center justify-center">
-                <span className="text-accent-foreground font-bold text-sm">F</span>
-              </div>
-              <div>
-                <CardTitle className="text-lg">F.B/c AI Assistant</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  {currentMode === 'admin' ? 'Admin Dashboard Mode' : 'Business Consulting Mode'}
-                </p>
-              </div>
+      {/* Modern Header */}
+      <div className="sticky top-0 z-10 backdrop-blur-xl bg-background/80 border-b border-border/20">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center shadow-lg">
+              <div className="w-3 h-3 rounded-full bg-accent-foreground" />
             </div>
-            
-            <div className="flex items-center gap-2">
-              {/* Mode Toggle */}
-              {showModeToggle && (
-                <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
-                  <Badge 
-                    variant={currentMode === 'public' ? 'default' : 'outline'}
-                    className="cursor-pointer px-3 py-1"
-                    onClick={() => setCurrentMode('public')}
-                  >
-                    Public
-                  </Badge>
-                  <Badge 
-                    variant={currentMode === 'admin' ? 'default' : 'outline'}
-                    className="cursor-pointer px-3 py-1"
-                    onClick={() => setCurrentMode('admin')}
-                  >
-                    Admin
-                  </Badge>
-                </div>
-              )}
-              
-              {/* Actions */}
-              <Button variant="ghost" size="icon-sm" onClick={clear}>
-                <RotateCcw className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon-sm">
-                <Settings className="h-4 w-4" />
-              </Button>
+            <div>
+              <h1 className="font-semibold text-foreground">F.B/c AI Assistant</h1>
+              <p className="text-xs text-muted-foreground">Modern chat experience</p>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+          
+          <div className="flex items-center gap-2">
+            {showModeToggle && (
+              <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-xl">
+                <Button
+                  variant={currentMode === 'public' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setCurrentMode('public')}
+                  className="text-xs h-7 px-3"
+                >
+                  Public
+                </Button>
+                <Button
+                  variant={currentMode === 'admin' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setCurrentMode('admin')}
+                  className="text-xs h-7 px-3"
+                >
+                  Admin
+                </Button>
+              </div>
+            )}
+            
+            <Button variant="ghost" size="icon" onClick={clear}>
+              <RotateCcw className="w-4 h-4" />
+            </Button>
+            
+            <Button variant="ghost" size="icon">
+              <Settings className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Messages Area */}
-      <Card variant="minimal" padding="sm" className="flex-1 flex flex-col min-h-0">
-        <CardContent padding="sm" className="flex-1 overflow-hidden">
-          <div className="h-full overflow-y-auto space-y-4 scroll-smooth">
-            {/* Empty State */}
-            {messages.length === 0 && !isLoading && (
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto px-4 py-6">
+          <div className="max-w-3xl mx-auto space-y-6">
+            {messages.length === 0 ? (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center h-full text-center py-12"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-12"
               >
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accent/10 to-accent/5 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-accent">F</span>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-6 h-6 rounded-full bg-accent" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Ready to help you succeed
-                </h3>
-                <p className="text-muted-foreground max-w-md">
-                  Ask me about AI automation, business strategy, ROI analysis, or anything else you'd like to explore.
+                <h2 className="text-xl font-semibold text-foreground mb-2">
+                  Ready to assist you
+                </h2>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Ask me anything about your business, get insights, or explore our AI capabilities.
                 </p>
+              </motion.div>
+            ) : (
+              <AnimatePresence mode="popLayout">
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{ 
+                      duration: 0.3, 
+                      delay: Math.min(index * 0.05, 0.15),
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className={cn(
+                      'flex gap-4',
+                      message.role === 'user' ? 'justify-end' : 'justify-start'
+                    )}
+                  >
+                    <ChatBubble
+                      role={message.role}
+                      content={message.content}
+                      timestamp={new Date()}
+                      className="max-w-[85%]"
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
+
+            {/* Typing Indicator */}
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-start"
+              >
+                <TypingIndicator />
               </motion.div>
             )}
 
-            {/* Messages */}
-            <AnimatePresence mode="popLayout">
-              {messages.map((message) => (
-                <ChatBubble
-                  key={message.id}
-                  message={{
-                    ...message,
-                    timestamp: new Date()
-                  }}
-                  showTimestamp={true}
-                  className="mb-4"
-                />
-              ))}
-            </AnimatePresence>
+            {/* Error Display */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-center"
+              >
+                <div className="bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 text-sm text-destructive max-w-md text-center">
+                  <strong>Error:</strong> {error.message}
+                </div>
+              </motion.div>
+            )}
 
-            {/* Typing Indicator */}
-            {isLoading && <TypingIndicator className="mb-4" />}
-
-            {/* Scroll anchor */}
             <div ref={messagesEndRef} />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Error Display */}
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-2"
-        >
-          <Card variant="outline" padding="sm">
-            <CardContent padding="sm">
-              <div className="flex items-center gap-2 text-destructive text-sm">
-                <div className="w-2 h-2 rounded-full bg-destructive" />
-                Error: {error.message}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-
-      {/* Input Area */}
-      <Card variant="glass" padding="sm" className="mt-4">
-        <CardContent padding="sm">
-          <div className="flex gap-3 items-end">
-            <div className="flex-1">
+      {/* Modern Composer */}
+      <div className="sticky bottom-0 bg-gradient-to-t from-background via-background/95 to-transparent">
+        <div className="max-w-3xl mx-auto p-4">
+          <div className="relative">
+            <div className="flex gap-3 p-3 bg-card/60 backdrop-blur-xl border border-border/20 rounded-2xl shadow-lg">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={`Message F.B/c${currentMode === 'admin' ? ' (Admin)' : ''}...`}
-                className="min-h-[44px] max-h-32 resize-none border-0 bg-transparent focus:ring-0 text-base"
-                rows={1}
+                placeholder={`Message F.B/c AI ${currentMode === 'admin' ? '(Admin Mode)' : ''}...`}
+                className="flex-1 min-h-[44px] max-h-32 resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                disabled={isLoading}
               />
+              
+              <Button
+                onClick={handleSend}
+                disabled={isLoading || !input.trim()}
+                size="icon"
+                className="rounded-xl bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
             </div>
             
-            <Button
-              onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-              loading={isLoading}
-              loadingText="Sending..."
-              size="icon"
-              className="shrink-0"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            {/* Status Indicator */}
+            <div className="flex items-center justify-between mt-2 px-1">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span>Connected</span>
+                {currentMode === 'admin' && (
+                  <Badge variant="secondary" className="text-xs">Admin Mode</Badge>
+                )}
+              </div>
+              
+              <div className="text-xs text-muted-foreground">
+                {messages.length} messages • Press Enter to send
+              </div>
+            </div>
           </div>
-          
-          {/* Input Footer */}
-          <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
-            <span>
-              {currentMode === 'admin' ? 'Admin mode active' : 'Press Enter to send, Shift+Enter for new line'}
-            </span>
-            <span className="flex items-center gap-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              Connected
-            </span>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

@@ -24,43 +24,17 @@ const chatBubbleVariants = cva(
         ],
         assistant: [
           'bg-card/60 backdrop-blur-xl border border-border/20',
-          'text-card-foreground shadow-md hover:shadow-lg',
+          'text-foreground shadow-md hover:shadow-lg',
           'rounded-bl-md' // Distinctive corner for assistant messages
         ],
         system: [
-          'bg-muted/50 text-muted-foreground border border-border/30',
-          'mx-auto text-center text-sm italic'
+          'bg-muted/50 text-muted-foreground border border-border/10',
+          'mx-auto text-center text-sm'
         ]
-      },
-      size: {
-        sm: 'px-3 py-2 text-sm',
-        md: 'px-4 py-3 text-base',
-        lg: 'px-5 py-4 text-base'
-      },
-      animation: {
-        none: '',
-        slide: 'animate-in slide-in-from-bottom-2 duration-300',
-        fade: 'animate-in fade-in duration-300'
       }
     },
     defaultVariants: {
-      role: 'assistant',
-      size: 'md',
-      animation: 'slide'
-    }
-  }
-)
-
-// Message container variants
-const messageContainerVariants = cva(
-  'flex gap-3 group',
-  {
-    variants: {
-      role: {
-        user: 'flex-row-reverse',
-        assistant: 'flex-row',
-        system: 'justify-center'
-      }
+      role: 'assistant'
     }
   }
 )
@@ -68,135 +42,122 @@ const messageContainerVariants = cva(
 export interface ChatBubbleProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof chatBubbleVariants> {
-  message: {
-    id: string
-    role: 'user' | 'assistant' | 'system'
-    content: string
-    timestamp?: Date
-    avatar?: string
-    name?: string
-    status?: 'sending' | 'sent' | 'error'
-  }
-  showAvatar?: boolean
+  content: string
+  timestamp?: Date
   showTimestamp?: boolean
-  onRetry?: () => void
+  showAvatar?: boolean
 }
 
-export function ChatBubble({
-  message,
-  role,
-  size,
-  animation,
-  showAvatar = true,
-  showTimestamp = false,
-  onRetry,
-  className,
-  ...props
-}: ChatBubbleProps) {
-  const messageRole = role || message.role
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={cn(messageContainerVariants({ role: messageRole }))}
-      {...props}
-    >
-      {/* Avatar */}
-      {showAvatar && messageRole !== 'system' && (
-        <Avatar className="h-8 w-8 shrink-0">
-          <AvatarFallback className={cn(
-            'text-xs font-medium',
-            messageRole === 'user' 
-              ? 'bg-muted text-muted-foreground' 
-              : 'bg-accent text-accent-foreground'
-          )}>
-            {messageRole === 'user' ? 'U' : 'F'}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      
-      {/* Message Content */}
-      <div className="flex flex-col gap-1 min-w-0 flex-1">
-        {/* Message Bubble */}
-        <div
-          className={cn(
-            chatBubbleVariants({ role: messageRole, size, animation }),
-            className
-          )}
-        >
-          {message.content}
-        </div>
+export const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
+  ({ 
+    className, 
+    role, 
+    content, 
+    timestamp, 
+    showTimestamp = false,
+    showAvatar = true,
+    ...props 
+  }, ref) => {
+    return (
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className={cn(
+          'flex gap-3 items-end',
+          role === 'user' ? 'flex-row-reverse' : 'flex-row'
+        )}
+        {...props}
+      >
+        {/* Avatar */}
+        {showAvatar && role !== 'system' && (
+          <Avatar className="w-8 h-8 shrink-0">
+            <AvatarFallback className={cn(
+              role === 'user' 
+                ? 'bg-accent text-accent-foreground' 
+                : 'bg-muted text-muted-foreground'
+            )}>
+              {role === 'user' ? 'U' : 'AI'}
+            </AvatarFallback>
+          </Avatar>
+        )}
         
-        {/* Message Meta */}
-        <div className={cn(
-          'flex items-center gap-2 text-xs text-muted-foreground',
-          messageRole === 'user' ? 'justify-end' : 'justify-start'
-        )}>
+        {/* Message Bubble */}
+        <div className={cn(chatBubbleVariants({ role }), className)}>
+          <div className="whitespace-pre-wrap leading-relaxed">
+            {content}
+          </div>
+          
           {/* Timestamp */}
-          {showTimestamp && message.timestamp && (
-            <span>
-              {message.timestamp.toLocaleTimeString([], { 
+          {showTimestamp && timestamp && (
+            <div className={cn(
+              'text-xs mt-2 opacity-70',
+              role === 'user' ? 'text-accent-foreground/70' : 'text-muted-foreground'
+            )}>
+              {timestamp.toLocaleTimeString([], { 
                 hour: '2-digit', 
                 minute: '2-digit' 
               })}
-            </span>
-          )}
-          
-          {/* Status Badge */}
-          {message.status && message.status !== 'sent' && (
-            <Badge 
-              variant={message.status === 'error' ? 'destructive' : 'secondary'}
-              className="h-5 px-2 text-xs"
-            >
-              {message.status === 'sending' && 'Sending...'}
-              {message.status === 'error' && 'Failed'}
-            </Badge>
-          )}
-          
-          {/* Retry Button */}
-          {message.status === 'error' && onRetry && (
-            <button
-              onClick={onRetry}
-              className="text-accent hover:text-accent/80 underline"
-            >
-              Retry
-            </button>
+            </div>
           )}
         </div>
-      </div>
-    </motion.div>
-  )
-}
+      </motion.div>
+    )
+  }
+)
 
-// Typing indicator component
-export function TypingIndicator({ className }: { className?: string }) {
+ChatBubble.displayName = 'ChatBubble'
+
+// Typing Indicator Component
+export const TypingIndicator = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
-    <div className={cn(messageContainerVariants({ role: 'assistant' }), className)}>
-      <Avatar className="h-8 w-8 shrink-0">
-        <AvatarFallback className="bg-accent text-accent-foreground text-xs font-medium">
-          F
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className={cn('flex gap-3 items-end', className)}
+      {...props}
+    >
+      {/* AI Avatar */}
+      <Avatar className="w-8 h-8 shrink-0">
+        <AvatarFallback className="bg-muted text-muted-foreground">
+          AI
         </AvatarFallback>
       </Avatar>
       
+      {/* Typing Bubble */}
       <div className={cn(
-        chatBubbleVariants({ role: 'assistant', size: 'md' }),
-        'flex items-center gap-1'
+        chatBubbleVariants({ role: 'assistant' }),
+        'flex items-center gap-1 min-w-[60px]'
       )}>
-        <span className="text-sm text-muted-foreground">Thinking</span>
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
-            <div
+            <motion.div
               key={i}
-              className="w-1 h-1 bg-current rounded-full animate-pulse"
-              style={{ animationDelay: `${i * 0.2}s` }}
+              className="w-2 h-2 rounded-full bg-muted-foreground/50"
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.5, 1, 0.5]
+              }}
+              transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                delay: i * 0.2
+              }}
             />
           ))}
         </div>
+        <span className="text-xs text-muted-foreground ml-2">AI is typing...</span>
       </div>
-    </div>
+    </motion.div>
   )
-}
+})
+
+TypingIndicator.displayName = 'TypingIndicator'
 
 export { chatBubbleVariants }
