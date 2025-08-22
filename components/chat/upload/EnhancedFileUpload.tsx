@@ -6,7 +6,7 @@ import { UploadCloud, FileIcon, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { useChatContext } from "@/app/(chat)/chat/context/ChatProvider"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 interface UploadedFile {
   file: File

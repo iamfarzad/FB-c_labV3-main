@@ -1,8 +1,8 @@
 "use client"
 
-import { getAllModules } from '@/lib/education/modules'
+import { getAllModules } from '@/src/core/education/modules'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 
 export function CourseOutline() {
   const mods = getAllModules()

@@ -1,6 +1,6 @@
 "use client"
 
-import type { ModuleItem } from '@/lib/education/modules'
+import type { ModuleItem } from '@/src/core/education/modules'
 import AIHierarchyVisual from '@/components/workshop/modules/ai-hierarchy-visual'
 import LLMParameterGrowth from '@/components/workshop/modules/llm-parameter-growth'
 import TokenizationVisualizer from '@/components/workshop/modules/tokenization-visualizer'

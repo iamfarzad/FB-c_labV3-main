@@ -1,4 +1,4 @@
-import { supabaseService } from "@/lib/supabase/client"
+import { supabaseService } from '@/src/services/storage/supabase'
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
 import { adminRateLimit } from "@/lib/rate-limiting"

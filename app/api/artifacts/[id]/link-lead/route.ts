@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 
 const Body = z.object({ leadId: z.string() })
 
@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
     const { leadId } = parsed.data
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     const { error } = await supabase
       .from('artifacts')
       .update({ lead_id: leadId })

@@ -4,11 +4,11 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useWebSocketVoice } from '@/hooks/use-websocket-voice';
 import { useVoiceRecorder } from '@/hooks/use-voice-recorder';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/primitives/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { X, Volume2, Mic, MicOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { cn } from '@/src/core/utils';
 import { FbcVoiceOrb } from './FbcVoiceOrb';
 
 interface VoiceInputProps {

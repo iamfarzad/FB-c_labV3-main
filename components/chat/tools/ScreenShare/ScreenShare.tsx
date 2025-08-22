@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Monitor, Brain, Loader2, X } from "@/lib/icon-mapping"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

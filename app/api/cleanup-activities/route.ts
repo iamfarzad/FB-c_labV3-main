@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     
     // Update ALL stale activities (in_progress or pending) to 'failed' status
     const { error: updateError } = await supabase

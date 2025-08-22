@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { getSupabase } from '@/lib/supabase/server';
+import { getSupabase } from '@/src/services/storage/supabase';
 import { logServerActivity } from '@/lib/server-activity-logger';
 import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/lib/pdf-generator-puppeteer';
 import fs from 'fs';
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const supabase = getSupabase();
+    const supabase = getSupabaseStorage();
 
     // Get lead information
     let leadInfo = { name: 'Unknown', email: leadEmail || 'unknown@example.com' };

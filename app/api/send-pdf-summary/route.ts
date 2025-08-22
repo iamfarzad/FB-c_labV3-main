@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { generatePdfWithPuppeteer, generatePdfPath } from '@/lib/pdf-generator-puppeteer'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 import fs from 'fs'
 
 export const dynamic = 'force-dynamic'
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Prepare minimal data for summary – reuse export-summary query path (lightweight inline)
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     const leadInfo: any = { name: leadName, email: toEmail }
     let leadResearch: any = null
 

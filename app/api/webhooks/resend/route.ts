@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import { logServerActivity } from "@/lib/server-activity-logger"
 
 // Webhook signature verification
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const event = JSON.parse(payload)
     console.info("Resend webhook event:", event.type, event.data)
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     // Process different event types
     switch (event.type) {

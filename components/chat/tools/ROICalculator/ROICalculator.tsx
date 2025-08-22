@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import type { ROICalculatorProps, ROICalculationResult, WizardStep } from "./ROICalculator.types"
 import type { ChatMessage, ROIResultPayload } from '@/src/core/types/chat'
 import { markCapabilityUsed } from "@/components/experience/progress-tracker"

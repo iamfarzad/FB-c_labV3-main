@@ -2,14 +2,14 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 import { Badge } from '@/components/ui/badge'
 import { 
   Sparkles,
   ArrowRight,
   Target
 } from '@/lib/icon-mapping'
-import { cn } from '@/lib/utils'
+import { cn } from '@/src/core/utils'
 
 interface AIInsightCardProps {
   content: string

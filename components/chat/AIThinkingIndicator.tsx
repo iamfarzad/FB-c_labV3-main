@@ -17,7 +17,7 @@ import {
   TrendingUp
 } from '@/lib/icon-mapping'
 import { FbcIcon } from '@/components/ui/fbc-icon'
-import { cn } from '@/lib/utils'
+import { cn } from '@/src/core/utils'
 
 export type AIThinkingContext = 
   | 'analyzing_document'

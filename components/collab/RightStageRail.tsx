@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useMemo, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 export interface StageItem {
   id: string

@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
 import { adminRateLimit } from "@/lib/rate-limiting"
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000)
 
     // Get leads data
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     const { data: leads } = await supabase.from("lead_summaries").select("*").gte("created_at", startDate.toISOString())
 
     // Process engagement types

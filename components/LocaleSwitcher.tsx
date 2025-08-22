@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useState } from 'react'
 import { Globe } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 import {
   DropdownMenu,
   DropdownMenuContent,

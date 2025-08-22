@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import { EmailService } from '@/src/services/email/resend'
 import { MeetingScheduler } from "@/lib/meeting-scheduler"
 import type { NextRequest } from "next/server"
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const bookingData = await req.json()
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     // Check if slot is still available
     const { data: existingMeeting } = await supabase

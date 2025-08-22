@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 type CapabilityKey =
   | "roi"

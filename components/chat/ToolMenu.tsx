@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { Plus, FileText, ImageIcon, Camera, Monitor, Calculator, Video } from "@/lib/icon-mapping"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 export interface ToolMenuProps {
   onUploadDocument?: () => void

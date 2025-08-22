@@ -8,13 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Confetti } from "@/components/ui/confetti"
-import { getAllModules } from "@/lib/education/modules"
+import { getAllModules } from '@/src/core/education/modules'
 import { useModuleProgress } from "@/hooks/workshop/use-module-progress"
 import { BookOpen, Award, TrendingUp, Brain, ChevronRight } from "lucide-react"
 import { CourseOutline } from "@/components/workshop/CourseOutline"
 import { CitationsDemo } from "@/components/experience/citations-demo"
 import ModuleRenderer from "@/components/workshop/ModuleRenderer"
-import { getModuleBySlug } from "@/lib/education/modules"
+import { getModuleBySlug } from '@/src/core/education/modules'
 import { MODULE_QUIZZES, hasQuizFor, type QuizQuestion } from "@/lib/education/quizzes"
 
 export function WorkshopPanel() {

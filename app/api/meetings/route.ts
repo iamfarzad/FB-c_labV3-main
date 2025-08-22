@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const date = searchParams.get("date")
     const leadId = searchParams.get("leadId")
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     let query = supabase
       .from("meetings")

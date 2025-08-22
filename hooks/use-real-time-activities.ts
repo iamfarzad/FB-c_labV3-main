@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { supabase } from "@/lib/supabase/client"
+import { supabase } from '@/src/services/storage/supabase'
 import type { ActivityItem } from "@/app/(chat)/chat/types/chat"
 
 export function useRealTimeActivities() {

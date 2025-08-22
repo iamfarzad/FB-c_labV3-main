@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ContextStorage } from '@/lib/context/context-storage'
 import { LeadResearchService } from '@/src/core/intelligence'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 
 const contextStorage = new ContextStorage()
 const leadResearchService = new LeadResearchService()
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const sessionId = providedSessionId || headerSession || `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     // Upsert minimal conversation context row (ensures row exists)
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage()
       await supabase
         .from('conversation_contexts')
         .upsert({

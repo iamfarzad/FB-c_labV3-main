@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useChatContext } from "@/app/(chat)/chat/context/ChatProvider"
 import { ActivityIcon } from "@/components/chat/sidebar/ActivityIcon"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 export function EnhancedLiveActivity() {
   const { activityLog } = useChatContext()

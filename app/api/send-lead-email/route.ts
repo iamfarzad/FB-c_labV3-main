@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 import { z } from 'zod'
 
 // Initialize Resend with fallback for build time
@@ -213,7 +213,7 @@ export async function POST(req: NextRequest) {
     const validatedData = emailRequestSchema.parse(body)
     
     // Get lead data from Supabase
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     const { data: lead, error: leadError } = await supabase
       .from('leads')
       .select('*')

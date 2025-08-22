@@ -20,7 +20,7 @@ import {
   CheckCircle,
   Zap,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import type { ActivityItem } from "@/app/(chat)/chat/types/chat"
 
 interface VerticalProcessChainProps {

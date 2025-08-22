@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
 import { adminRateLimit } from "@/lib/rate-limiting"
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     return authResult;
   }
   try {
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     const { data, error } = await supabase.from("email_campaigns").select("*").order("created_at", { ascending: false })
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   try {
     const campaignData = await req.json()
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     const { data, error } = await supabase
       .from("email_campaigns")

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Video, Sparkles, Loader2, Link, X } from "@/lib/icon-mapping"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"

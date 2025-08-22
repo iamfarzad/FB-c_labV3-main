@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { useAdminChat, type AdminMessage } from "@/hooks/useAdminChat"
 import { useToast } from "@/components/ui/use-toast"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 interface AdminChatInterfaceProps {
   className?: string

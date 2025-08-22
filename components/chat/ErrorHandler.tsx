@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle, RefreshCw, MessageCircle, Wifi, Clock } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'

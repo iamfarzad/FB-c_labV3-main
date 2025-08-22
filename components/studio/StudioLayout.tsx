@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/src/core/utils'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 
 type Tab = 'chat' | 'build' | 'learn'
 

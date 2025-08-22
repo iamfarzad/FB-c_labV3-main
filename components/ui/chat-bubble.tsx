@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 const chatBubbleVariants = cva(
   "rounded-2xl px-5 py-4 max-w-[85%] break-words shadow-lg transition-all duration-200",

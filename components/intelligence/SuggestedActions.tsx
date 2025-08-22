@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { FileText, PhoneCall, Mail, MoreHorizontal } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'

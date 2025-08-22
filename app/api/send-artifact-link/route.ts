@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { Resend } from 'resend'
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 
 const Body = z.object({
   email: z.string().email(),
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const { email, artifactId } = parsed.data
 
     // Validate artifact exists
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
     const { data: artifact, error } = await supabase
       .from('artifacts')
       .select('*')

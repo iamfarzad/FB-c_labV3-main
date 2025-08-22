@@ -1,7 +1,7 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { supabaseService } from "@/lib/supabase/client"
+import { supabaseService } from '@/src/services/storage/supabase'
 
 export async function GET(
   req: NextRequest,

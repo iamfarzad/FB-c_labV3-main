@@ -3,7 +3,7 @@
 import React from 'react'
 import { Plus, Camera, Monitor, Video, FileText } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 import { useCanvas } from '@/components/providers/canvas-provider'
 
 export function ToolLauncher() {

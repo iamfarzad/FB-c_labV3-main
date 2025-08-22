@@ -3,8 +3,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Virtual scrolling removed - can be added with @tanstack/react-virtual package
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/src/core/utils'
+import { Button } from '@/components/ui/primitives/button'
 import { FbcIcon } from '@/components/ui/fbc-icon'
 import { Send, RotateCcw, Settings, Maximize2, Copy, Check, Edit, Languages, User } from 'lucide-react'
 import { 

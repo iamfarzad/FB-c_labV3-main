@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Slider } from '@/components/ui/slider'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/primitives/button'
 
 export default function TemperatureSamplingControls() {
   const [temperature, setTemperature] = useState(0.7)

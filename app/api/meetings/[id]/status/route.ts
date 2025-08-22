@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
@@ -7,7 +7,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const { status, notes } = await req.json()
     const meetingId = params.id
 
-    const supabase = getSupabase()
+    const supabase = getSupabaseStorage()
 
     const { data, error } = await supabase
       .from("meetings")

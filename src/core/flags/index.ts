@@ -4,6 +4,7 @@ export type FlagName =
   | 'canvas_console' 
   | 'coach_v2'
   | 'use_clean_chat_api' // Flag to switch to new API
+  | 'use_modern_design' // Flag to switch to new design system
 
 interface FlagConfig {
   defaultValue: boolean
@@ -26,6 +27,10 @@ const FLAG_CONFIGS: Record<FlagName, FlagConfig> = {
   use_clean_chat_api: { 
     defaultValue: true, // Enable by default for testing
     description: 'Use refactored chat API endpoints' 
+  },
+  use_modern_design: {
+    defaultValue: true, // Enable modern design by default
+    description: 'Use new modern design system components'
   }
 }
 

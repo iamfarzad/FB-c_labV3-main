@@ -8,7 +8,7 @@ import { SPEC_FROM_VIDEO_PROMPT, CODE_REGION_OPENER, CODE_REGION_CLOSER, SPEC_AD
 import { getYouTubeVideoId } from "@/lib/youtube"
 import { getYouTubeTranscript, summarizeTranscript, extractKeyTopics } from "@/lib/youtube-transcript"
 import { selectModelForFeature, estimateTokens } from "@/lib/model-selector"
-import { getSupabase } from "@/lib/supabase/server"
+import { getSupabase } from '@/src/services/storage/supabase'
 import { enforceBudgetAndLog } from "@/lib/token-usage-logger"
 import { withFullSecurity } from "@/lib/api-security"
 import { recordCapabilityUsed } from "@/lib/context/capabilities"
@@ -187,7 +187,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       const videoIdForHash = getYouTubeVideoId(videoUrl) || videoUrl
       const hash = createHash('sha256').update(`${videoIdForHash}|${(userPrompt || '').trim()}`).digest('hex')
       try {
-        const supabase = getSupabase()
+        const supabase = getSupabaseStorage()
         const { data: cached } = await supabase
           .from('artifacts')
           .select('*')
@@ -274,7 +274,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
 
       // Store spec in cache
       try {
-        const supabase = getSupabase()
+        const supabase = getSupabaseStorage()
         await supabase
           .from('artifacts')
           .insert([{ type: 'video_app_spec', content: parsedSpec, metadata: { hash, videoId: videoIdForHash, intent: (userPrompt || '').trim() } }])
@@ -310,7 +310,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       } catch {}
       const hash = createHash('sha256').update(`${videoIdForHash}|${intentForHash}`).digest('hex')
       try {
-        const supabase = getSupabase()
+        const supabase = getSupabaseStorage()
         const { data: cached } = await supabase
           .from('artifacts')
           .select('*')
@@ -390,7 +390,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       // Persist artifact (HTML) for return link reuse
       let artifactId: string | undefined
       try {
-        const supabase = getSupabase()
+        const supabase = getSupabaseStorage()
         const { data, error } = await supabase
           .from('artifacts')
           .insert([{ type: 'video_app_code', content: code, metadata: { model: modelSelection.model, hash } }])

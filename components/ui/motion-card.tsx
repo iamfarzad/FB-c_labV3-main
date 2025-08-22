@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import { useRef } from "react"
 
 interface MotionCardProps {

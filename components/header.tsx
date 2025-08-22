@@ -10,7 +10,7 @@ import { FbcIcon } from "@/components/ui/fbc-icon"
 // Temporarily hide text logo; keep orb icon only
 const FbcLogo = ({ className }: { className?: string }) => null as any
 import { ThemeToggle } from "@/components/theme-toggle"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 import { useState } from "react"
 
 const navLinks = [

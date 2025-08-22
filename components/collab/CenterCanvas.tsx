@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from '@/src/core/utils'
 
 export type CanvasState = "empty" | "webcam" | "screen" | "video" | "pdf"
 
