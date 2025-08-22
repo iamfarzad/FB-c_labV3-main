@@ -46,7 +46,7 @@ export default function ChatPage() {
     fetchContextFromLocalSession 
   } = useConversationalIntelligence()
 
-  // Initialize session
+  // Initialize session and add demo messages
   useEffect(() => {
     const initSession = async () => {
       try {
@@ -125,14 +125,66 @@ export default function ChatPage() {
     }
   }
 
-  // Convert useChat messages to Message format
-  const chatMessages: Message[] = messages.map(msg => ({
-    id: msg.id || `msg-${Date.now()}`,
-    role: msg.role,
-    content: msg.content,
-    createdAt: new Date(),
-    sources: msg.meta?.sources,
-  }))
+  // Convert useChat messages to Message format + add demo messages
+  const chatMessages: Message[] = [
+    // Demo message showing all ai-elements
+    {
+      id: 'demo-analysis',
+      role: 'assistant',
+      content: 'I\'ve completed a comprehensive business analysis for your AI automation initiative. Here are the key findings and recommendations:',
+      createdAt: new Date(Date.now() - 60000),
+      businessContent: {
+        type: 'business_analysis',
+        htmlContent: '<div>Business Analysis Complete</div>',
+        context: {
+          industry: 'Technology',
+          companySize: 'Mid-market',
+          stage: 'Implementation'
+        }
+      },
+      sources: [
+        { url: 'https://example.com/ai-trends', title: 'AI Industry Trends 2024' },
+        { url: 'https://example.com/automation-roi', title: 'Automation ROI Study' }
+      ]
+    },
+    {
+      id: 'demo-roi',
+      role: 'assistant', 
+      content: 'Based on your requirements, I\'ve calculated the ROI for your proposed AI automation project:',
+      createdAt: new Date(Date.now() - 30000),
+      businessContent: {
+        type: 'roi_calculator',
+        htmlContent: '<div>ROI Calculation</div>'
+      }
+    },
+    {
+      id: 'demo-tasks',
+      role: 'assistant',
+      content: 'I\'ve generated a comprehensive implementation plan with actionable tasks:',
+      createdAt: new Date(Date.now() - 15000),
+      businessContent: {
+        type: 'consultation_planner', 
+        htmlContent: '<div>Implementation Plan</div>'
+      }
+    },
+    {
+      id: 'demo-proposal',
+      role: 'assistant',
+      content: 'Here\'s your customized business proposal with interactive suggestions:',
+      createdAt: new Date(Date.now() - 5000),
+      businessContent: {
+        type: 'proposal_generator',
+        htmlContent: '<div>Business Proposal</div>'
+      }
+    },
+    ...messages.map(msg => ({
+      id: msg.id || `msg-${Date.now()}`,
+      role: msg.role,
+      content: msg.content,
+      createdAt: new Date(),
+      sources: msg.meta?.sources,
+    }))
+  ]
 
   return (
     <TooltipProvider>

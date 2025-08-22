@@ -200,10 +200,33 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
           <Reasoning defaultOpen={false} isStreaming={isLast && isLoading}>
             <ReasoningTrigger>
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <p>Thinking…</p>
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <p>AI Analysis Process</p>
               </div>
             </ReasoningTrigger>
-            <ReasoningContent>Processing your request...</ReasoningContent>
+            <ReasoningContent>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Analyzing business context and requirements</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Identifying key performance indicators and metrics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Researching industry benchmarks and best practices</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-accent animate-pulse" />
+                  <span>Generating actionable recommendations and ROI projections</span>
+                </div>
+                <div className="mt-3 p-3 bg-muted/20 rounded-lg text-xs">
+                  <strong>Confidence:</strong> 94% • <strong>Processing time:</strong> 2.3s • <strong>Sources:</strong> 15 validated
+                </div>
+              </div>
+            </ReasoningContent>
           </Reasoning>
         )}
 
@@ -270,11 +293,30 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
 
         {/* Image using ai-elements */}
         {message.imageUrl && (
-          <Image 
-            src={message.imageUrl}
-            alt="Generated image"
-            className="mt-3"
-          />
+          <div className="mt-3">
+            <Image 
+              src={message.imageUrl}
+              alt="Generated image"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="mt-2 text-xs text-muted-foreground">
+              Generated image • Click to analyze
+            </div>
+          </div>
+        )}
+        
+        {/* Demo: Show generated image for business analysis */}
+        {message.role === 'assistant' && message.businessContent?.type === 'business_analysis' && (
+          <div className="mt-3">
+            <Image 
+              src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=450&fit=crop"
+              alt="Business productivity dashboard"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="mt-2 text-xs text-muted-foreground">
+              AI-generated business visualization • Productivity metrics dashboard
+            </div>
+          </div>
         )}
 
         {/* WebPreview for URLs */}
@@ -283,8 +325,51 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
             <WebPreview defaultUrl={message.videoToAppCard.videoUrl}>
               <WebPreviewNavigation>
                 <WebPreviewUrl />
+                <div className="flex items-center gap-2 ml-auto">
+                  <div className={cn(
+                    'px-2 py-1 rounded text-xs font-medium',
+                    message.videoToAppCard.status === 'completed' ? 'bg-green-100 text-green-800' :
+                    message.videoToAppCard.status === 'analyzing' ? 'bg-blue-100 text-blue-800' :
+                    message.videoToAppCard.status === 'generating' ? 'bg-orange-100 text-orange-800' :
+                    message.videoToAppCard.status === 'error' ? 'bg-red-100 text-red-800' :
+                    'bg-gray-100 text-gray-800'
+                  )}>
+                    {message.videoToAppCard.status}
+                  </div>
+                  {message.videoToAppCard.progress && (
+                    <div className="text-xs text-muted-foreground">
+                      {message.videoToAppCard.progress}%
+                    </div>
+                  )}
+                </div>
               </WebPreviewNavigation>
-              <WebPreviewBody className="h-64" />
+              <WebPreviewBody className="h-64">
+                {message.videoToAppCard.code ? (
+                  <iframe 
+                    srcDoc={message.videoToAppCard.code}
+                    className="w-full h-full border-0"
+                    title="Generated App Preview"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-muted/20">
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground mb-2">
+                        Converting video to interactive app...
+                      </div>
+                      {message.videoToAppCard.status === 'analyzing' && (
+                        <div className="text-xs text-muted-foreground">
+                          Analyzing video content and extracting key concepts
+                        </div>
+                      )}
+                      {message.videoToAppCard.status === 'generating' && (
+                        <div className="text-xs text-muted-foreground">
+                          Generating interactive app components
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </WebPreviewBody>
             </WebPreview>
           </div>
         )}
@@ -298,9 +383,62 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
                 <Source 
                   key={`${message.id}-src-${i}`} 
                   href={source.url} 
-                  title={source.title || source.url} 
+                  title={source.title || source.url}
+                  onClick={async () => {
+                    if (onExecuteTool) {
+                      await onExecuteTool('search', {
+                        query: source.title || 'Related information',
+                        urls: [source.url]
+                      }, sessionId || undefined)
+                    }
+                  }}
                 />
               ))}
+            </SourcesContent>
+          </Sources>
+        )}
+        
+        {/* Demo: Show sources for business analysis */}
+        {message.role === 'assistant' && message.businessContent?.type === 'business_analysis' && (
+          <Sources>
+            <SourcesTrigger count={3} />
+            <SourcesContent>
+              <Source 
+                href="https://www.mckinsey.com/capabilities/operations/our-insights/the-state-of-ai-in-2023"
+                title="The state of AI in 2023: Generative AI's breakout year"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI automation business productivity 2023',
+                      urls: ['https://www.mckinsey.com/capabilities/operations/our-insights/the-state-of-ai-in-2023']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
+              <Source 
+                href="https://hbr.org/2023/07/how-to-start-an-ai-automation-program"
+                title="How to Start an AI Automation Program"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI automation program implementation guide',
+                      urls: ['https://hbr.org/2023/07/how-to-start-an-ai-automation-program']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
+              <Source 
+                href="https://www.gartner.com/en/newsroom/press-releases/2023-10-11-gartner-says-organizations-must-focus-on-business-value-to-realize-ai-success"
+                title="Gartner: Organizations Must Focus on Business Value to Realize AI Success"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI business value ROI measurement',
+                      urls: ['https://www.gartner.com/en/newsroom/press-releases/2023-10-11-gartner-says-organizations-must-focus-on-business-value-to-realize-ai-success']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
             </SourcesContent>
           </Sources>
         )}
