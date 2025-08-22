@@ -10,7 +10,7 @@ import { getAllModules, getModuleBySlug } from '@/src/core/education/modules'
 import { useModuleProgress } from '@/hooks/workshop/use-module-progress'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Confetti } from '@/components/ui/confetti'
-import { MODULE_QUIZZES, hasQuizFor, type QuizQuestion } from '@/lib/education/quizzes'
+import { MODULE_QUIZZES, hasQuizFor, type QuizQuestion } from '@/src/core/education/quizzes'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function WorkshopModulePage() {

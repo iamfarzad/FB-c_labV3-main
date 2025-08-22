@@ -13,7 +13,7 @@ import AttentionMechanismDemo from '@/components/workshop/modules/attention-mech
 import EmbeddingExplorer from '@/components/workshop/modules/embedding-explorer'
 import CustomizationModes from '@/components/workshop/modules/customization-modes'
 import HallucinationChecker from '@/components/workshop/modules/hallucination-checker'
-import { MODULE_QUIZZES } from '@/lib/education/quizzes'
+import { MODULE_QUIZZES } from '@/src/core/education/quizzes'
 import { useEffect } from 'react'
 
 export default function ModuleRenderer({ module }: { module: ModuleItem }) {

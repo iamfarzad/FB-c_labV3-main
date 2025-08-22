@@ -3,7 +3,7 @@
  * Helps choose the optimal model based on use case requirements
  */
 
-import { config } from './config'
+import { config } from '@/src/core/config'
 
 export type UseCase = 
   | 'chat'           // General chat interactions

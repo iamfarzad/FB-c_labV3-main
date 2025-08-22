@@ -15,7 +15,7 @@ import { CourseOutline } from "@/components/workshop/CourseOutline"
 import { CitationsDemo } from "@/components/experience/citations-demo"
 import ModuleRenderer from "@/components/workshop/ModuleRenderer"
 import { getModuleBySlug } from '@/src/core/education/modules'
-import { MODULE_QUIZZES, hasQuizFor, type QuizQuestion } from "@/lib/education/quizzes"
+import { MODULE_QUIZZES, hasQuizFor, type QuizQuestion } from "@/src/core/education/quizzes"
 
 export function WorkshopPanel() {
   const { completedModules } = useModuleProgress()

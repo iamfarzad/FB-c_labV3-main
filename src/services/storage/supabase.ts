@@ -147,35 +147,6 @@ export function getSupabaseStorage(): SupabaseStorage {
   return defaultInstance
 }
 
-// Legacy compatibility exports
-export const supabase = (() => {
-  try {
-    return getSupabaseStorage().client
-  } catch {
-    console.warn('⚠️ Supabase not configured, using mock client')
-    return createMockClient()
-  }
-})()
-
-function createMockClient() {
-  return {
-    auth: {
-      getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Mock client') }),
-      signInWithPassword: () => Promise.resolve({ data: { user: null }, error: new Error('Mock client') }),
-      signOut: () => Promise.resolve({ error: null })
-    },
-    from: (table: string) => ({
-      select: () => ({ data: [], error: null }),
-      insert: () => ({ data: null, error: new Error('Mock client') }),
-      update: () => ({ data: null, error: new Error('Mock client') }),
-      delete: () => ({ data: null, error: new Error('Mock client') }),
-      eq: function(column: string, value: any) { return this },
-      order: function(column: string, options?: any) { return this },
-      limit: function(count: number) { return this }
-    })
-  }
-}
-
 // Create and export instances
 const config = {
   url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',

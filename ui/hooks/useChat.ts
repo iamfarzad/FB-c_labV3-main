@@ -42,8 +42,8 @@ export function useChat({
     // Add user message
     const userMessage = addMessage({ role: 'user', content: userText.trim() })
     
-    // Add placeholder assistant message
-    const assistantMessage = addMessage({ role: 'assistant', content: '' })
+    // Don't create placeholder assistant message - let ChatMessages handle typing indicator
+    let assistantMessage: ChatMessage | null = null
 
     // Cancel any ongoing request
     abortRef.current?.abort()
@@ -107,7 +107,12 @@ export function useChat({
               const data = JSON.parse(line.slice(6))
               if (typeof data === 'string') {
                 accumulatedContent += data
-                updateMessage(assistantMessage.id!, { content: accumulatedContent })
+                // Create assistant message on first content chunk
+                if (!assistantMessage) {
+                  assistantMessage = addMessage({ role: 'assistant', content: accumulatedContent })
+                } else {
+                  updateMessage(assistantMessage.id!, { content: accumulatedContent })
+                }
               }
             } catch (e) {
               // Skip malformed JSON
@@ -127,21 +132,25 @@ export function useChat({
         }
       }
 
-      const finalMessage = { 
-        ...assistantMessage, 
-        content: accumulatedContent 
+      if (assistantMessage) {
+        const finalMessage = { 
+          ...assistantMessage, 
+          content: accumulatedContent 
+        }
+        
+        console.log('✅ Message completed:', finalMessage.content.substring(0, 50) + '...')
+        onFinish?.(finalMessage)
       }
-      
-      console.log('✅ Message completed:', finalMessage.content.substring(0, 50) + '...')
-      onFinish?.(finalMessage)
 
     } catch (err) {
       const errorObj = err instanceof Error ? err : new Error('Failed to send message')
       setError(errorObj)
       onError?.(errorObj)
       
-      // Remove the failed assistant message
-      setMessages(prev => prev.filter(msg => msg.id !== assistantMessage.id))
+      // Remove the failed assistant message if it was created
+      if (assistantMessage) {
+        setMessages(prev => prev.filter(msg => msg.id !== assistantMessage.id))
+      }
       
       console.error('❌ Chat error:', errorObj)
     } finally {
