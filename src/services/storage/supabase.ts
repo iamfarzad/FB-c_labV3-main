@@ -147,16 +147,6 @@ export function getSupabaseStorage(): SupabaseStorage {
   return defaultInstance
 }
 
-// Legacy compatibility exports
-export const supabase = (() => {
-  try {
-    return getSupabaseStorage().client
-  } catch {
-    console.warn('⚠️ Supabase not configured, using mock client')
-    return createMockClient()
-  }
-})()
-
 function createMockClient() {
   return {
     auth: {
@@ -188,4 +178,3 @@ export const supabaseStorage = new SupabaseStorage(config)
 // Legacy exports for compatibility
 export const getSupabase = () => supabaseStorage.client
 export const supabaseService = supabaseStorage
-export const supabase = supabaseStorage.client

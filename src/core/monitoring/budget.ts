@@ -1,4 +1,4 @@
-import { getSupabase } from './supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 
 /**
  * Demo Budget Manager
