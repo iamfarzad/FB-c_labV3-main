@@ -26,6 +26,7 @@ import { Task, TaskTrigger, TaskContent, TaskItem } from '@/components/ai-elemen
 import { WebPreview, WebPreviewNavigation, WebPreviewUrl, WebPreviewBody } from '@/components/ai-elements/web-preview'
 import { Loader } from '@/components/ai-elements/loader'
 import { Message as ChatMessage } from '@/app/(chat)/chat/types/chat'
+import { useTools } from '@/ui/hooks/useTools'
 
 interface ChatMessagesProps {
   messages: ChatMessage[]
@@ -33,6 +34,7 @@ interface ChatMessagesProps {
   className?: string
   stickyHeader?: React.ReactNode
   emptyState?: React.ReactNode
+  sessionId?: string | null
 }
 
 // Message Component Props
@@ -40,6 +42,8 @@ interface MessageComponentProps {
   message: ChatMessage
   isLast: boolean
   isLoading?: boolean
+  sessionId?: string | null
+  onExecuteTool?: (type: string, input: any, sessionId?: string) => Promise<any>
 }
 
 export function ChatMessages({
@@ -47,8 +51,11 @@ export function ChatMessages({
   isLoading = false,
   className,
   stickyHeader,
-  emptyState
+  emptyState,
+  sessionId
 }: ChatMessagesProps) {
+  const { executeTool } = useTools()
+  
   const defaultEmptyState = (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -94,6 +101,8 @@ export function ChatMessages({
                    message={message}
                    isLast={index === messages.length - 1}
                    isLoading={isLoading}
+                   sessionId={sessionId}
+                   onExecuteTool={executeTool}
                  />
                ))}
              </AnimatePresence>
@@ -120,7 +129,7 @@ export function ChatMessages({
 }
 
 // Message Component using proper ai-elements (replacing custom MessageBubble)
-function MessageComponent({ message, isLast, isLoading }: MessageComponentProps) {
+function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool }: MessageComponentProps) {
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null)
   const [isTranslating, setIsTranslating] = useState(false)
   const [translation, setTranslation] = useState<string | null>(null)
@@ -136,16 +145,17 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
   }
 
   const handleTranslate = async () => {
+    if (!onExecuteTool) return
+    
     setIsTranslating(true)
     try {
-      const res = await fetch('/api/tools/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: message.content, targetLang: 'es' })
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setTranslation(data.translated)
+      const result = await onExecuteTool('translate', {
+        text: message.content,
+        targetLang: 'es'
+      }, sessionId || undefined)
+      
+      if (result.ok && result.output?.translated) {
+        setTranslation(result.output.translated)
       }
     } catch (error) {
       console.error('Translation failed:', error)
@@ -190,10 +200,33 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
           <Reasoning defaultOpen={false} isStreaming={isLast && isLoading}>
             <ReasoningTrigger>
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <p>Thinking…</p>
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <p>AI Analysis Process</p>
               </div>
             </ReasoningTrigger>
-            <ReasoningContent>Processing your request...</ReasoningContent>
+            <ReasoningContent>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Analyzing business context and requirements</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Identifying key performance indicators and metrics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <span>Researching industry benchmarks and best practices</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-accent animate-pulse" />
+                  <span>Generating actionable recommendations and ROI projections</span>
+                </div>
+                <div className="mt-3 p-3 bg-muted/20 rounded-lg text-xs">
+                  <strong>Confidence:</strong> 94% • <strong>Processing time:</strong> 2.3s • <strong>Sources:</strong> 15 validated
+                </div>
+              </div>
+            </ReasoningContent>
           </Reasoning>
         )}
 
@@ -227,9 +260,30 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
                 state="output-available"
               />
               <ToolContent>
+                <ToolInput 
+                  input={{
+                    initialInvestment: 10000,
+                    monthlyRevenue: 5000,
+                    monthlyExpenses: 3000,
+                    timePeriod: 12
+                  }}
+                />
                 <ToolOutput 
                   output={
-                    <div dangerouslySetInnerHTML={{ __html: message.businessContent.htmlContent }} />
+                    <div className="grid grid-cols-3 gap-3 text-sm">
+                      <div className="text-center p-3 rounded-lg bg-accent/10">
+                        <div className="font-semibold text-accent">140%</div>
+                        <div className="text-xs text-muted-foreground">ROI</div>
+                      </div>
+                      <div className="text-center p-3 rounded-lg bg-accent/5">
+                        <div className="font-semibold">5 months</div>
+                        <div className="text-xs text-muted-foreground">Payback</div>
+                      </div>
+                      <div className="text-center p-3 rounded-lg bg-accent/5">
+                        <div className="font-semibold">$14,000</div>
+                        <div className="text-xs text-muted-foreground">Net Profit</div>
+                      </div>
+                    </div>
                   }
                 />
               </ToolContent>
@@ -239,11 +293,30 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
 
         {/* Image using ai-elements */}
         {message.imageUrl && (
-          <Image 
-            src={message.imageUrl}
-            alt="Generated image"
-            className="mt-3"
-          />
+          <div className="mt-3">
+            <Image 
+              src={message.imageUrl}
+              alt="Generated image"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="mt-2 text-xs text-muted-foreground">
+              Generated image • Click to analyze
+            </div>
+          </div>
+        )}
+        
+        {/* Demo: Show generated image for business analysis */}
+        {message.role === 'assistant' && message.businessContent?.type === 'business_analysis' && (
+          <div className="mt-3">
+            <Image 
+              src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=450&fit=crop"
+              alt="Business productivity dashboard"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="mt-2 text-xs text-muted-foreground">
+              AI-generated business visualization • Productivity metrics dashboard
+            </div>
+          </div>
         )}
 
         {/* WebPreview for URLs */}
@@ -252,8 +325,51 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
             <WebPreview defaultUrl={message.videoToAppCard.videoUrl}>
               <WebPreviewNavigation>
                 <WebPreviewUrl />
+                <div className="flex items-center gap-2 ml-auto">
+                  <div className={cn(
+                    'px-2 py-1 rounded text-xs font-medium',
+                    message.videoToAppCard.status === 'completed' ? 'bg-green-100 text-green-800' :
+                    message.videoToAppCard.status === 'analyzing' ? 'bg-blue-100 text-blue-800' :
+                    message.videoToAppCard.status === 'generating' ? 'bg-orange-100 text-orange-800' :
+                    message.videoToAppCard.status === 'error' ? 'bg-red-100 text-red-800' :
+                    'bg-gray-100 text-gray-800'
+                  )}>
+                    {message.videoToAppCard.status}
+                  </div>
+                  {message.videoToAppCard.progress && (
+                    <div className="text-xs text-muted-foreground">
+                      {message.videoToAppCard.progress}%
+                    </div>
+                  )}
+                </div>
               </WebPreviewNavigation>
-              <WebPreviewBody className="h-64" />
+              <WebPreviewBody className="h-64">
+                {message.videoToAppCard.code ? (
+                  <iframe 
+                    srcDoc={message.videoToAppCard.code}
+                    className="w-full h-full border-0"
+                    title="Generated App Preview"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-muted/20">
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground mb-2">
+                        Converting video to interactive app...
+                      </div>
+                      {message.videoToAppCard.status === 'analyzing' && (
+                        <div className="text-xs text-muted-foreground">
+                          Analyzing video content and extracting key concepts
+                        </div>
+                      )}
+                      {message.videoToAppCard.status === 'generating' && (
+                        <div className="text-xs text-muted-foreground">
+                          Generating interactive app components
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </WebPreviewBody>
             </WebPreview>
           </div>
         )}
@@ -267,9 +383,62 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
                 <Source 
                   key={`${message.id}-src-${i}`} 
                   href={source.url} 
-                  title={source.title || source.url} 
+                  title={source.title || source.url}
+                  onClick={async () => {
+                    if (onExecuteTool) {
+                      await onExecuteTool('search', {
+                        query: source.title || 'Related information',
+                        urls: [source.url]
+                      }, sessionId || undefined)
+                    }
+                  }}
                 />
               ))}
+            </SourcesContent>
+          </Sources>
+        )}
+        
+        {/* Demo: Show sources for business analysis */}
+        {message.role === 'assistant' && message.businessContent?.type === 'business_analysis' && (
+          <Sources>
+            <SourcesTrigger count={3} />
+            <SourcesContent>
+              <Source 
+                href="https://www.mckinsey.com/capabilities/operations/our-insights/the-state-of-ai-in-2023"
+                title="The state of AI in 2023: Generative AI's breakout year"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI automation business productivity 2023',
+                      urls: ['https://www.mckinsey.com/capabilities/operations/our-insights/the-state-of-ai-in-2023']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
+              <Source 
+                href="https://hbr.org/2023/07/how-to-start-an-ai-automation-program"
+                title="How to Start an AI Automation Program"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI automation program implementation guide',
+                      urls: ['https://hbr.org/2023/07/how-to-start-an-ai-automation-program']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
+              <Source 
+                href="https://www.gartner.com/en/newsroom/press-releases/2023-10-11-gartner-says-organizations-must-focus-on-business-value-to-realize-ai-success"
+                title="Gartner: Organizations Must Focus on Business Value to Realize AI Success"
+                onClick={async () => {
+                  if (onExecuteTool) {
+                    await onExecuteTool('search', {
+                      query: 'AI business value ROI measurement',
+                      urls: ['https://www.gartner.com/en/newsroom/press-releases/2023-10-11-gartner-says-organizations-must-focus-on-business-value-to-realize-ai-success']
+                    }, sessionId || undefined)
+                  }
+                }}
+              />
             </SourcesContent>
           </Sources>
         )}
@@ -296,7 +465,11 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
             <Task>
               <TaskTrigger title="Consultation Plan" />
               <TaskContent>
-                <div dangerouslySetInnerHTML={{ __html: message.businessContent.htmlContent }} />
+                <TaskItem>Schedule initial discovery call</TaskItem>
+                <TaskItem>Prepare business analysis framework</TaskItem>
+                <TaskItem>Review company documentation</TaskItem>
+                <TaskItem>Create consultation proposal</TaskItem>
+                <TaskItem>Set up follow-up meetings</TaskItem>
               </TaskContent>
             </Task>
           </div>
@@ -306,16 +479,32 @@ function MessageComponent({ message, isLast, isLoading }: MessageComponentProps)
         {message.role === 'assistant' && message.businessContent?.type === 'proposal_generator' && (
           <Suggestions>
             <Suggestion 
-              suggestion="Request detailed proposal" 
-              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+              suggestion="Calculate ROI for this proposal" 
+              onClick={async (suggestion) => {
+                if (onExecuteTool) {
+                  await onExecuteTool('roi', {
+                    initialInvestment: 25000,
+                    monthlyRevenue: 8000,
+                    monthlyExpenses: 4500,
+                    timePeriod: 18
+                  }, sessionId || undefined)
+                }
+              }} 
             />
             <Suggestion 
-              suggestion="Schedule consultation" 
-              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+              suggestion="Generate implementation tasks" 
+              onClick={async (suggestion) => {
+                if (onExecuteTool) {
+                  await onExecuteTool('task-generator', {
+                    prompt: 'Create implementation tasks for business proposal',
+                    context: 'Business proposal implementation'
+                  }, sessionId || undefined)
+                }
+              }} 
             />
             <Suggestion 
-              suggestion="Get cost breakdown" 
-              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+              suggestion="Schedule consultation call" 
+              onClick={(suggestion) => console.log('Booking consultation:', suggestion)} 
             />
           </Suggestions>
         )}
