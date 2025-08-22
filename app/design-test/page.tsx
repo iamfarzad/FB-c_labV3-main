@@ -1,4 +1,4 @@
-import { CleanChatDemo } from '@/components/chat/CleanChatDemo'
+import { ChatInterfaceWrapper } from '@/components/chat/ChatInterfaceWrapper'
 import { Button } from '@/components/ui/primitives/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/primitives/card'
 
@@ -103,7 +103,14 @@ export default function DesignTestPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <CleanChatDemo />
+            <ChatInterfaceWrapper 
+              messages={[]}
+              isLoading={false}
+              sessionId="demo-session"
+              onSendMessage={() => {}}
+              onClearMessages={() => {}}
+              onToolAction={() => {}}
+            />
           </CardContent>
         </Card>
 

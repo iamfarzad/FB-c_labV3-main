@@ -1,4 +1,4 @@
-import { CleanChatDemo } from '@/components/chat/CleanChatDemo'
+import { ChatInterfaceWrapper } from '@/components/chat/ChatInterfaceWrapper'
 
 export default function TestCleanChatPage() {
   return (
@@ -10,7 +10,14 @@ export default function TestCleanChatPage() {
         </p>
       </div>
       
-      <CleanChatDemo />
+      <ChatInterfaceWrapper 
+        messages={[]}
+        isLoading={false}
+        sessionId="test-session"
+        onSendMessage={() => {}}
+        onClearMessages={() => {}}
+        onToolAction={() => {}}
+      />
       
       <div className="mt-8 text-center text-sm text-muted-foreground">
         <p>✅ Single message schema</p>
