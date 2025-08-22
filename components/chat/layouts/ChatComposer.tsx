@@ -1,11 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Send } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { ToolMenu } from '@/components/chat/ToolMenu'
+import React from 'react'
 import { cn } from '@/src/core/utils'
+import { 
+  PromptInput, 
+  PromptInputToolbar, 
+  PromptInputTools, 
+  PromptInputTextarea, 
+  PromptInputSubmit 
+} from '@/components/ai-elements/prompt-input'
+import { ToolMenu } from '@/components/chat/ToolMenu'
 
 interface ChatComposerProps {
   value: string
@@ -37,15 +41,6 @@ export function ChatComposer({
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      if (value.trim() && !isLoading) {
-        onSubmit(value.trim())
-      }
-    }
-  }
-
   return (
     <div className={cn('space-y-3', className)}>
       {/* Top Slot (for suggestions, etc.) */}
@@ -55,54 +50,37 @@ export function ChatComposer({
         </div>
       )}
 
-      {/* Main Composer */}
-      <form onSubmit={handleSubmit}>
-        <div className="relative">
-          <div className="flex gap-3 p-3 bg-card/60 backdrop-blur-xl border border-border/20 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200">
-            {/* Tool Menu */}
-            <div className="flex items-center gap-2">
-              <ToolMenu 
-                onUploadDocument={() => onToolAction?.('document')}
-                onUploadImage={() => onToolAction?.('image')}
-                onWebcam={() => onToolAction?.('webcam')}
-                onScreenShare={() => onToolAction?.('screen')}
-                onROI={() => onToolAction?.('roi')}
-                onVideoToApp={() => onToolAction?.('video')}
-                comingSoon={['webcam', 'screen', 'video']}
-                className="rounded-xl border-border/30 hover:border-accent/30 hover:bg-accent/10"
-              />
-            </div>
-            
-            {/* Text Input */}
-            <Textarea
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              className="flex-1 min-h-[44px] max-h-32 resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/60"
-              disabled={isLoading}
-              rows={1}
+      {/* AI-Elements PromptInput */}
+      <PromptInput onSubmit={handleSubmit} aria-label="Chat composer">
+        <PromptInputToolbar>
+          <PromptInputTools>
+            <ToolMenu 
+              onUploadDocument={() => onToolAction?.('document')}
+              onUploadImage={() => onToolAction?.('image')}
+              onWebcam={() => onToolAction?.('webcam')}
+              onScreenShare={() => onToolAction?.('screen')}
+              onROI={() => onToolAction?.('roi')}
+              onVideoToApp={() => onToolAction?.('video')}
+              comingSoon={['webcam', 'screen', 'video']}
             />
-            
-            {/* Send Button */}
-            <Button
-              type="submit"
-              disabled={isLoading || !value.trim()}
-              size="icon"
-              className="rounded-xl bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
+          </PromptInputTools>
+        </PromptInputToolbar>
+        
+        <PromptInputTextarea
+          placeholder={placeholder}
+          className="min-h-[64px] text-base"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label="Type your message"
+        />
+        
+        <div className="flex items-center justify-between p-1">
+          <div className="text-xs text-muted-foreground">
+            Press Enter to send • Shift+Enter for new line
           </div>
-          
-          {/* Input Hint Only */}
-          <div className="flex items-center justify-end mt-2 px-1">
-            <div className="text-xs text-muted-foreground">
-              Press Enter to send • Shift+Enter for new line
-            </div>
-          </div>
+          <PromptInputSubmit status={isLoading ? 'submitted' : undefined} />
         </div>
-      </form>
+      </PromptInput>
     </div>
   )
 }

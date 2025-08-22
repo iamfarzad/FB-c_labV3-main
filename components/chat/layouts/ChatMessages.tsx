@@ -22,6 +22,13 @@ import { Actions, Action, Suggestions, Suggestion } from '@/components/ai-elemen
 import { ActivityChip } from '@/components/chat/activity/ActivityChip'
 import CitationDisplay from '@/components/chat/CitationDisplay'
 import { ToolCardWrapper } from '@/components/chat/ToolCardWrapper'
+import { Image } from '@/components/ai-elements/image'
+import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool'
+import { Task, TaskTrigger, TaskContent, TaskItem } from '@/components/ai-elements/task'
+import { WebPreview, WebPreviewNavigation, WebPreviewUrl, WebPreviewBody } from '@/components/ai-elements/web-preview'
+import { InlineCitation } from '@/components/ai-elements/inline-citation'
+import { Branch } from '@/components/ai-elements/branch'
+import { Loader } from '@/components/ai-elements/loader'
 
 interface ChatMessage {
   id: string
@@ -103,7 +110,7 @@ export function ChatMessages({
             </AnimatePresence>
           )}
 
-          {/* Typing indicator using ai-elements pattern */}
+          {/* Typing indicator using ai-elements Loader */}
           {isLoading && (
             <Message from="assistant">
               <MessageAvatar 
@@ -111,26 +118,7 @@ export function ChatMessages({
                 name="F.B/c AI"
               />
               <MessageContent>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    {[0, 1, 2].map((i) => (
-                      <motion.div
-                        key={i}
-                        className="w-2 h-2 rounded-full bg-muted-foreground/50"
-                        animate={{
-                          scale: [1, 1.3, 1],
-                          opacity: [0.5, 1, 0.5]
-                        }}
-                        transition={{
-                          duration: 1.2,
-                          repeat: Infinity,
-                          delay: i * 0.2
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-muted-foreground">AI is thinking...</span>
-                </div>
+                <Loader type="typing" text="AI is thinking..." />
               </MessageContent>
             </Message>
           )}
@@ -246,44 +234,66 @@ function MessageComponent({ message, isLast }: MessageComponentProps) {
           })}
         </div>
 
-        {/* Tool Results */}
+        {/* Tool Results using ai-elements */}
         {message.type === 'tool' && message.metadata?.tools?.length && (
           <div className="mt-3 space-y-2">
-            {message.metadata.tools.map((tool, i) => {
-              if (tool.type === 'roiResult') {
-                const r = tool.data || {}
-                return (
-                  <ToolCardWrapper key={`tool-${message.id}-${i}`} title="ROI Analysis" icon={<FbcIcon className="h-4 w-4" />}>
-                    <div className="grid grid-cols-3 gap-3 text-sm">
-                      <div className="text-center p-3 rounded-lg bg-accent/10">
-                        <div className="font-semibold text-accent">{r.estimatedROI ?? r.roi}%</div>
-                        <div className="text-xs text-muted-foreground">ROI</div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg bg-accent/5">
-                        <div className="font-semibold">{r.paybackPeriod ?? '—'}</div>
-                        <div className="text-xs text-muted-foreground">Payback (mo)</div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg bg-accent/5">
-                        <div className="font-semibold">${(r.costSavings ?? r.netProfit)?.toLocaleString?.() ?? r.costSavings}</div>
-                        <div className="text-xs text-muted-foreground">Net Profit</div>
-                      </div>
-                    </div>
-                  </ToolCardWrapper>
-                )
-              }
-              return null
-            })}
+            {message.metadata.tools.map((tool, i) => (
+              <Tool key={`tool-${message.id}-${i}`}>
+                <ToolHeader 
+                  type={tool.type}
+                  state="output-available"
+                />
+                <ToolContent>
+                  <ToolInput input={tool.data?.input || {}} />
+                  <ToolOutput 
+                    output={
+                      tool.type === 'roiResult' ? (
+                        <div className="grid grid-cols-3 gap-3 text-sm">
+                          <div className="text-center p-3 rounded-lg bg-accent/10">
+                            <div className="font-semibold text-accent">{tool.data?.estimatedROI ?? tool.data?.roi}%</div>
+                            <div className="text-xs text-muted-foreground">ROI</div>
+                          </div>
+                          <div className="text-center p-3 rounded-lg bg-accent/5">
+                            <div className="font-semibold">{tool.data?.paybackPeriod ?? '—'}</div>
+                            <div className="text-xs text-muted-foreground">Payback (mo)</div>
+                          </div>
+                          <div className="text-center p-3 rounded-lg bg-accent/5">
+                            <div className="font-semibold">${(tool.data?.costSavings ?? tool.data?.netProfit)?.toLocaleString?.() ?? tool.data?.costSavings}</div>
+                            <div className="text-xs text-muted-foreground">Net Profit</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <pre className="text-xs">{JSON.stringify(tool.data, null, 2)}</pre>
+                      )
+                    }
+                    errorText={tool.data?.error}
+                  />
+                </ToolContent>
+              </Tool>
+            ))}
           </div>
         )}
 
-        {/* Image */}
+        {/* Image using ai-elements */}
         {message.metadata?.imageUrl && (
-          <div className="mt-3 rounded-lg overflow-hidden border border-border/20">
-            <img 
-              src={message.metadata.imageUrl} 
-              alt="Message attachment" 
-              className="max-w-full h-auto"
-            />
+          <Image 
+            src={message.metadata.imageUrl}
+            alt="Generated image"
+            className="mt-3"
+          />
+        )}
+
+        {/* WebPreview for URLs */}
+        {message.metadata?.tools?.some(tool => tool.type === 'webPreview') && (
+          <div className="mt-3">
+            {message.metadata.tools.filter(tool => tool.type === 'webPreview').map((tool, i) => (
+              <WebPreview key={`preview-${message.id}-${i}`} defaultUrl={tool.data?.url}>
+                <WebPreviewNavigation>
+                  <WebPreviewUrl />
+                </WebPreviewNavigation>
+                <WebPreviewBody className="h-64" />
+              </WebPreview>
+            ))}
           </div>
         )}
 
@@ -322,6 +332,24 @@ function MessageComponent({ message, isLast }: MessageComponentProps) {
               {translation}
             </div>
           </motion.div>
+        )}
+
+        {/* Task Management using ai-elements */}
+        {message.metadata?.tools?.some(tool => tool.type === 'taskList') && (
+          <div className="mt-3">
+            {message.metadata.tools.filter(tool => tool.type === 'taskList').map((tool, i) => (
+              <Task key={`task-${message.id}-${i}`}>
+                <TaskTrigger title="Generated Tasks" />
+                <TaskContent>
+                  {tool.data?.tasks?.map((task: any, taskIndex: number) => (
+                    <TaskItem key={taskIndex}>
+                      {task.title || task.description || `Task ${taskIndex + 1}`}
+                    </TaskItem>
+                  ))}
+                </TaskContent>
+              </Task>
+            ))}
+          </div>
         )}
 
         {/* Suggestions using ai-elements */}

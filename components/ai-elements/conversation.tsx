@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/components/ui/button';
 import { ArrowDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useCallback } from 'react';
@@ -47,12 +47,13 @@ export const ConversationScrollButton = ({
       <Button
         className={cn(
           'absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full',
+          'bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg backdrop-blur-xl',
           className,
         )}
         onClick={handleScrollToBottom}
         size="icon"
         type="button"
-        variant="outline"
+        variant="default"
         {...props}
       >
         <ArrowDownIcon className="size-4" />
