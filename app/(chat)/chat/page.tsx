@@ -5,13 +5,15 @@ import { ChatLayout } from '@/components/chat/layouts/ChatLayout'
 import { ChatHeader } from '@/components/chat/layouts/ChatHeader'
 import { ChatMessages } from '@/components/chat/layouts/ChatMessages'
 import { ChatComposer } from '@/components/chat/layouts/ChatComposer'
-import { ChatSidebar } from '@/components/chat/layouts/ChatSidebar'
 import { VoiceOverlay } from '@/components/chat/VoiceOverlay'
 import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/ui/hooks/useChat'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
 import { Message } from './types/chat'
+
+// Import VerticalProcessChain from ChatSidebar for reuse
+import { VerticalProcessChain } from '@/components/chat/layouts/ChatSidebar'
 
 export default function ChatPage() {
   const [input, setInput] = useState('')
@@ -177,13 +179,26 @@ export default function ChatPage() {
         htmlContent: '<div>Business Proposal</div>'
       }
     },
-    ...messages.map(msg => ({
-      id: msg.id || `msg-${Date.now()}`,
-      role: msg.role,
-      content: msg.content,
-      createdAt: new Date(),
-      sources: msg.meta?.sources,
-    }))
+    ...messages
+      .filter((msg): msg is typeof msg & { role: 'user' | 'assistant' } =>
+        msg.role === 'user' || msg.role === 'assistant')
+      .map(msg => {
+        const message: Message = {
+          id: msg.id || `msg-${Date.now()}`,
+          role: msg.role,
+          content: msg.content,
+          createdAt: new Date(),
+        }
+
+        if (Array.isArray(msg.meta?.sources)) {
+          message.sources = msg.meta.sources.map((source: any) => ({
+            title: source.title || source.url,
+            url: source.url
+          }))
+        }
+
+        return message
+      })
   ]
 
   return (
@@ -194,20 +209,10 @@ export default function ChatPage() {
         <ChatHeader
           sessionId={sessionId}
           onClearMessages={clear}
-          onOpenVoice={() => setOpenVoice(true)}
+          showVoiceButton={false}
         />
       }
-      sidebar={
-        <ChatSidebar
-          sessionId={sessionId}
-          context={context}
-          activityLog={activityLog}
-          stages={stages}
-          currentStage={stage}
-          stageProgress={stageProgress}
-        />
-      }
-      composer={
+            composer={
         <ChatComposer
           value={input}
           onChange={setInput}
@@ -215,10 +220,12 @@ export default function ChatPage() {
           onToolAction={handleToolAction}
           isLoading={isLoading}
           sessionId={sessionId}
+          onOpenVoice={() => setOpenVoice(true)}
+          showVoiceButton={true}
           topSlot={
-            <SuggestedActions 
-              sessionId={sessionId} 
-              stage={stage as any} 
+            <SuggestedActions
+              sessionId={sessionId}
+              stage={stage as any}
               onRun={handleSuggestionRun}
               mode="static"
             />
@@ -226,11 +233,44 @@ export default function ChatPage() {
         />
       }
       overlay={
-        <VoiceOverlay
-          open={openVoice}
-          onCancel={() => setOpenVoice(false)}
-          onAccept={handleVoiceInput}
-        />
+        <>
+          <VoiceOverlay
+            open={openVoice}
+            onCancel={() => setOpenVoice(false)}
+            onAccept={handleVoiceInput}
+          />
+          {/* Floating Vertical Process Chain - Integrated Design */}
+          {(stages && stages.length > 0) || (activityLog && activityLog.length > 0) ? (
+            <div className="fixed top-1/2 right-6 -translate-y-1/2 w-16 z-50 pointer-events-none max-lg:right-4 max-md:right-3">
+              <VerticalProcessChain
+                activities={
+                  activityLog && activityLog.length > 0
+                    ? activityLog.slice(-8).map((activity, index) => ({
+                        id: activity.id,
+                        type: activity.type,
+                        title: activity.title,
+                        description: activity.description,
+                        status: activity.status
+                      }))
+                    : stages!.slice(-8).map((stage, index) => ({
+                        id: stage.id,
+                        type: index === 0 ? 'user_action' :
+                              index === 1 ? 'ai_thinking' :
+                              index === 2 ? 'search' :
+                              index === 3 ? 'doc_analysis' :
+                              index === 4 ? 'tool_used' :
+                              index === 5 ? 'ai_stream' :
+                              index === 6 ? 'database' : 'complete',
+                        title: stage.label,
+                        description: `Stage ${index + 1} of ${stages!.length}`,
+                        status: stage.done ? 'completed' :
+                                stage.current ? 'in_progress' : 'pending'
+                      }))
+                }
+              />
+            </div>
+          ) : null}
+        </>
       }
     >
       <ChatMessages

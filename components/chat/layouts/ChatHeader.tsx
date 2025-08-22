@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { RotateCcw, Settings, Mic } from 'lucide-react'
+import { RotateCcw, Mic } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FbcIcon } from '@/components/ui/fbc-icon'
@@ -73,13 +73,7 @@ export function ChatHeader({
           </Button>
         )}
         
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="hover:bg-accent/10 rounded-xl"
-        >
-          <Settings className="h-4 w-4" />
-        </Button>
+
       </div>
     </div>
   )

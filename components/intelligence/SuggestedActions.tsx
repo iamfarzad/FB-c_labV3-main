@@ -93,9 +93,9 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                className="rounded-full h-8 px-3 bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)] text-white"
+                className="rounded-full h-9 px-4 bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)] text-white"
               >
-                <FileText className="mr-2 h-3.5 w-3.5" /> Share Summary
+                <FileText className="mr-2 h-4 w-4" /> Share Summary
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -137,9 +137,9 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
           <BookCallButton
             size="sm"
             variant="outline"
-            className={outlineCtaClasses + ' rounded-full h-8 px-3'}
+            className={outlineCtaClasses + ' rounded-full h-9 px-4'}
           >
-            <PhoneCall className="mr-2 h-3.5 w-3.5" /> Book a Call
+            <PhoneCall className="mr-2 h-4 w-4" /> Book a Call
           </BookCallButton>
         </div>
 
@@ -258,7 +258,7 @@ export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 's
         <Button
           key={s.id}
           size="sm"
-          variant={s.capability === 'exportPdf' ? 'default' : 'outline'}
+          variant={s.capability === 'exportPdf' ? 'primary' : 'outline'}
           onClick={() => onRun?.(s)}
         >
           {s.label}

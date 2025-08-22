@@ -149,6 +149,11 @@
     perspective: 1000px;
     will-change: transform;
   }
+
+  /* Brand gradient utilities */
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+  }
 }
 
 /* ===========================================

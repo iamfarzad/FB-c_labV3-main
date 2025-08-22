@@ -2,12 +2,14 @@
 
 import React from 'react'
 import { cn } from '@/src/core/utils'
-import { 
-  PromptInput, 
-  PromptInputToolbar, 
-  PromptInputTools, 
-  PromptInputTextarea, 
-  PromptInputSubmit 
+import { Mic } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  PromptInput,
+  PromptInputToolbar,
+  PromptInputTools,
+  PromptInputTextarea,
+  PromptInputSubmit
 } from '@/components/ai-elements/prompt-input'
 import { ToolMenu } from '@/components/chat/ToolMenu'
 
@@ -21,6 +23,8 @@ interface ChatComposerProps {
   topSlot?: React.ReactNode
   className?: string
   sessionId?: string | null
+  onOpenVoice?: () => void
+  showVoiceButton?: boolean
 }
 
 export function ChatComposer({
@@ -32,7 +36,9 @@ export function ChatComposer({
   placeholder = 'Message F.B/c AI...',
   topSlot,
   className,
-  sessionId
+  sessionId,
+  onOpenVoice,
+  showVoiceButton = true
 }: ChatComposerProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,10 +57,11 @@ export function ChatComposer({
       )}
 
       {/* AI-Elements PromptInput */}
-      <PromptInput onSubmit={handleSubmit} aria-label="Chat composer">
+      <div className="overflow-visible">
+        <PromptInput onSubmit={handleSubmit} aria-label="Chat composer">
         <PromptInputToolbar>
-          <PromptInputTools>
-            <ToolMenu 
+          <div className="flex items-center gap-2 overflow-visible">
+            <ToolMenu
               onUploadDocument={() => onToolAction?.('document')}
               onUploadImage={() => onToolAction?.('image')}
               onWebcam={() => onToolAction?.('webcam')}
@@ -63,7 +70,7 @@ export function ChatComposer({
               onVideoToApp={() => onToolAction?.('video')}
               comingSoon={['webcam', 'screen', 'video']}
             />
-          </PromptInputTools>
+          </div>
         </PromptInputToolbar>
         
         <PromptInputTextarea
@@ -78,9 +85,23 @@ export function ChatComposer({
           <div className="text-xs text-muted-foreground">
             Press Enter to send • Shift+Enter for new line
           </div>
-          <PromptInputSubmit status={isLoading ? 'submitted' : undefined} />
+          <div className="flex items-center gap-2">
+            {showVoiceButton && onOpenVoice && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenVoice}
+                className="h-10 w-10 hover:bg-accent/10 rounded-lg"
+                title="Voice input"
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+            )}
+            <PromptInputSubmit disabled={isLoading} />
+          </div>
         </div>
-      </PromptInput>
+        </PromptInput>
+      </div>
     </div>
   )
 }
