@@ -37,7 +37,7 @@ export function useChat({
   const send = useCallback(async (userText: string) => {
     if (!userText.trim() || isLoading) return
 
-    const endpoint = mode === 'admin' ? '/api/admin/chat-v2' : '/api/chat-v2'
+    const endpoint = mode === 'admin' ? '/api/admin/chat' : '/api/chat'
     
     // Add user message
     const userMessage = addMessage({ role: 'user', content: userText.trim() })
