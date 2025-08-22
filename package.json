@@ -184,6 +184,7 @@
     "dotenv": "^17.2.0",
     "eslint": "^9.33.0",
     "eslint-config-next": "^15.4.6",
+    "glob": "^11.0.3",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.0.5",
     "jscpd": "^4.0.5",

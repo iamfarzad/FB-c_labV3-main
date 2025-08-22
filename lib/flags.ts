@@ -1,6 +1,6 @@
 // Simple client-side feature flag helper with URL and localStorage overrides
 // Usage in client components:
-//   import { isFlagEnabled } from '@/lib/flags'
+//   import { isFlagEnabled } from '@/src/core/flags'
 //   if (isFlagEnabled('roi_inline_form')) { ... }
 
 type FlagName = 'roi_inline_form' | 'canvas_console' | 'coach_v2'

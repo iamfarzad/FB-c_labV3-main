@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookCallButton } from '@/components/meeting/BookCallButton'
-import type { Suggestion } from '@/types/intelligence'
+import type { Suggestion } from '@/src/core/types/intelligence'
 
 interface Props {
   sessionId?: string | null

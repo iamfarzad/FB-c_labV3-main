@@ -2,9 +2,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { isMockEnabled } from '@/lib/mock-control'
 import type { NextRequest } from 'next/server'
 import { recordCapabilityUsed } from '@/lib/context/capabilities'
-import { translationRequestSchema, validateRequest, sanitizeString } from '@/lib/validation'
+import { translationRequestSchema, validateRequest, sanitizeString } from '@/src/core/validation'
 import { logServerActivity } from '@/lib/server-activity-logger'
-import type { ToolRunResult } from '@/types/intelligence'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
 
 export async function POST(req: NextRequest) {
   const startTime = Date.now()

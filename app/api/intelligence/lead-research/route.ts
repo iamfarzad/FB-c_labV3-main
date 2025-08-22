@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { ToolRunResult } from '@/types/intelligence'
-import { LeadResearchService } from '@/lib/intelligence/lead-research'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
+import { LeadResearchService } from '@/src/core/intelligence'
 import { ContextStorage } from '@/lib/context/context-storage'
 import { embedTexts } from '@/lib/embeddings/gemini'
 import { upsertEmbeddings } from '@/lib/embeddings/query'

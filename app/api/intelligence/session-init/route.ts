@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ContextStorage } from '@/lib/context/context-storage'
-import { LeadResearchService } from '@/lib/intelligence/lead-research'
+import { LeadResearchService } from '@/src/core/intelligence'
 import { getSupabase } from '@/lib/supabase/server'
 
 const contextStorage = new ContextStorage()

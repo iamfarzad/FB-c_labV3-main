@@ -1,10 +1,10 @@
 import { GoogleGenAI } from '@google/genai'
 import { NextRequest, NextResponse } from 'next/server'
-import { adminAuthMiddleware } from '@/lib/auth'
+import { adminAuthMiddleware } from '@/src/core/auth'
 import { adminRateLimit } from '@/lib/rate-limiting'
 import { buildAdminContext, formatAdminContextForAI } from '@/lib/admin-context-builder'
 import { logServerActivity } from '@/lib/server-activity-logger'
-import { sanitizeString } from '@/lib/validation'
+import { sanitizeString } from '@/src/core/validation'
 import { withAdminMonitoring } from '@/lib/admin-monitoring'
 import { createOptimizedConfig, optimizeConversation, type ConversationMessage } from '@/lib/gemini-config-enhanced'
 

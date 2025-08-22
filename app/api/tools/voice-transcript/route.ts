@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { VoiceTranscriptSchema } from '@/lib/services/tool-service'
-import type { ToolRunResult } from '@/types/intelligence'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
 import { recordCapabilityUsed } from '@/lib/context/capabilities'
 
 export async function POST(req: NextRequest) {

@@ -1,8 +1,22 @@
 import { handleChat } from '../chat/handler'
+import { authService } from '@/src/core/auth'
 import type { ChatRequest } from '@/src/core/types/chat'
 
+export interface AdminChatOptions {
+  userId?: string
+  headers?: Record<string, string | null>
+}
+
 // Admin chat uses the same core service but with additional checks
-export async function handleAdminChat(body: ChatRequest, options?: { userId?: string }) {
+export async function handleAdminChat(body: unknown, options?: AdminChatOptions) {
+  // Verify admin authentication if headers provided
+  if (options?.headers) {
+    const authResult = await authService.authenticateRequest(options.headers)
+    if (!authResult.success) {
+      throw new Error('Unauthorized: ' + (authResult.error || 'Invalid credentials'))
+    }
+  }
+
   // Add admin-specific system message if not present
   const adminSystemMessage = {
     role: 'system' as const,
@@ -28,13 +42,14 @@ Response Style:
 - Maintain professional, business-focused tone`
   }
 
-  // Ensure admin system message is included
-  const hasSystemMessage = body.messages.some(msg => msg.role === 'system')
+  // Parse and enhance the request
+  const request = body as ChatRequest
+  const hasSystemMessage = request.messages.some(msg => msg.role === 'system')
   const enhancedBody: ChatRequest = {
-    ...body,
+    ...request,
     messages: hasSystemMessage 
-      ? body.messages 
-      : [adminSystemMessage, ...body.messages]
+      ? request.messages 
+      : [adminSystemMessage, ...request.messages]
   }
 
   // Reuse the same chat handler with enhanced context

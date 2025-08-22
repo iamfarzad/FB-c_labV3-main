@@ -1,5 +1,5 @@
 import { getSupabase } from "@/lib/supabase/server"
-import { EmailService } from "@/lib/email-service"
+import { EmailService } from '@/src/services/email/resend'
 import { MeetingScheduler } from "@/lib/meeting-scheduler"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"

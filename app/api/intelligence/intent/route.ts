@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { ToolRunResult } from '@/types/intelligence'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
 import { z } from 'zod'
-import { detectIntent } from '@/lib/intelligence/intent-detector'
+import { detectIntent } from '@/src/core/intelligence'
 import { ContextStorage } from '@/lib/context/context-storage'
 import { withApiGuard } from '@/lib/api/withApiGuard'
 

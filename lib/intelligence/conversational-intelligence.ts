@@ -3,7 +3,7 @@ import { LeadResearchService } from './lead-research'
 import { detectRole } from './role-detector'
 import type { ContextSnapshot } from '@/lib/context/context-schema'
 import { getContextSnapshot, updateContext } from '@/lib/context/context-manager'
-import type { IntentResult, Suggestion } from '@/types/intelligence'
+import type { IntentResult, Suggestion } from '@/src/core/types/intelligence'
 import { suggestTools } from './tool-suggestion-engine'
 
 export class ConversationalIntelligence {

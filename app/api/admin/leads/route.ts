@@ -1,6 +1,6 @@
 import { supabaseService } from "@/lib/supabase/client"
 import { type NextRequest, NextResponse } from "next/server"
-import { adminAuthMiddleware } from "@/lib/auth"
+import { adminAuthMiddleware } from '@/src/core/auth'
 import { adminRateLimit } from "@/lib/rate-limiting"
 import { withAdminAuth } from "@/lib/api/withAdminAuth"
 

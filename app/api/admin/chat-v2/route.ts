@@ -1,27 +1,23 @@
 import { NextRequest } from 'next/server'
 import { handleAdminChat } from '@/src/api/admin-chat/handler'
-import type { ChatRequest } from '@/src/core/types/chat'
-
-// Simple auth check - in production you'd use proper middleware
-async function checkAdminAuth(req: NextRequest): Promise<{ authorized: boolean; userId?: string }> {
-  // For now, just check for a basic auth header or session
-  // This should be replaced with your actual auth logic
-  const authHeader = req.headers.get('authorization')
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { authorized: false }
-  }
-
-  // In production, validate the token properly
-  // For demo purposes, accept any Bearer token
-  return { authorized: true, userId: 'admin-user' }
-}
 
 export async function POST(req: NextRequest) {
   try {
-    // Check authentication
-    const auth = await checkAdminAuth(req)
-    if (!auth.authorized) {
+    const body = await req.json()
+    
+    // Convert Next.js headers to plain object
+    const headers: Record<string, string | null> = {}
+    req.headers.forEach((value, key) => {
+      headers[key] = value
+    })
+
+    const result = await handleAdminChat(body, { headers })
+    return result
+  } catch (error) {
+    console.error('Admin chat API error:', error)
+    
+    // Handle auth errors specifically
+    if (error instanceof Error && error.message.startsWith('Unauthorized')) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized access' }), 
         { 
@@ -31,10 +27,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const body: ChatRequest = await req.json()
-    return await handleAdminChat(body, auth.userId ? { userId: auth.userId } : undefined)
-  } catch (error) {
-    console.error('Admin chat API error:', error)
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : 'Internal server error' 

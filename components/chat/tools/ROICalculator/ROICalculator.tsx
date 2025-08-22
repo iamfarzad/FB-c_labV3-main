@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
 import { cn } from "@/lib/utils"
 import type { ROICalculatorProps, ROICalculationResult, WizardStep } from "./ROICalculator.types"
-import type { ChatMessage, ROIResultPayload } from "@/types/chat"
+import type { ChatMessage, ROIResultPayload } from '@/src/core/types/chat'
 import { markCapabilityUsed } from "@/components/experience/progress-tracker"
 
 // Type for the API response data

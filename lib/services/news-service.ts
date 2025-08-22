@@ -1,4 +1,4 @@
-import GoogleSearchService, { GoogleSearchResponse } from '@/lib/services/google-search-service'
+import GoogleSearchService, { GoogleSearchResponse } from '@/src/services/search/google'
 
 export type NewsItem = {
   title: string

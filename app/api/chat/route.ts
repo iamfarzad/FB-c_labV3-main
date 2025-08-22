@@ -4,7 +4,7 @@ import { queryTopK } from '@/lib/embeddings/query'
 import { streamPerplexity } from '@/lib/providers/perplexity';
 import { getSupabase } from '@/lib/supabase/server';
 import type { NextRequest } from 'next/server';
-import { chatRequestSchema, validateRequest, sanitizeString } from '@/lib/validation';
+import { chatRequestSchema, validateRequest, sanitizeString } from '@/src/core/validation';
 import { logServerActivity } from '@/lib/server-activity-logger';
 // Legacy imports removed - using new Conversational Intelligence system
 import { checkDevelopmentConfig } from '@/lib/config';
@@ -12,7 +12,7 @@ import { withFullSecurity } from '@/lib/api-security';
 import { ModelSelector } from '@/lib/model-selector';
 import { enforceBudgetAndLog } from '@/lib/token-usage-logger';
 import URLContextService from '@/lib/services/url-context-service';
-import GoogleSearchService from '@/lib/services/google-search-service';
+import GoogleSearchService from '@/src/services/search/google';
 import { createOptimizedConfig, optimizeConversation, type ConversationMessage } from '@/lib/gemini-config-enhanced';
 import { shouldUseMockForRequest, createMockRedirectResponse, logApiRouting } from '@/lib/api-router';
 

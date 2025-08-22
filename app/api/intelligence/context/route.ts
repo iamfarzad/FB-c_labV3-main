@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { ToolRunResult } from '@/types/intelligence'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
 import { ContextStorage } from '@/lib/context/context-storage'
 import crypto from 'crypto'
 
