@@ -7,7 +7,7 @@ import type {
   KeyboardEventHandler,
 } from 'react';
 import { Children, useCallback, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -79,7 +79,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      'w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm',
+      'w-full divide-y overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-200',
       className,
     )}
     {...props}
@@ -123,9 +123,9 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        'w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0',
-        'bg-transparent dark:bg-transparent',
-        'focus-visible:ring-0',
+        'w-full resize-none rounded-none border-none p-4 shadow-none outline-none ring-0',
+        'bg-transparent dark:bg-transparent text-base',
+        'focus-visible:ring-0 placeholder:text-muted-foreground/60',
         className,
       )}
       name="message"
@@ -149,7 +149,7 @@ export const PromptInputToolbar = ({
   ...props
 }: PromptInputToolbarProps) => (
   <div
-    className={cn('flex items-center justify-between p-1', className)}
+    className={cn('flex items-center justify-between px-3 py-2 border-b border-border/10', className)}
     {...props}
   />
 );
@@ -162,8 +162,7 @@ export const PromptInputTools = ({
 }: PromptInputToolsProps) => (
   <div
     className={cn(
-      'flex items-center gap-1',
-      '[&_button:first-child]:rounded-bl-xl',
+      'flex items-center gap-2',
       className,
     )}
     {...props}
@@ -184,8 +183,8 @@ export const PromptInputButton = ({
   return (
     <Button
       className={cn(
-        'shrink-0 gap-1.5 rounded-lg',
-        variant === 'ghost' && 'text-muted-foreground',
+        'shrink-0 gap-1.5 rounded-xl',
+        variant === 'ghost' && 'text-muted-foreground hover:bg-accent/10',
         newSize === 'default' && 'px-3',
         className,
       )}
@@ -221,7 +220,10 @@ export const PromptInputSubmit = ({
 
   return (
     <Button
-      className={cn('gap-1.5 rounded-lg', className)}
+      className={cn(
+        'gap-1.5 rounded-xl bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 shadow-md hover:shadow-lg transition-all duration-200',
+        className
+      )}
       size={size}
       type="submit"
       variant={variant}
@@ -248,8 +250,8 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      'border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors',
-      'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground',
+      'border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors rounded-xl',
+      'hover:bg-accent/10 hover:text-foreground [&[aria-expanded="true"]]:bg-accent/10 [&[aria-expanded="true"]]:text-foreground',
       className,
     )}
     {...props}
@@ -264,7 +266,7 @@ export const PromptInputModelSelectContent = ({
   className,
   ...props
 }: PromptInputModelSelectContentProps) => (
-  <SelectContent className={cn(className)} {...props} />
+  <SelectContent className={cn('rounded-xl border-border/20 bg-card/90 backdrop-blur-xl', className)} {...props} />
 );
 
 export type PromptInputModelSelectItemProps = ComponentProps<typeof SelectItem>;
@@ -273,7 +275,7 @@ export const PromptInputModelSelectItem = ({
   className,
   ...props
 }: PromptInputModelSelectItemProps) => (
-  <SelectItem className={cn(className)} {...props} />
+  <SelectItem className={cn('rounded-lg hover:bg-accent/10', className)} {...props} />
 );
 
 export type PromptInputModelSelectValueProps = ComponentProps<
