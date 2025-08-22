@@ -155,14 +155,6 @@ export default function ChatPage() {
           sessionId={sessionId}
           onClearMessages={clear}
           onOpenVoice={() => setOpenVoice(true)}
-          rightSlot={
-            <SuggestedActions 
-              sessionId={sessionId} 
-              stage={stage as any} 
-              onRun={handleSuggestionRun}
-              mode="static"
-            />
-          }
         />
       }
       sidebar={

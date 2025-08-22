@@ -39,38 +39,7 @@ export function ChatSidebar({
 }: ChatSidebarProps) {
   return (
     <div className={cn('h-full p-4 space-y-4 overflow-y-auto', className)}>
-      {/* Session Info */}
-      <Card variant="glass" className="border-border/20">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <Brain className="w-4 h-4 text-accent" />
-            Session Status
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Connection</span>
-            <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse" />
-              Live
-            </Badge>
-          </div>
-          
-          {sessionId && (
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">Session ID</span>
-              <code className="text-xs bg-muted/50 px-2 py-1 rounded">
-                {sessionId.slice(0, 8)}...
-              </code>
-            </div>
-          )}
-          
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">AI Model</span>
-            <span className="text-foreground font-medium">Gemini 1.5 Flash</span>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Session info removed - now only in header */}
 
       {/* Context Display */}
       {context && Object.keys(context).length > 0 && (
@@ -185,38 +154,7 @@ export function ChatSidebar({
         </Card>
       )}
 
-      {/* Quick Actions */}
-      <Card variant="glass" className="border-border/20">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <Settings className="w-4 h-4 text-accent" />
-            Quick Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="w-full justify-start text-xs hover:bg-accent/10"
-          >
-            Export Conversation
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="w-full justify-start text-xs hover:bg-accent/10"
-          >
-            Book Meeting
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="w-full justify-start text-xs hover:bg-accent/10"
-          >
-            Share Insights
-          </Button>
-        </CardContent>
-      </Card>
+      {/* Quick Actions removed - handled by SuggestedActions in composer */}
     </div>
   )
 }

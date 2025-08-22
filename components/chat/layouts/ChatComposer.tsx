@@ -95,16 +95,8 @@ export function ChatComposer({
             </Button>
           </div>
           
-          {/* Status Bar */}
-          <div className="flex items-center justify-between mt-2 px-1">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span>Connected</span>
-              {sessionId && (
-                <span>• Session: {sessionId.slice(0, 8)}...</span>
-              )}
-            </div>
-            
+          {/* Input Hint Only */}
+          <div className="flex items-center justify-end mt-2 px-1">
             <div className="text-xs text-muted-foreground">
               Press Enter to send • Shift+Enter for new line
             </div>
