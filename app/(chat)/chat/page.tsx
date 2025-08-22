@@ -5,6 +5,7 @@ import { ChatLayout } from '@/components/chat/layouts/ChatLayout'
 import { ChatHeader } from '@/components/chat/layouts/ChatHeader'
 import { ChatMessages } from '@/components/chat/layouts/ChatMessages'
 import { ChatComposer } from '@/components/chat/layouts/ChatComposer'
+import { ChatSidebar } from '@/components/chat/layouts/ChatSidebar'
 import { VoiceOverlay } from '@/components/chat/VoiceOverlay'
 import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
 import { useChat } from '@/ui/hooks/useChat'
@@ -28,6 +29,19 @@ export default function ChatPage() {
   const [openVoice, setOpenVoice] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [stage, setStage] = useState('GREETING')
+  const [activityLog, setActivityLog] = useState<any[]>([])
+  const [stageProgress, setStageProgress] = useState(1)
+
+  // Stage progression configuration
+  const stages = [
+    { id: 'GREETING', label: 'Initial Greeting', done: false, current: true },
+    { id: 'CONTEXT', label: 'Context Gathering', done: false, current: false },
+    { id: 'ANALYSIS', label: 'Problem Analysis', done: false, current: false },
+    { id: 'SOLUTION', label: 'Solution Design', done: false, current: false },
+    { id: 'ROI', label: 'ROI Calculation', done: false, current: false },
+    { id: 'IMPLEMENTATION', label: 'Implementation Plan', done: false, current: false },
+    { id: 'FOLLOWUP', label: 'Follow-up Setup', done: false, current: false }
+  ]
 
   // Use the clean chat hook
   const { messages, isLoading, error, send, clear } = useChat({ 
@@ -72,7 +86,36 @@ export default function ChatPage() {
 
   const handleSendMessage = async (message: string) => {
     setInput('')
-    await send(message)
+    
+    // Add activity tracking
+    const activityId = `activity-${Date.now()}`
+    setActivityLog(prev => [...prev, {
+      id: activityId,
+      type: 'user_message',
+      title: 'User Message',
+      description: message.slice(0, 50) + (message.length > 50 ? '...' : ''),
+      status: 'in_progress',
+      timestamp: new Date()
+    }])
+    
+    try {
+      await send(message)
+      
+      // Mark activity as completed
+      setActivityLog(prev => prev.map(activity => 
+        activity.id === activityId 
+          ? { ...activity, status: 'completed' }
+          : activity
+      ))
+    } catch (error) {
+      // Mark activity as failed
+      setActivityLog(prev => prev.map(activity => 
+        activity.id === activityId 
+          ? { ...activity, status: 'failed' }
+          : activity
+      ))
+      throw error
+    }
   }
 
   const handleToolAction = (tool: string, data?: any) => {
@@ -120,6 +163,16 @@ export default function ChatPage() {
           }
         />
       }
+      sidebar={
+        <ChatSidebar
+          sessionId={sessionId}
+          context={context}
+          activityLog={activityLog}
+          stages={stages}
+          currentStage={stage}
+          stageProgress={stageProgress}
+        />
+      }
       composer={
         <ChatComposer
           value={input}
@@ -128,6 +181,14 @@ export default function ChatPage() {
           onToolAction={handleToolAction}
           isLoading={isLoading}
           sessionId={sessionId}
+          topSlot={
+            <SuggestedActions 
+              sessionId={sessionId} 
+              stage={stage as any} 
+              onRun={handleSuggestionRun}
+              mode="static"
+            />
+          }
         />
       }
       overlay={

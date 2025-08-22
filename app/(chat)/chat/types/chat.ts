@@ -5,6 +5,8 @@ export interface ActivityItem {
   type: string
   status: 'pending' | 'in_progress' | 'completed' | 'failed'
   content: string
+  title: string
+  description: string
   timestamp: Date
 }
 
