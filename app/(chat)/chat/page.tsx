@@ -184,6 +184,7 @@ export default function ChatPage() {
       <ChatMessages
         messages={chatMessages}
         isLoading={isLoading}
+        sessionId={sessionId}
       />
     </ChatLayout>
     </TooltipProvider>
