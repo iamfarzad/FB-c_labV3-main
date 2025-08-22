@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGroundingProvider } from '@/lib/intelligence/providers/search/google-grounding'
+import { GoogleSearchService } from '@/src/services/search/google'
 import { recordCapabilityUsed } from '@/lib/context/capabilities'
 
-const groundingProvider = new GoogleGroundingProvider()
+const searchService = new GoogleSearchService()
 
 // Per-session rate limit + optional idempotency
 const rl = new Map<string, { count: number; reset: number }>()

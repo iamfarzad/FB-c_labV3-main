@@ -175,3 +175,17 @@ function createMockClient() {
     })
   }
 }
+
+// Create and export instances
+const config = {
+  url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',
+  anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '',
+  serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY
+}
+
+export const supabaseStorage = new SupabaseStorage(config)
+
+// Legacy exports for compatibility
+export const getSupabase = () => supabaseStorage.client
+export const supabaseService = supabaseStorage
+export const supabase = supabaseStorage.client

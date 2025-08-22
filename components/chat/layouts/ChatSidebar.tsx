@@ -6,7 +6,7 @@ import { Brain, Activity, Settings, BarChart3 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { AiActivityMonitor } from '@/components/chat/activity/AiActivityMonitor'
+// import { AiActivityMonitor } from '@/components/chat/activity/AiActivityMonitor' // Temporarily disabled
 import { cn } from '@/src/core/utils'
 
 interface ActivityItem {
@@ -106,13 +106,27 @@ export function ChatSidebar({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <AiActivityMonitor
-              activities={activityLog}
-              stages={stages}
-              currentStage={currentStage}
-              stageProgress={stageProgress}
-              className="scale-90 origin-top"
-            />
+            <div className="space-y-2">
+              {activityLog.slice(-5).map((activity) => (
+                <div key={activity.id} className="flex items-center gap-2 text-xs">
+                  <div className={cn(
+                    'w-2 h-2 rounded-full',
+                    activity.status === 'completed' ? 'bg-green-500' :
+                    activity.status === 'failed' ? 'bg-red-500' :
+                    activity.status === 'in_progress' ? 'bg-accent animate-pulse' :
+                    'bg-muted-foreground/30'
+                  )} />
+                  <span className="text-muted-foreground truncate">
+                    {activity.title}
+                  </span>
+                </div>
+              ))}
+              {activityLog.length === 0 && (
+                <div className="text-xs text-muted-foreground text-center py-2">
+                  No recent activity
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}

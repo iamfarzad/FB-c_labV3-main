@@ -3,7 +3,7 @@ import type { ToolRunResult } from '@/src/core/types/intelligence'
 import { z } from 'zod'
 import { ContextStorage } from '@/lib/context/context-storage'
 import type { ContextSnapshot, IntentResult } from '@/src/core/types/intelligence'
-import { suggestTools } from '@/lib/intelligence/tool-suggestion-engine'
+import { intelligenceService } from '@/src/core/intelligence'
 import { withApiGuard } from '@/lib/api/withApiGuard'
 
 const contextStorage = new ContextStorage()

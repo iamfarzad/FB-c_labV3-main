@@ -69,6 +69,18 @@ export class AuthService {
 // Export singleton instance
 export const authService = new AuthService()
 
+// Admin authentication middleware
+export async function adminAuthMiddleware(headers: Record<string, string | null>): Promise<AuthResult> {
+  return authService.authenticateRequest(headers)
+}
+
+// Token creation (for login)
+export function createToken(payload: Omit<JWTPayload, 'exp' | 'iat'>): string {
+  // In production, use proper JWT library
+  // For now, return a mock token
+  return `mock-token-${payload.userId}-${Date.now()}`
+}
+
 // Utility functions
 export function sanitizeUserId(userId: string): string {
   return userId.replace(/[^a-zA-Z0-9\-_]/g, '').substring(0, 50)
