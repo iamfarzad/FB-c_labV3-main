@@ -10,6 +10,11 @@ import { Badge } from '@/components/ui/badge'
 import { FbcIcon } from '@/components/ui/fbc-icon'
 import { User } from 'lucide-react'
 import { Response } from '@/components/ai-elements/response'
+import { Reasoning, ReasoningTrigger, ReasoningContent } from '@/components/ai-elements/reasoning'
+import { Sources, SourcesTrigger, SourcesContent, Source } from '@/components/ai-elements/source'
+import { Actions, Action, Suggestions, Suggestion } from '@/components/ai-elements/actions'
+import { ActivityChip } from '@/components/chat/activity/ActivityChip'
+import CitationDisplay from '@/components/chat/CitationDisplay'
 import { ToolCardWrapper } from '@/components/chat/ToolCardWrapper'
 
 interface ChatMessage {
@@ -239,9 +244,37 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
           ? 'bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-br-md hover:shadow-xl' 
           : 'bg-card/60 border border-border/20 text-foreground rounded-bl-md hover:shadow-lg'
       )}>
-        {/* Main Content */}
+        {/* Reasoning (for assistant messages) */}
+        {message.role === 'assistant' && message.type === 'analysis' && (
+          <Reasoning defaultOpen={false} isStreaming={isLast && isLoading}>
+            <ReasoningTrigger>
+              <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                <p>Thinking…</p>
+              </div>
+            </ReasoningTrigger>
+            <ReasoningContent>Processing your request...</ReasoningContent>
+          </Reasoning>
+        )}
+
+        {/* Main Content with Activity Chips */}
         <div className="prose prose-sm max-w-none leading-relaxed break-words dark:prose-invert">
-          <Response>{message.content}</Response>
+          {/* Parse content for activity chips */}
+          {message.content.split(/(\[ACTIVITY_(IN|OUT):[^\]]+\])/).map((part, idx) => {
+            const activityMatch = part.match(/\[ACTIVITY_(IN|OUT):([^\]]+)\]/)
+            if (activityMatch) {
+              const direction = activityMatch[1].toLowerCase() as 'in' | 'out'
+              const label = activityMatch[2].trim()
+              return (
+                <ActivityChip 
+                  key={`${message.id}-activity-${idx}`}
+                  direction={direction}
+                  label={label}
+                  className="mx-1 align-middle"
+                />
+              )
+            }
+            return part ? <Response key={`${message.id}-content-${idx}`}>{part}</Response> : null
+          })}
         </div>
 
         {/* Tool Results */}
@@ -285,39 +318,28 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
           </div>
         )}
 
-        {/* Citations */}
+        {/* Citations using ai-elements */}
         {message.metadata?.citations && message.metadata.citations.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {message.metadata.citations.slice(0, 3).map((citation, i) => (
-              <a
-                key={i}
-                href={citation.uri}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs bg-background/50 border border-border/30 rounded-full px-2 py-1 hover:bg-background/70 transition-colors"
-              >
-                <ExternalLink className="w-3 h-3" />
-                <span>[{i + 1}] {citation.title || new URL(citation.uri).hostname}</span>
-              </a>
-            ))}
+          <div className="mt-3">
+            <CitationDisplay citations={message.metadata.citations} />
           </div>
         )}
 
-        {/* Sources */}
+        {/* Sources using ai-elements */}
         {message.metadata?.sources && message.metadata.sources.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {message.metadata.sources.slice(0, 3).map((source, i) => (
-              <a
-                key={i}
-                href={source.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs bg-background/50 border border-border/30 rounded-full px-2 py-1 hover:bg-background/70 transition-colors"
-              >
-                <span className="opacity-70">[{i + 1}]</span>
-                <span>{source.title || new URL(source.url).hostname}</span>
-              </a>
-            ))}
+          <div className="mt-3">
+            <Sources>
+              <SourcesTrigger count={message.metadata.sources.length} />
+              <SourcesContent>
+                {message.metadata.sources.map((source, i) => (
+                  <Source 
+                    key={`${message.id}-src-${i}`} 
+                    href={source.url} 
+                    title={source.title || source.url} 
+                  />
+                ))}
+              </SourcesContent>
+            </Sources>
           </div>
         )}
 
@@ -337,20 +359,18 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
           </motion.div>
         )}
 
-        {/* Suggestions */}
+        {/* Suggestions using ai-elements */}
         {message.role === 'assistant' && message.metadata?.suggestions && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {message.metadata.suggestions.slice(0, 3).map((suggestion, i) => (
-              <Button
-                key={i}
-                variant="outline"
-                size="sm"
-                className="text-xs rounded-full border-border/30 hover:border-accent/50 hover:bg-accent/10"
-                onClick={() => console.log('Suggestion clicked:', suggestion)}
-              >
-                {suggestion}
-              </Button>
-            ))}
+          <div className="mt-3">
+            <Suggestions>
+              {message.metadata.suggestions.map((suggestion, i) => (
+                <Suggestion 
+                  key={`${message.id}-sug-${i}`} 
+                  suggestion={suggestion} 
+                  onClick={() => console.log('Suggestion clicked:', suggestion)} 
+                />
+              ))}
+            </Suggestions>
           </div>
         )}
         
@@ -367,46 +387,46 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
           </div>
         )}
 
-        {/* Message Actions */}
-        <div className="absolute -top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="flex items-center gap-1 bg-background/90 backdrop-blur-sm border border-border/30 rounded-lg p-1 shadow-sm">
-            <Button
+        {/* Message Actions using ai-elements */}
+        <Actions className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Action
+            tooltip={copiedMessageId === message.id ? 'Copied' : 'Copy'}
+            aria-label="Copy"
+            variant="ghost"
+            size="sm"
+            onClick={handleCopy}
+          >
+            {copiedMessageId === message.id ?
+              <Check className="w-3 h-3 text-green-500" /> :
+              <Copy className="w-3 h-3" />
+            }
+          </Action>
+
+          {message.role === 'user' && (
+            <Action
+              tooltip="Edit"
+              aria-label="Edit message"
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 hover:bg-accent/10"
-              onClick={handleCopy}
+              onClick={() => console.log('Edit message:', message.id)}
             >
-              {copiedMessageId === message.id ? (
-                <Check className="w-3 h-3 text-green-500" />
-              ) : (
-                <Copy className="w-3 h-3" />
-              )}
-            </Button>
+              <Edit className="w-3 h-3" />
+            </Action>
+          )}
 
-            {message.role === 'user' && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 hover:bg-accent/10"
-                onClick={() => console.log('Edit message:', message.id)}
-              >
-                <Edit className="w-3 h-3" />
-              </Button>
-            )}
-
-            {message.role === 'assistant' && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 hover:bg-accent/10"
-                onClick={handleTranslate}
-                disabled={isTranslating}
-              >
-                <Languages className="w-3 h-3" />
-              </Button>
-            )}
-          </div>
-        </div>
+          {message.role === 'assistant' && (
+            <Action
+              tooltip={isTranslating ? 'Translating…' : 'Translate'}
+              aria-label="Translate"
+              variant="ghost"
+              size="sm"
+              onClick={handleTranslate}
+              disabled={isTranslating}
+            >
+              <Languages className="w-3 h-3" />
+            </Action>
+          )}
+        </Actions>
       </div>
     </motion.div>
   )
