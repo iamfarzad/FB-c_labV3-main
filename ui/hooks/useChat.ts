@@ -37,7 +37,7 @@ export function useChat({
   const send = useCallback(async (userText: string) => {
     if (!userText.trim() || isLoading) return
 
-    const endpoint = mode === 'admin' ? '/api/admin/chat' : '/api/chat'
+    const endpoint = mode === 'admin' ? '/api/admin/chat-v2' : '/api/chat-v2'
     
     // Add user message
     const userMessage = addMessage({ role: 'user', content: userText.trim() })
@@ -68,6 +68,8 @@ export function useChat({
         headers['Authorization'] = 'Bearer admin-token'
       }
 
+      console.log(`🚀 Sending to ${endpoint}:`, body)
+
       const res = await fetch(endpoint, {
         method: 'POST',
         headers,
@@ -94,27 +96,33 @@ export function useChat({
 
         const chunk = decoder.decode(value, { stream: true })
         
-        // Parse SSE frames
-        for (const frame of chunk.split('\n\n')) {
-          if (!frame.trim()) continue
+        // Parse SSE frames - handle multiple frames in one chunk
+        const lines = chunk.split('\n')
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim()
+          if (!line) continue
           
-          if (frame.startsWith('data: ')) {
+          if (line.startsWith('data: ')) {
             try {
-              const data = JSON.parse(frame.slice(6))
+              const data = JSON.parse(line.slice(6))
               if (typeof data === 'string') {
                 accumulatedContent += data
                 updateMessage(assistantMessage.id!, { content: accumulatedContent })
               }
             } catch (e) {
               // Skip malformed JSON
-              console.warn('Failed to parse SSE data:', frame)
+              console.warn('Failed to parse SSE data:', line)
             }
-          } else if (frame.startsWith('event: end')) {
+          } else if (line.startsWith('event: end')) {
             // Stream completed successfully
+            console.log('✅ Stream completed')
             break
-          } else if (frame.startsWith('event: error')) {
-            const errorData = JSON.parse(frame.split('data: ')[1] || '{}')
-            throw new Error(errorData.error || 'Stream error')
+          } else if (line.startsWith('event: error')) {
+            const errorLine = lines[i + 1] // Next line should be data
+            if (errorLine?.startsWith('data: ')) {
+              const errorData = JSON.parse(errorLine.slice(6))
+              throw new Error(errorData.error || 'Stream error')
+            }
           }
         }
       }
@@ -124,6 +132,7 @@ export function useChat({
         content: accumulatedContent 
       }
       
+      console.log('✅ Message completed:', finalMessage.content.substring(0, 50) + '...')
       onFinish?.(finalMessage)
 
     } catch (err) {
@@ -134,7 +143,7 @@ export function useChat({
       // Remove the failed assistant message
       setMessages(prev => prev.filter(msg => msg.id !== assistantMessage.id))
       
-      console.error('Chat error:', errorObj)
+      console.error('❌ Chat error:', errorObj)
     } finally {
       setIsLoading(false)
       abortRef.current = null

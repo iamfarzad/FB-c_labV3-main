@@ -2,7 +2,7 @@
 
 import { DemoSessionProvider } from "@/components/demo-session-manager"
 import { PageShell } from "@/components/page-shell"
-import { UnifiedChatInterface } from "@/components/chat/unified/UnifiedChatInterface"
+import { ChatInterfaceWrapper } from "@/components/chat/ChatInterfaceWrapper"
 import { useState, useEffect, useMemo, useRef } from "react"
 import type { UnifiedMessage } from "@/components/chat/unified/UnifiedChatInterface"
 import { useConversationalIntelligence } from "@/hooks/useConversationalIntelligence"
@@ -607,7 +607,7 @@ export default function ChatPage() {
               </div>
             </div>
           )}>
-            <UnifiedChatInterface
+            <ChatInterfaceWrapper
               messages={messages}
               isLoading={isLoading}
               sessionId={sessionId}
