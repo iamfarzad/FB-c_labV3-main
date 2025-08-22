@@ -11,19 +11,7 @@ import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/ui/hooks/useChat'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
-
-interface ChatMessage {
-  id: string
-  role: 'user' | 'assistant' | 'system'
-  content: string
-  timestamp?: Date
-  metadata?: {
-    sources?: Array<{ url: string; title?: string }>
-    citations?: Array<{ uri: string; title?: string }>
-    tools?: Array<{ type: string; data: any }>
-    suggestions?: string[]
-  }
-}
+import { Message } from './types/chat'
 
 export default function ChatPage() {
   const [input, setInput] = useState('')
@@ -137,13 +125,13 @@ export default function ChatPage() {
     }
   }
 
-  // Convert useChat messages to ChatMessage format
-  const chatMessages: ChatMessage[] = messages.map(msg => ({
+  // Convert useChat messages to Message format
+  const chatMessages: Message[] = messages.map(msg => ({
     id: msg.id || `msg-${Date.now()}`,
     role: msg.role,
     content: msg.content,
-    timestamp: new Date(),
-    metadata: msg.meta as any
+    createdAt: new Date(),
+    sources: msg.meta?.sources,
   }))
 
   return (

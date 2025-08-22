@@ -6,7 +6,7 @@ import { Message, MessageContent } from "@/components/ai-elements/message"
 import { Response } from "@/components/ai-elements/response"
 import { Sources, SourcesTrigger, SourcesContent, Source } from "@/components/ai-elements/source"
 import { PromptInput, PromptInputToolbar, PromptInputTools, PromptInputTextarea, PromptInputSubmit } from "@/components/ai-elements/prompt-input"
-import useChat from "@/hooks/chat/useChat"
+import { useChat } from "@/ui/hooks/useChat"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import { Video, Monitor, Camera } from "@/lib/icon-mapping"
 

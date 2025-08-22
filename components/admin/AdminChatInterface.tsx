@@ -12,7 +12,7 @@ import {
   Lightbulb, Copy, Check, Clock, AlertCircle, Sparkles,
   TrendingUp, Users, Calendar, Mail, DollarSign, Activity
 } from "lucide-react"
-import { useAdminChat, type AdminMessage } from "@/hooks/useAdminChat"
+import { useChat } from "@/ui/hooks/useChat"
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from '@/src/core/utils'
 
@@ -74,17 +74,14 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { 
-    messages, 
-    input, 
-    setInput,
-    handleInputChange, 
-    handleSubmit, 
+    const {
+    messages,
     isLoading, 
     error,
-    sendMessage,
-    clearMessages
-  } = useAdminChat({
+    send: sendMessage,
+    clear: clearMessages
+  } = useChat({ 
+    mode: 'admin',
     onFinish: (message) => {
       toast({
         title: "AI Analysis Complete",
@@ -99,6 +96,20 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
       })
     }
   })
+
+  const [input, setInput] = useState('')
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value)
+  }
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (input.trim() && !isLoading) {
+      await sendMessage(input.trim())
+      setInput('')
+    }
+  }
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
