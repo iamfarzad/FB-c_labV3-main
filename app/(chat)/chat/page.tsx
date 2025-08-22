@@ -8,6 +8,7 @@ import { ChatComposer } from '@/components/chat/layouts/ChatComposer'
 import { ChatSidebar } from '@/components/chat/layouts/ChatSidebar'
 import { VoiceOverlay } from '@/components/chat/VoiceOverlay'
 import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/ui/hooks/useChat'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
 
@@ -146,7 +147,8 @@ export default function ChatPage() {
   }))
 
   return (
-    <ChatLayout
+    <TooltipProvider>
+      <ChatLayout
       disabled={false}
       header={
         <ChatHeader
@@ -204,5 +206,6 @@ export default function ChatPage() {
         isLoading={isLoading}
       />
     </ChatLayout>
+    </TooltipProvider>
   )
 }
