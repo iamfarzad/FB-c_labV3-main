@@ -4,11 +4,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, Edit, Languages, ExternalLink } from 'lucide-react'
 import { cn } from '@/src/core/utils'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { FbcIcon } from '@/components/ui/fbc-icon'
-import { User } from 'lucide-react'
+import { 
+  Conversation, 
+  ConversationContent, 
+  ConversationScrollButton 
+} from '@/components/ai-elements/conversation'
+import { 
+  Message, 
+  MessageContent, 
+  MessageAvatar 
+} from '@/components/ai-elements/message'
 import { Response } from '@/components/ai-elements/response'
 import { Reasoning, ReasoningTrigger, ReasoningContent } from '@/components/ai-elements/reasoning'
 import { Sources, SourcesTrigger, SourcesContent, Source } from '@/components/ai-elements/source'
@@ -48,23 +54,6 @@ export function ChatMessages({
   stickyHeader,
   emptyState
 }: ChatMessagesProps) {
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  // Auto-scroll to bottom on new messages
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 120
-    
-    if (isNearBottom) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    }
-  }, [messages.length])
-
   const defaultEmptyState = (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -86,92 +75,80 @@ export function ChatMessages({
   )
 
   return (
-    <div 
-      ref={containerRef}
-      className={cn(
-        'flex-1 overflow-y-auto scroll-smooth',
-        className
-      )}
-    >
-      {/* Sticky Header */}
-      {stickyHeader && (
-        <div className="sticky top-0 z-30 bg-background/90 backdrop-blur-sm border-b border-border/20">
-          <div className="max-w-3xl mx-auto px-4 py-3">
-            {stickyHeader}
-          </div>
-        </div>
-      )}
-
-      {/* Messages Container */}
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        {messages.length === 0 ? (
-          emptyState || defaultEmptyState
-        ) : (
-          <AnimatePresence mode="popLayout">
-            {messages.map((message, index) => (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                index={index}
-                isLast={index === messages.length - 1}
-              />
-            ))}
-          </AnimatePresence>
-        )}
-
-        {/* Typing Indicator */}
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex gap-3 items-end"
-          >
-            <Avatar className="w-8 h-8 shrink-0">
-              <AvatarFallback className="bg-muted text-muted-foreground">
-                <FbcIcon className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            
-            <div className="bg-card/60 backdrop-blur-xl border border-border/20 rounded-2xl rounded-bl-md px-4 py-3 shadow-lg">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-2 h-2 rounded-full bg-muted-foreground/50"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.5, 1, 0.5]
-                      }}
-                      transition={{
-                        duration: 1.2,
-                        repeat: Infinity,
-                        delay: i * 0.2
-                      }}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-muted-foreground">AI is thinking...</span>
+    <div className={cn('flex-1 min-h-0 overflow-hidden', className)}>
+      <Conversation className="h-full" aria-live="polite" aria-busy={isLoading}>
+        <ConversationContent className="mx-auto w-full max-w-3xl space-y-4 px-4 py-6" aria-label="Chat messages">
+          {/* Sticky Header */}
+          {stickyHeader && (
+            <div className="sticky top-0 z-30 bg-background/90 backdrop-blur-sm border-b border-border/20 mb-4">
+              <div className="py-3">
+                {stickyHeader}
               </div>
             </div>
-          </motion.div>
-        )}
+          )}
 
-        <div ref={messagesEndRef} className="h-4" />
-      </div>
+          {/* Empty State */}
+          {messages.length === 0 && !isLoading ? (
+            emptyState || defaultEmptyState
+          ) : (
+            // Messages using proper ai-elements
+            <AnimatePresence mode="popLayout">
+              {messages.map((message, index) => (
+                <MessageComponent 
+                  key={message.id}
+                  message={message}
+                  isLast={index === messages.length - 1}
+                />
+              ))}
+            </AnimatePresence>
+          )}
+
+          {/* Typing indicator using ai-elements pattern */}
+          {isLoading && (
+            <Message from="assistant">
+              <MessageAvatar 
+                src="/api/placeholder-avatar" 
+                name="F.B/c AI"
+              />
+              <MessageContent>
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-2 h-2 rounded-full bg-muted-foreground/50"
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [0.5, 1, 0.5]
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          delay: i * 0.2
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-muted-foreground">AI is thinking...</span>
+                </div>
+              </MessageContent>
+            </Message>
+          )}
+        </ConversationContent>
+        
+        <ConversationScrollButton className="bg-accent hover:bg-accent/90 text-accent-foreground backdrop-blur" />
+      </Conversation>
     </div>
   )
 }
 
-// Enhanced Message Bubble Component with all features
-interface MessageBubbleProps {
+// Message Component using proper ai-elements (replacing custom MessageBubble)
+interface MessageComponentProps {
   message: ChatMessage
-  index: number
   isLast: boolean
 }
 
-function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
+function MessageComponent({ message, isLast }: MessageComponentProps) {
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null)
   const [isTranslating, setIsTranslating] = useState(false)
   const [translation, setTranslation] = useState<string | null>(null)
@@ -205,45 +182,37 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
     }
   }
 
+  // Extract activities from content
+  const contentParts = React.useMemo(() => {
+    const content = message.content
+    const regex = /\[(ACTIVITY_IN|ACTIVITY_OUT):([^\]]+)\]/g
+    const parts: Array<{ type: 'text' | 'activity'; value: string; dir?: 'in' | 'out' }> = []
+    let lastIndex = 0
+    let match: RegExpExecArray | null
+    while ((match = regex.exec(content)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({ type: 'text', value: content.slice(lastIndex, match.index) })
+      }
+      const dir = match[1] === 'ACTIVITY_IN' ? 'in' : 'out'
+      parts.push({ type: 'activity', value: match[2].trim(), dir })
+      lastIndex = regex.lastIndex
+    }
+    if (lastIndex < content.length) {
+      parts.push({ type: 'text', value: content.slice(lastIndex) })
+    }
+    return parts
+  }, [message.content])
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-      transition={{ 
-        duration: 0.3, 
-        delay: Math.min(index * 0.05, 0.15),
-        ease: [0.16, 1, 0.3, 1]
-      }}
-      className={cn(
-        'flex gap-3 items-end group',
-        message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-      )}
-    >
-      {/* Avatar */}
-      <Avatar className="w-8 h-8 shrink-0">
-        <AvatarFallback className={cn(
-          'font-medium shadow-sm',
-          message.role === 'user' 
-            ? 'bg-accent text-accent-foreground' 
-            : 'bg-muted text-muted-foreground'
-        )}>
-          {message.role === 'user' ? (
-            <User className="h-4 w-4" />
-          ) : (
-            <FbcIcon className="h-4 w-4" />
-          )}
-        </AvatarFallback>
-      </Avatar>
+    <Message from={message.role}>
+      {/* Avatar using ai-elements */}
+      <MessageAvatar 
+        src={message.role === 'assistant' ? "/api/placeholder-avatar" : "/api/user-avatar"} 
+        name={message.role === 'assistant' ? "F.B/c AI" : "You"}
+      />
       
-      {/* Message Content */}
-      <div className={cn(
-        'max-w-[85%] rounded-2xl px-4 py-3 shadow-lg backdrop-blur-xl transition-all duration-200 relative group',
-        'break-words hyphens-auto leading-relaxed',
-        message.role === 'user' 
-          ? 'bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-br-md hover:shadow-xl' 
-          : 'bg-card/60 border border-border/20 text-foreground rounded-bl-md hover:shadow-lg'
-      )}>
+      {/* Message Content using ai-elements */}
+      <MessageContent>
         {/* Reasoning (for assistant messages) */}
         {message.role === 'assistant' && message.type === 'analysis' && (
           <Reasoning defaultOpen={false} isStreaming={isLast && isLoading}>
@@ -256,24 +225,24 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
           </Reasoning>
         )}
 
-        {/* Main Content with Activity Chips */}
+        {/* Main content with activity chips */}
         <div className="prose prose-sm max-w-none leading-relaxed break-words dark:prose-invert">
-          {/* Parse content for activity chips */}
-          {message.content.split(/(\[ACTIVITY_(IN|OUT):[^\]]+\])/).map((part, idx) => {
-            const activityMatch = part.match(/\[ACTIVITY_(IN|OUT):([^\]]+)\]/)
-            if (activityMatch) {
-              const direction = activityMatch[1].toLowerCase() as 'in' | 'out'
-              const label = activityMatch[2].trim()
+          {contentParts.map((part, idx) => {
+            if (part.type === 'activity' && part.dir) {
               return (
                 <ActivityChip 
-                  key={`${message.id}-activity-${idx}`}
-                  direction={direction}
-                  label={label}
-                  className="mx-1 align-middle"
+                  key={`${message.id}-act-${idx}`} 
+                  direction={part.dir} 
+                  label={part.value} 
+                  className="mx-1 align-middle" 
                 />
               )
             }
-            return part ? <Response key={`${message.id}-content-${idx}`}>{part}</Response> : null
+            return (
+              <Response key={`${message.id}-txt-${idx}`}>
+                {part.value}
+              </Response>
+            )
           })}
         </div>
 
@@ -320,27 +289,23 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
 
         {/* Citations using ai-elements */}
         {message.metadata?.citations && message.metadata.citations.length > 0 && (
-          <div className="mt-3">
-            <CitationDisplay citations={message.metadata.citations} />
-          </div>
+          <CitationDisplay citations={message.metadata.citations} />
         )}
 
         {/* Sources using ai-elements */}
         {message.metadata?.sources && message.metadata.sources.length > 0 && (
-          <div className="mt-3">
-            <Sources>
-              <SourcesTrigger count={message.metadata.sources.length} />
-              <SourcesContent>
-                {message.metadata.sources.map((source, i) => (
-                  <Source 
-                    key={`${message.id}-src-${i}`} 
-                    href={source.url} 
-                    title={source.title || source.url} 
-                  />
-                ))}
-              </SourcesContent>
-            </Sources>
-          </div>
+          <Sources>
+            <SourcesTrigger count={message.metadata.sources.length} />
+            <SourcesContent>
+              {message.metadata.sources.map((source, i) => (
+                <Source 
+                  key={`${message.id}-src-${i}`} 
+                  href={source.url} 
+                  title={source.title || source.url} 
+                />
+              ))}
+            </SourcesContent>
+          </Sources>
         )}
 
         {/* Translation */}
@@ -361,34 +326,19 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
 
         {/* Suggestions using ai-elements */}
         {message.role === 'assistant' && message.metadata?.suggestions && (
-          <div className="mt-3">
-            <Suggestions>
-              {message.metadata.suggestions.map((suggestion, i) => (
-                <Suggestion 
-                  key={`${message.id}-sug-${i}`} 
-                  suggestion={suggestion} 
-                  onClick={() => console.log('Suggestion clicked:', suggestion)} 
-                />
-              ))}
-            </Suggestions>
-          </div>
-        )}
-        
-        {/* Timestamp */}
-        {message.timestamp && (
-          <div className={cn(
-            'text-xs mt-3 opacity-70',
-            message.role === 'user' ? 'text-accent-foreground/70' : 'text-muted-foreground'
-          )}>
-            {message.timestamp.toLocaleTimeString([], { 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}
-          </div>
+          <Suggestions>
+            {message.metadata.suggestions.map((suggestion, i) => (
+              <Suggestion 
+                key={`${message.id}-sug-${i}`} 
+                suggestion={suggestion} 
+                onClick={() => console.log('Suggestion clicked:', suggestion)} 
+              />
+            ))}
+          </Suggestions>
         )}
 
         {/* Message Actions using ai-elements */}
-        <Actions className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Actions className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Action
             tooltip={copiedMessageId === message.id ? 'Copied' : 'Copy'}
             aria-label="Copy"
@@ -427,7 +377,7 @@ function MessageBubble({ message, index, isLast }: MessageBubbleProps) {
             </Action>
           )}
         </Actions>
-      </div>
-    </motion.div>
+      </MessageContent>
+    </Message>
   )
 }
