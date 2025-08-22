@@ -23,7 +23,7 @@ interface ChatMessage {
   }
 }
 
-export default function ChatPage() {
+export default function ModernChatPage() {
   const [input, setInput] = useState('')
   const [openVoice, setOpenVoice] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
