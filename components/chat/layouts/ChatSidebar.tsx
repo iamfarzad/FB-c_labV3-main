@@ -65,8 +65,8 @@ export function ChatSidebar({
         </Card>
       )}
 
-      {/* AI Activity Monitor */}
-      {activityLog && activityLog.length > 0 && (
+      {/* AI Activity Monitor - DISABLED */}
+      {/* {activityLog && activityLog.length > 0 && (
         <Card variant="glass" className="border-border/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2">
@@ -98,7 +98,7 @@ export function ChatSidebar({
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
 
       {/* Conversation Stages */}
       {stages && stages.length > 0 && (
