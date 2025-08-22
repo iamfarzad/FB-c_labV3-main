@@ -18,7 +18,7 @@ import {
 import { Response } from '@/components/ai-elements/response'
 import { Reasoning, ReasoningTrigger, ReasoningContent } from '@/components/ai-elements/reasoning'
 import { Sources, SourcesTrigger, SourcesContent, Source } from '@/components/ai-elements/source'
-import { Actions, Action } from '@/components/ai-elements/actions'
+import { Actions, Action, Suggestions, Suggestion } from '@/components/ai-elements/actions'
 import { ActivityChip } from '@/components/chat/activity/ActivityChip'
 import { Image } from '@/components/ai-elements/image'
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool'
@@ -33,6 +33,13 @@ interface ChatMessagesProps {
   className?: string
   stickyHeader?: React.ReactNode
   emptyState?: React.ReactNode
+}
+
+// Message Component Props
+interface MessageComponentProps {
+  message: ChatMessage
+  isLast: boolean
+  isLoading?: boolean
 }
 
 export function ChatMessages({
@@ -80,15 +87,16 @@ export function ChatMessages({
             emptyState || defaultEmptyState
           ) : (
             // Messages using proper ai-elements
-            <AnimatePresence mode="popLayout">
-              {messages.map((message, index) => (
-                <MessageComponent 
-                  key={message.id}
-                  message={message}
-                  isLast={index === messages.length - 1}
-                />
-              ))}
-            </AnimatePresence>
+                         <AnimatePresence mode="popLayout">
+               {messages.map((message, index) => (
+                 <MessageComponent 
+                   key={message.id}
+                   message={message}
+                   isLast={index === messages.length - 1}
+                   isLoading={isLoading}
+                 />
+               ))}
+             </AnimatePresence>
           )}
 
           {/* Typing indicator using ai-elements Loader */}
@@ -112,12 +120,7 @@ export function ChatMessages({
 }
 
 // Message Component using proper ai-elements (replacing custom MessageBubble)
-interface MessageComponentProps {
-  message: ChatMessage
-  isLast: boolean
-}
-
-function MessageComponent({ message, isLast }: MessageComponentProps) {
+function MessageComponent({ message, isLast, isLoading }: MessageComponentProps) {
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null)
   const [isTranslating, setIsTranslating] = useState(false)
   const [translation, setTranslation] = useState<string | null>(null)
@@ -297,6 +300,24 @@ function MessageComponent({ message, isLast }: MessageComponentProps) {
               </TaskContent>
             </Task>
           </div>
+        )}
+
+        {/* Suggestions using ai-elements */}
+        {message.role === 'assistant' && message.businessContent?.type === 'proposal_generator' && (
+          <Suggestions>
+            <Suggestion 
+              suggestion="Request detailed proposal" 
+              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+            />
+            <Suggestion 
+              suggestion="Schedule consultation" 
+              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+            />
+            <Suggestion 
+              suggestion="Get cost breakdown" 
+              onClick={(suggestion) => console.log('Suggestion clicked:', suggestion)} 
+            />
+          </Suggestions>
         )}
 
         {/* Message Actions using ai-elements */}

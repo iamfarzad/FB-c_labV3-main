@@ -78,18 +78,56 @@ const LoaderIcon = ({ size = 16 }: LoaderIconProps) => (
   </svg>
 );
 
-export type LoaderProps = HTMLAttributes<HTMLDivElement> & {
-  size?: number;
-};
-
-export const Loader = ({ className, size = 16, ...props }: LoaderProps) => (
-  <div
-    className={cn(
-      'inline-flex items-center justify-center animate-spin',
-      className,
-    )}
-    {...props}
-  >
-    <LoaderIcon size={size} />
+// Typing dots for chat
+const TypingDots = () => (
+  <div className="flex gap-1">
+    {[0, 1, 2].map((i) => (
+      <div
+        key={i}
+        className="w-2 h-2 rounded-full bg-muted-foreground/50 animate-pulse"
+        style={{
+          animationDelay: `${i * 0.2}s`,
+          animationDuration: '1.2s'
+        }}
+      />
+    ))}
   </div>
 );
+
+export type LoaderProps = HTMLAttributes<HTMLDivElement> & {
+  size?: number;
+  type?: 'spinner' | 'typing';
+  text?: string;
+};
+
+export const Loader = ({ 
+  className, 
+  size = 16, 
+  type = 'spinner',
+  text,
+  ...props 
+}: LoaderProps) => {
+  if (type === 'typing') {
+    return (
+      <div
+        className={cn('flex items-center gap-2', className)}
+        {...props}
+      >
+        <TypingDots />
+        {text && <span className="text-sm text-muted-foreground">{text}</span>}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        'inline-flex items-center justify-center animate-spin',
+        className,
+      )}
+      {...props}
+    >
+      <LoaderIcon size={size} />
+    </div>
+  );
+};

@@ -1,7 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
@@ -63,3 +63,32 @@ export const Action = ({
 
   return button;
 };
+
+// Suggestions Components
+export type SuggestionsProps = ComponentProps<'div'>;
+
+export const Suggestions = ({ className, children, ...props }: SuggestionsProps) => (
+  <div className={cn('flex flex-wrap gap-2 mt-3', className)} {...props}>
+    {children}
+  </div>
+);
+
+export type SuggestionProps = {
+  suggestion: string;
+  onClick?: (suggestion: string) => void;
+  className?: string;
+};
+
+export const Suggestion = ({ suggestion, onClick, className }: SuggestionProps) => (
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={() => onClick?.(suggestion)}
+    className={cn(
+      'text-xs border-border/30 hover:border-accent/50 hover:bg-accent/10 rounded-xl',
+      className
+    )}
+  >
+    {suggestion}
+  </Button>
+);
