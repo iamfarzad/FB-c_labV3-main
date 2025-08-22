@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleSearchService } from '@/src/services/search/google'
-import { recordCapabilityUsed } from '@/lib/context/capabilities'
+import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 
 const searchService = new GoogleSearchService()
 
