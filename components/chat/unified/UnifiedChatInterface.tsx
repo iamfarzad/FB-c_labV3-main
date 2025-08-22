@@ -55,7 +55,7 @@ export interface UnifiedMessage {
     suggestions?: string[]
     imageUrl?: string
     activities?: Array<{ type: 'in' | 'out'; label: string }>
-  }
+  } | undefined
   rendering?: {
     format?: 'markdown' | 'html' | 'plain'
     theme?: 'default' | 'code' | 'insight'
@@ -151,7 +151,12 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
           </Avatar>
         )}
         
-        <AIMessageContent>
+        <AIMessageContent className={cn(
+          'rounded-2xl px-4 py-3 shadow-lg backdrop-blur-xl transition-all duration-200',
+          message.role === 'user' 
+            ? 'bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-br-md' 
+            : 'bg-card/60 border border-border/20 text-foreground rounded-bl-md'
+        )}>
           {/* Reasoning (for assistant messages) */}
           {message.role === 'assistant' && message.rendering?.showReasoning && (
             <Reasoning defaultOpen={false} isStreaming={isLast && false}>
@@ -497,31 +502,35 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
         'fixed inset-0 z-40 flex h-[100dvh] flex-col overflow-hidden bg-background',
         className
       )}>
-        {/* Header */}
+        {/* Modern Header */}
         {!isDock && (
-          <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/95 p-4 backdrop-blur">
-            <div className="flex items-center gap-3">
-              <FbcIcon className="h-6 w-6 text-accent" />
-              <div>
-                <h1 className="text-lg font-semibold text-foreground">F.B/c — Unified Chat</h1>
-                <p className="text-xs text-muted-foreground">
-                  Optimized message architecture
-                </p>
+          <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/20 shadow-sm">
+            <div className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center shadow-lg">
+                  <FbcIcon className="h-4 w-4 text-accent-foreground" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-semibold text-foreground">F.B/c AI Assistant</h1>
+                  <p className="text-xs text-muted-foreground">
+                    Intelligent business consulting
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={onClearMessages}
-                className="border-accent/30 hover:border-accent hover:bg-accent/10"
-              >
-                <RotateCcw className="h-4 w-4 mr-1" />
-                Reset
-              </Button>
-              <Button variant="ghost" size="icon" className="hover:bg-accent/10">
-                <Settings className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={onClearMessages}
+                  className="border-border/30 hover:border-accent/50 hover:bg-accent/10 rounded-xl"
+                >
+                  <RotateCcw className="h-4 w-4 mr-1" />
+                  Reset
+                </Button>
+                <Button variant="ghost" size="icon" className="hover:bg-accent/10 rounded-xl">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </header>
         )}
@@ -532,16 +541,19 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
             <ConversationContent className="mx-auto w-full max-w-3xl space-y-4 px-4 py-6" aria-label="Chat messages">
               {messages.length === 0 && !isLoading ? (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="flex-1 min-h-[40vh] grid place-items-center"
                 >
                   <div className="text-center">
-                    <h3 className="text-2xl font-semibold">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mx-auto mb-6">
+                      <FbcIcon className="h-6 w-6 text-accent" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-foreground mb-3">
                       Ready to assist you
                     </h3>
-                    <p className="text-muted-foreground mt-2">
-                      Ask anything or share what you're working on
+                    <p className="text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
+                      Ask me about AI automation, business strategy, ROI analysis, or anything else you'd like to explore.
                     </p>
                   </div>
                 </motion.div>
@@ -570,8 +582,8 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
                 {composerTopSlot}
               </div>
             )}
-            <PromptInput onSubmit={handleSubmit} aria-label="Chat composer">
-            <PromptInputToolbar>
+            <PromptInput onSubmit={handleSubmit} aria-label="Chat composer" className="bg-card/60 backdrop-blur-xl border border-border/20 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200">
+            <PromptInputToolbar className="px-3 py-2 border-b border-border/10">
               <PromptInputTools>
                 <ToolMenu 
                   onUploadDocument={() => onToolAction?.('document')}
@@ -581,16 +593,15 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
                   onROI={() => { onToolAction?.('roi') }}
                   onVideoToApp={() => onToolAction?.('video')}
                   comingSoon={['webcam','screen','video']}
+                  className="rounded-xl border-border/30 hover:border-accent/30 hover:bg-accent/10"
                 />
-                <Badge className="ml-2 text-[11px] bg-accent/10 text-accent border-accent/20">
-                  Context Aware
-                </Badge>
+                <ContextDisplay context={context} />
               </PromptInputTools>
               {isDock && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="ml-auto"
+                  className="ml-auto rounded-xl hover:bg-accent/10"
                   onClick={() => window.location.href = '/chat'}
                 >
                   <Maximize2 className="h-4 w-4" />
@@ -598,8 +609,8 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
               )}
             </PromptInputToolbar>
             <PromptInputTextarea
-              placeholder="Message F.B/c…"
-              className="min-h-[64px] text-base"
+              placeholder="Message F.B/c AI..."
+              className="min-h-[64px] text-base px-3 py-2 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               aria-label="Type your message"
@@ -614,11 +625,18 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
                 }
               }}
             />
-            <div className="flex items-center justify-between p-1">
-              <div className="text-xs text-muted-foreground">
-                {sessionId && `Session: ${sessionId.slice(0, 8)}...`}
+            <div className="flex items-center justify-between px-3 py-2">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span>Connected</span>
+                {sessionId && (
+                  <span>• {sessionId.slice(0, 8)}...</span>
+                )}
               </div>
-              <PromptInputSubmit status={isLoading ? 'submitted' : undefined} />
+              <PromptInputSubmit 
+                status={isLoading ? 'submitted' : undefined} 
+                className="rounded-xl bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 shadow-md hover:shadow-lg transition-all duration-200"
+              />
             </div>
           </PromptInput>
           </div>

@@ -2,7 +2,6 @@
 
 import { isFlagEnabled } from '@/src/core/flags'
 import { UnifiedChatInterface } from './unified/UnifiedChatInterface'
-import { ModernChatInterface } from './ModernChatInterface'
 
 interface ChatInterfaceWrapperProps {
   messages?: any[]
@@ -19,19 +18,13 @@ interface ChatInterfaceWrapperProps {
 
 export function ChatInterfaceWrapper(props: ChatInterfaceWrapperProps) {
   const useCleanChat = isFlagEnabled('use_clean_chat_api')
-  const useModernDesign = isFlagEnabled('use_modern_design') ?? true // Default to modern
-  
-  if (useCleanChat && useModernDesign) {
-    // Use the new modern chat interface
-    return <ModernChatInterface mode="public" showModeToggle={true} />
-  }
   
   if (useCleanChat) {
-    // Use the clean chat demo (simpler version)
+    // Use the clean chat demo (for testing)
     const { CleanChatDemo } = require('./CleanChatDemo')
     return <CleanChatDemo />
   }
   
-  // Use the legacy system
+  // Use the modernized unified system (now with modern design)
   return <UnifiedChatInterface {...props} />
 }

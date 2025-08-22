@@ -1,4 +1,4 @@
-import { ModernChatInterface } from '@/components/chat/ModernChatInterface'
+import { CleanChatDemo } from '@/components/chat/CleanChatDemo'
 import { Button } from '@/components/ui/primitives/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/primitives/card'
 
@@ -103,11 +103,7 @@ export default function DesignTestPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ModernChatInterface 
-              mode="public" 
-              showModeToggle={true}
-              className="h-[500px]"
-            />
+            <CleanChatDemo />
           </CardContent>
         </Card>
 

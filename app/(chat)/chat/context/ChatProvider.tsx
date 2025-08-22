@@ -16,7 +16,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const addActivity: ChatContextValue['addActivity'] = (item) => {
     const newItem: ActivityItem = {
       id: item.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      timestamp: item.timestamp || Date.now(),
+      timestamp: item.timestamp || new Date(),
       type: item.type as ActivityItem['type'],
       title: (item as any).title || (item as any).content || 'Activity',
       description: (item as any).description || (item as any).content || '',

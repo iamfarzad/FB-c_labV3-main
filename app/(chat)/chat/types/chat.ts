@@ -1,3 +1,29 @@
+// Chat types for the unified chat system
+
+export interface ActivityItem {
+  id: string
+  type: string
+  status: 'pending' | 'in_progress' | 'completed' | 'failed'
+  content: string
+  timestamp: Date
+}
+
+export interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant' | 'system'
+  content: string
+  timestamp?: Date
+  metadata?: Record<string, any>
+}
+
+export interface ChatSession {
+  id: string
+  messages: ChatMessage[]
+  context?: Record<string, any>
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface Message {
   id: string
   role: "user" | "assistant"
