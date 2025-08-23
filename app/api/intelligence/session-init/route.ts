@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const sessionId = providedSessionId || headerSession || `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     // Upsert minimal conversation context row (ensures row exists)
     try {
-      const supabase = getSupabaseStorage()
+      const supabase = getSupabase()
       await supabase
         .from('conversation_contexts')
         .upsert({

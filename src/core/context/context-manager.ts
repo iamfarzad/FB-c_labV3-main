@@ -17,7 +17,7 @@ export async function getMergedContext(sessionId: string) {
   return snapshot
 }
 
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabase } from '@/src/services/storage/supabase'
 import { ContextSnapshotSchema, type ContextSnapshot } from './context-schema'
 
 export async function getContextSnapshot(sessionId: string): Promise<ContextSnapshot | null> {
