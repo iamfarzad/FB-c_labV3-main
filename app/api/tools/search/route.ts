@@ -48,20 +48,20 @@ export async function POST(request: NextRequest) {
         }).slice(0, urlContextMax)
       : undefined
     // Perform grounded search (optionally include URL context)
-    const result = await groundingProvider.groundedAnswer(query, urlContextEnabled ? filteredUrls : undefined)
+    const result = await searchService.search(query, { urls: urlContextEnabled ? filteredUrls : undefined })
 
     // Record capability usage if session is available
     if (effectiveSessionId) {
       try {
         await recordCapabilityUsed(String(effectiveSessionId), 'search', {
           queryLength: String(query).length,
-          citations: Array.isArray(result.citations) ? result.citations.length : 0,
+          citations: Array.isArray(result.citations) ? result.citations.length : Array.isArray(result.results) ? result.results.length : 0,
         })
         console.info('✅ Recorded search capability for session:', effectiveSessionId)
       } catch {}
     }
 
-    const body = { ok: true, output: { answer: result.text, citations: result.citations, query, sessionId: effectiveSessionId, urls: Array.isArray(urls) ? urls : undefined } }
+    const body = { ok: true, output: { answer: result.results?.[0]?.snippet || result.text || 'Search completed', citations: result.citations || result.results, query, sessionId: effectiveSessionId, urls: Array.isArray(urls) ? urls : undefined } }
 
     if (effectiveSessionId && idemKey) {
       idem.set(`${effectiveSessionId}:${idemKey}`, { expires: Date.now() + 5 * 60_000, body })

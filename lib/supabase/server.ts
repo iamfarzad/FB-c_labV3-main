@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
-import { config, isDevelopment } from "../config"
+import { config, isDevelopment } from "@/src/core/config"
 import type { Database } from "../database.types"
 
 // Check if mocking is enabled
