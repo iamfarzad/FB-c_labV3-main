@@ -66,7 +66,7 @@ const MODULES: ModuleItem[] = [
     slug: 'temperature-sampling-controls',
     description: 'Explore temperature, top‑p, and top‑k effects on output.',
     phase: 2,
-    interaction: 'Sliders with live output',
+    interaction: 'Sliders and sample outputs',
     goal: 'Balance creativity vs reliability',
     featured: false,
   },
@@ -140,14 +140,8 @@ export function getModuleBySlug(slug: string): ModuleItem | undefined {
   return MODULES.find(m => m.slug === slug)
 }
 
-export function getModulesByPhase(phase: number): ModuleItem[] {
-  return MODULES.filter(m => m.phase === phase)
-}
-
-export function getFeaturedModules(): ModuleItem[] {
-  return MODULES.filter(m => m.featured)
-}
-
 export function getAllModuleSlugs(): string[] {
   return MODULES.map(m => m.slug)
 }
+
+

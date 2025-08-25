@@ -56,7 +56,7 @@ export const handleROICalculation = async (result: ROICalculationResult) => {
 
     return await response.json()
   } catch (error) {
-          // ROI calculation error occurred
+    console.error('ROI calculation error:', error)
     throw new Error('Failed to process ROI calculation')
   }
 }
@@ -77,7 +77,7 @@ export const handleVoiceTranscript = async (result: VoiceTranscriptResult) => {
 
     return await response.json()
   } catch (error) {
-          // Voice transcript error occurred
+    console.error('Voice transcript error:', error)
     throw new Error('Failed to process voice transcript')
   }
 }
@@ -98,7 +98,7 @@ export const handleVideoAppResult = async (result: VideoAppResult) => {
 
     return await response.json()
   } catch (error) {
-          // Video to app error occurred
+    console.error('Video to app error:', error)
     throw new Error('Failed to process video to app')
   }
 }

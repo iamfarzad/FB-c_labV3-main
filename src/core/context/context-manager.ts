@@ -17,11 +17,11 @@ export async function getMergedContext(sessionId: string) {
   return snapshot
 }
 
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { getSupabase } from '@/src/core/supabase/server'
 import { ContextSnapshotSchema, type ContextSnapshot } from './context-schema'
 
 export async function getContextSnapshot(sessionId: string): Promise<ContextSnapshot | null> {
-  const supabase = getSupabaseStorage().getClient()
+  const supabase = getSupabase()
   const { data } = await supabase
     .from('conversation_contexts')
     .select('*')
@@ -44,7 +44,7 @@ export async function getContextSnapshot(sessionId: string): Promise<ContextSnap
 }
 
 export async function updateContext(sessionId: string, patch: Partial<ContextSnapshot>) {
-  const supabase = getSupabaseStorage().getClient()
+  const supabase = getSupabase()
   const { data: existing } = await supabase
     .from('conversation_contexts')
     .select('*')

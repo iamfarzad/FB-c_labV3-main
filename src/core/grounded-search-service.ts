@@ -1,4 +1,4 @@
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { supabaseService } from './supabase/client'
 
 interface SearchLeadParams {
   name: string
@@ -64,7 +64,7 @@ export class GroundedSearchService {
         raw: { ...result }
       }))
 
-      const { error } = await getSupabaseStorage().getServiceClient()
+      const { error } = await supabaseService
         .from('lead_search_results')
         .insert(searchRecords)
 
@@ -81,7 +81,7 @@ export class GroundedSearchService {
 
   async getSearchResults(leadId: string): Promise<SearchResult[]> {
     try {
-      const { data, error } = await getSupabaseStorage().getServiceClient()
+      const { data, error } = await supabaseService
         .from('lead_search_results')
         .select('*')
         .eq('lead_id', leadId)

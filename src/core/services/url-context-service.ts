@@ -123,7 +123,7 @@ export class URLContextService {
       };
 
     } catch (error: any) {
-      // URL Context Analysis Error occurred
+      console.error('URL Context Analysis Error:', error);
       
       return {
         url,

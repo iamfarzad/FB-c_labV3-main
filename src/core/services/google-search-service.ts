@@ -156,7 +156,7 @@ export class GoogleSearchService {
       return data;
 
     } catch (error: any) {
-      // Google Search Error occurred
+      console.error('Google Search Error:', error);
       
       // Return empty response structure on error
       return {

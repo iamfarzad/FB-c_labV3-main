@@ -5,11 +5,11 @@
  */
 
 import { GoogleGenerativeAI, type GenerateContentRequest, type GenerateContentResponse } from '@google/generative-ai'
-import { createOptimizedConfig } from '@/src/core/ai/gemini-config-enhanced'
-import { selectModelForFeature, estimateTokens, estimateTokensForMessages } from '@/src/core/ai/model-selector'
-import { enforceBudgetAndLog } from '@/src/core/monitoring/token-usage-logger'
-import { checkDemoAccess, recordDemoUsage, DemoFeature } from '@/src/core/monitoring/demo-budget-manager'
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { createOptimizedConfig } from '@/src/core/gemini-config-enhanced'
+import { selectModelForFeature, estimateTokens, estimateTokensForMessages } from '@/src/core/model-selector'
+import { enforceBudgetAndLog } from '@/src/core/token-usage-logger'
+import { checkDemoAccess, recordDemoUsage, DemoFeature } from '@/src/core/demo-budget-manager'
+import { getSupabase } from '@/src/core/supabase/server'
 
 export interface GeminiServiceOptions {
   sessionId?: string
@@ -41,7 +41,7 @@ class GeminiService {
       throw new Error('GEMINI_API_KEY environment variable is not set')
     }
     this.client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-    this.supabase = getSupabaseStorage().getClient()
+    this.supabase = getSupabase()
   }
 
   /**
@@ -118,7 +118,7 @@ class GeminiService {
         cost: modelSelection.estimatedCost
       }
     } catch (error) {
-      // GeminiService generateText error occurred
+      console.error('[GeminiService] generateText error:', error)
       return {
         error: error instanceof Error ? error.message : 'Failed to generate text'
       }
@@ -207,7 +207,7 @@ class GeminiService {
         cost: modelSelection.estimatedCost
       }
     } catch (error) {
-      // GeminiService analyzeImage error occurred
+      console.error('[GeminiService] analyzeImage error:', error)
       return {
         error: error instanceof Error ? error.message : 'Failed to analyze image'
       }
@@ -294,7 +294,7 @@ class GeminiService {
         cost: modelSelection.estimatedCost
       }
     } catch (error) {
-      // GeminiService analyzeDocument error occurred
+      console.error('[GeminiService] analyzeDocument error:', error)
       return {
         error: error instanceof Error ? error.message : 'Failed to analyze document'
       }
@@ -433,7 +433,7 @@ class GeminiService {
         await recordDemoUsage(sessionId, 'chat' as DemoFeature, estimatedTokens)
       }
     } catch (error) {
-      // GeminiService generateTextStream error occurred
+      console.error('[GeminiService] generateTextStream error:', error)
       yield `Error: ${error instanceof Error ? error.message : 'Stream generation failed'}`
     }
   }

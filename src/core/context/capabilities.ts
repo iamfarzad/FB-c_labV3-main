@@ -1,4 +1,4 @@
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { supabase } from '@/src/core/supabase/server'
 
 /**
  * Records first-time capability usage for a session by calling the DB RPC
@@ -8,7 +8,7 @@ import { getSupabaseStorage } from '@/src/services/storage/supabase'
  * If the RPC is missing (older DB), falls back to legacy upsert pattern.
  */
 export async function recordCapabilityUsed(sessionId: string, capabilityName: string, usageData?: any) {
-  const supabaseClient = getSupabaseStorage().getClient()
+  const supabaseClient = supabase
   try {
     // Preferred path: server-side RPC handles dedupe + logging
     const { error: rpcError } = await supabaseClient.rpc('append_capability_if_missing', {
@@ -52,7 +52,7 @@ export async function recordCapabilityUsed(sessionId: string, capabilityName: st
 }
 
 export async function getCapabilitiesUsed(sessionId: string): Promise<string[]> {
-  const supabaseClient = getSupabaseStorage().getClient()
+  const supabaseClient = supabase
   try {
     const { data: context } = await supabaseClient
       .from('conversation_contexts')
