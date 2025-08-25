@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 
 export interface ConversationContext {
   session_id: string
@@ -21,10 +21,7 @@ export class ContextStorage {
   private supabase: any
 
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    this.supabase = getSupabaseStorage().getServiceClient()
   }
 
   async store(sessionId: string, payload: Partial<ConversationContext>): Promise<void> {

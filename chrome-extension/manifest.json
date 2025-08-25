@@ -1,40 +1,21 @@
 {
-  "name": "BrowserTools Extension",
-  "version": "1.0.0",
-  "description": "BrowserTools extension for MCP integration",
-  "manifest_version": 3,
-  "permissions": [
-    "activeTab",
-    "scripting",
-    "storage",
-    "tabs"
-  ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_start"
+    "name": "BrowserTools MCP",
+    "version": "1.2.0",
+    "description": "MCP tool for AI code editors to capture data from a browser such as console logs, network requests, screenshots and more",
+    "manifest_version": 3,
+    "devtools_page": "devtools.html",
+    "permissions": [
+      "activeTab",
+      "debugger",
+      "storage",
+      "tabs",
+      "tabCapture",
+      "windows"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "background": {
+      "service_worker": "background.js"
     }
-  ],
-  "devtools_page": "devtools.html",
-  "action": {
-    "default_title": "BrowserTools",
-    "default_icon": {
-      "16": "icons/icon16.svg",
-      "48": "icons/icon48.svg",
-      "128": "icons/icon128.svg"
-    }
-  },
-  "icons": {
-    "16": "icons/icon16.svg",
-    "48": "icons/icon48.svg",
-    "128": "icons/icon128.svg"
-  }
 }

@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "no-debugger": "error"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "build/",
+    "dist/"
+  ]
+}

@@ -55,9 +55,11 @@ function createGeminiProvider(): TextProvider {
       })
 
       for await (const chunk of response) {
-        const text = chunk.text()
-        if (text) {
-          yield text
+        if (chunk.text && typeof chunk.text === 'function') {
+          const text = chunk.text()
+          if (text) {
+            yield text
+          }
         }
       }
     }

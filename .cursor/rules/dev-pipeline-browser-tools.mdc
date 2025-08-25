@@ -74,7 +74,7 @@ In Cursor Settings → MCP Servers, configure the BrowserTools server. Example e
 - Open DevTools → "BrowserTools" panel for logging, screenshots, and audits.
 
 ## Health checks
-- App: `curl -sSI http://localhost:3000/collab` → 200 OK expected
+- App: `curl -sSI http://localhost:3000/chat` → 200 OK expected
 - Bridge: `curl -sSI http://localhost:3025` → 404 at `/` is OK; confirms listener
 - MCP: Terminal logs should show "Successfully discovered server at 127.0.0.1:3025"
 

@@ -1,4 +1,4 @@
-import { getSupabase } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 

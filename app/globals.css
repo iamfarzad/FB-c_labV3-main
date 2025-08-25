@@ -31,6 +31,25 @@
   100% { offset-distance: 100%; }
 }
 
+@keyframes dot-float {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.03;
+  }
+  25% { 
+    transform: translateY(-2px) translateX(1px);
+    opacity: 0.04;
+  }
+  50% { 
+    transform: translateY(-1px) translateX(-1px);
+    opacity: 0.05;
+  }
+  75% { 
+    transform: translateY(1px) translateX(2px);
+    opacity: 0.04;
+  }
+}
+
 /* ===========================================
    UTILITY LAYER
    =========================================== */

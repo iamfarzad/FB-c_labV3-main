@@ -1,5 +1,5 @@
 // Core intelligence types - consolidated from multiple files
-export type Stage = 'GREETING' | 'INTENT' | 'QUALIFY' | 'ACTION'
+export type Stage = 'GREETING' | 'NAME_COLLECTION' | 'EMAIL_CAPTURE' | 'BACKGROUND_RESEARCH' | 'PROBLEM_DISCOVERY' | 'SOLUTION_PRESENTATION' | 'CALL_TO_ACTION'
 
 export interface CompanyContext {
   name: string

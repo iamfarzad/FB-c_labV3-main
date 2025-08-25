@@ -1,7 +1,7 @@
-import { getSupabase } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
 
 export async function GET(request: NextRequest) {
   // Check rate limiting

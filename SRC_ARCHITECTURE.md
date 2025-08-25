@@ -132,3 +132,7 @@ Only Next.js-specific utilities:
 - Next.js config helpers
 
 Everything else moves to `src/`.
+
+You can find the local backup here 
+
+here /Users/farzad/FB-c_labV2

@@ -3,7 +3,7 @@ import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
 import { existsSync } from "fs"
 // Import supabase
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 
 export const dynamic = "force-dynamic"
 
@@ -70,22 +70,20 @@ export async function POST(request: NextRequest) {
     
     // Log upload to Supabase if configured
     try {
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-        const { error: logError } = await supabase.from('upload_logs').insert({
-          filename,
-          original_name: file.name,
-          size: file.size,
-          type: file.type,
-          url: fileUrl,
-          uploaded_at: new Date().toISOString(),
-          session_id: request.headers.get('x-intelligence-session-id') || null,
-          user_id: request.headers.get('x-user-id') || null
-        })
-        if (logError) console.error('Failed to log upload:', logError)
-      }
+      const supabase = getSupabaseStorage().getClient()
+      const { error: logError } = await supabase.from('upload_logs').insert({
+        filename,
+        original_name: file.name,
+        size: file.size,
+        type: file.type,
+        url: fileUrl,
+        uploaded_at: new Date().toISOString(),
+        session_id: request.headers.get('x-intelligence-session-id') || null,
+        user_id: request.headers.get('x-user-id') || null
+      })
+      // Failed to log upload
     } catch (dbError) {
-      console.error('Database logging error:', dbError)
+      // Database logging error occurred
       // Don't fail the upload if logging fails
     }
     
@@ -100,7 +98,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('[Upload API Error]', error)
+    // Upload API Error occurred
     return NextResponse.json({ 
       error: error instanceof Error ? error.message : 'Unknown error',
       details: process.env.NODE_ENV === 'development' ? error : undefined

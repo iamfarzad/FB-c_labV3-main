@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/primitives/button'
+import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { FileText, PhoneCall, Mail, MoreHorizontal } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
@@ -13,12 +13,12 @@ import type { Suggestion } from '@/src/core/types/intelligence'
 
 interface Props {
   sessionId?: string | null
-  stage?: 'GREETING' | 'INTENT' | 'QUALIFY' | 'ACTION'
+  stage?: 'GREETING' | 'NAME_COLLECTION' | 'EMAIL_CAPTURE' | 'BACKGROUND_RESEARCH' | 'PROBLEM_DISCOVERY' | 'SOLUTION_PRESENTATION' | 'CALL_TO_ACTION'
   onRun?: (s: Suggestion) => void
   mode?: 'suggested' | 'static'
 }
 
-export function SuggestedActions({ sessionId, stage = 'INTENT', onRun, mode = 'suggested' }: Props) {
+export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onRun, mode = 'suggested' }: Props) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [finishOpen, setFinishOpen] = useState(false)

@@ -4,7 +4,7 @@ import * as React from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
-import { Plus, FileText, ImageIcon, Camera, Monitor, Calculator, Video } from "@/lib/icon-mapping"
+import { Plus, FileText, ImageIcon, Camera, Monitor, Calculator, Video } from "@/src/core/utils/icon-mapping"
 import { cn } from '@/src/core/utils'
 
 export interface ToolMenuProps {
@@ -32,30 +32,32 @@ export function ToolMenu({
 }: ToolMenuProps) {
   const contentId = React.useId()
   const menuId = `tool-menu-${contentId.replace(/[:]/g, '-')}`
+  const [open, setOpen] = React.useState(false)
+  
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button
-          type="button"
-          variant="ghost"
-          size="touch"
-          disabled={disabled}
-          className={cn(
-            "h-8 w-8 rounded-full border border-border/30 bg-muted/40",
-            "hover:bg-accent/10 hover:border-accent/30",
-            className
-          )}
-          aria-label="Open tools"
-          aria-haspopup="menu"
-          aria-controls={menuId}
+              type="button"
+              variant="ghost"
+              size="touch"
+              disabled={disabled}
+              className={cn(
+                "h-8 w-8 rounded-full border border-border/30 bg-muted/40",
+                "hover:bg-accent/10 hover:border-accent/30",
+                className
+              )}
+              aria-label="Open tools"
+              aria-haspopup="menu"
+              aria-controls={menuId}
             >
               <Plus className="w-3.5 h-3.5" />
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
-        <TooltipContent>Tools</TooltipContent>
+        <TooltipContent side="top" sideOffset={8} hidden={open}>Tools</TooltipContent>
       </Tooltip>
       <DropdownMenuContent id={menuId} align="start" className="w-56" aria-label="Tools menu">
         {onUploadDocument && (

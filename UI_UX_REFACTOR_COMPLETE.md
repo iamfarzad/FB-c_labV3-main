@@ -176,8 +176,8 @@ import { getSpacing, getColorValue } from '@/src/design/tokens'
 ### **For New Components**
 ```tsx
 // Use design system components
-import { Button } from '@/components/ui/primitives/button'
-import { Card } from '@/components/ui/primitives/card'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { ChatBubble } from '@/components/ui/patterns/chat-bubble'
 
 // Follow consistent patterns

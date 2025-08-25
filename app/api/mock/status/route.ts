@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { MOCK_CONFIG } from '@/lib/mock-config'
+import { MOCK_CONFIG } from '@/src/core/mock-config'
 
 export async function GET() {
   try {

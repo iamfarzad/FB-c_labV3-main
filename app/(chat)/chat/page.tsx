@@ -10,7 +10,7 @@ import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/ui/hooks/useChat'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
-import { Message } from './types/chat'
+import { Message } from '@/src/core/types/chat'
 
 // Import VerticalProcessChain from ChatSidebar for reuse
 import { VerticalProcessChain } from '@/components/chat/layouts/ChatSidebar'
@@ -21,24 +21,24 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [stage, setStage] = useState('GREETING')
   const [activityLog, setActivityLog] = useState<any[]>([])
-  const [stageProgress, setStageProgress] = useState(1)
+  const [stageProgress, setStageProgress] = useState(0)
 
-  // Stage progression configuration
+  // Stage progression configuration - using new standardized stages
   const stages = [
-    { id: 'GREETING', label: 'Initial Greeting', done: false, current: true },
-    { id: 'CONTEXT', label: 'Context Gathering', done: false, current: false },
-    { id: 'ANALYSIS', label: 'Problem Analysis', done: false, current: false },
-    { id: 'SOLUTION', label: 'Solution Design', done: false, current: false },
-    { id: 'ROI', label: 'ROI Calculation', done: false, current: false },
-    { id: 'IMPLEMENTATION', label: 'Implementation Plan', done: false, current: false },
-    { id: 'FOLLOWUP', label: 'Follow-up Setup', done: false, current: false }
+    { id: 'GREETING', label: 'Discovery & Setup', done: false, current: true },
+    { id: 'NAME_COLLECTION', label: 'Identity', done: false, current: false },
+    { id: 'EMAIL_CAPTURE', label: 'Consent & Context', done: false, current: false },
+    { id: 'BACKGROUND_RESEARCH', label: 'Research', done: false, current: false },
+    { id: 'PROBLEM_DISCOVERY', label: 'Requirements', done: false, current: false },
+    { id: 'SOLUTION_PRESENTATION', label: 'Solution', done: false, current: false },
+    { id: 'CALL_TO_ACTION', label: 'Next Step', done: false, current: false }
   ]
 
   // Use the clean chat hook
   const { messages, isLoading, error, send, clear } = useChat({ 
     mode: 'public',
-    onError: (err) => console.error('Chat error:', err),
-    onFinish: (msg) => console.log('Message finished:', msg)
+            onError: (err) => { /* Chat error occurred */ },
+        onFinish: (msg) => { /* Message finished */ }
   })
 
   // Intelligence system
@@ -68,7 +68,7 @@ export default function ChatPage() {
           localStorage.setItem('intelligence-session-id', data.sessionId)
         }
       } catch (error) {
-        console.error('Failed to initialize session:', error)
+        // Failed to initialize session
       }
     }
 
@@ -110,12 +110,12 @@ export default function ChatPage() {
   }
 
   const handleToolAction = (tool: string, data?: any) => {
-    console.log('Tool action:', tool, data)
+            // Tool action executed
     // Handle tool actions here
   }
 
   const handleSuggestionRun = (suggestion: any) => {
-    console.log('Suggestion run:', suggestion)
+            // Suggestion executed
     // Handle suggestion actions here
   }
 

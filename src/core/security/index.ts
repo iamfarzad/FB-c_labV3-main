@@ -168,3 +168,33 @@ export function withFullSecurity(
     return withAPISecurity(limitedHandler)(req)
   }
 }
+
+// Admin authentication middleware
+export function withAdminAuth(handler: (req: NextRequest) => Promise<Response | NextResponse>) {
+  return async function(req: NextRequest) {
+    let role = ''
+    try {
+      // tolerate tests passing plain objects
+      role = (req as any)?.headers?.get ? (req as any).headers.get('x-user-role') || '' : ''
+    } catch {}
+    if (role.toLowerCase() !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+    return handler(req)
+  }
+}
+
+// API guard middleware
+export function withApiGuard(options: {
+  schema?: any
+  requireSession?: boolean
+  rateLimit?: { windowMs: number; max: number }
+} = {}) {
+  return function(handler: (req: NextRequest) => Promise<Response | NextResponse>) {
+    return async function(req: NextRequest) {
+      // For now, just pass through to the handler
+      // In a real implementation, this would validate the schema, check session, and apply rate limiting
+      return handler(req)
+    }
+  }
+}

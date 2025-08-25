@@ -1,3 +1,5 @@
+'use client'
+
 import { ChatInterfaceWrapper } from '@/components/chat/ChatInterfaceWrapper'
 
 export default function TestCleanChatPage() {

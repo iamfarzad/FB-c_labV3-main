@@ -12,6 +12,7 @@ import { MotionCard } from "@/components/ui/motion-card"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
 import { CitationsDemo } from "@/components/experience/citations-demo"
+import { DotScreenShader } from "@/components/ui/dot-shader-background"
 
 export const metadata: Metadata = {
   title: "Farzad Bayat - AI Consultant & Automation Expert | Build AI That Actually Works",
@@ -79,51 +80,45 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <PageShell className="pt-20 pb-16">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="flex justify-center mb-16 relative">
-            <div className="absolute inset-0 flex justify-center items-center">
-              <div className="w-56 h-56 bg-accent/20 rounded-full blur-xl animate-pulse" />
-              <div className="absolute w-64 h-64 bg-accent/10 rounded-full blur-2xl animate-pulse [animation-delay:0.5s]" />
-            </div>
-            <div className="relative z-10">
-              <div className="absolute inset-0 -z-10">
-                <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full 
-                                bg-[conic-gradient(from_0deg,theme(colors.accent.DEFAULT),transparent_60%)] 
-                                opacity-30 blur-2xl animate-[spin_14s_linear_infinite]" />
-                <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20 animate-pulse" />
-              </div>
-              <FbcIconPolished className="w-48 h-48" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold tracking-tight text-primary sm:text-6xl">
-            Build AI That Actually <span className="text-accent">Works</span>
-          </h1>
-          <p className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto">
-            I'm Farzad Bayat, an AI consultant with 10,000+ hours of hands-on experience. 
-            I build practical AI automation solutions that deliver real business results—not just hype.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <BookCallButton size="lg" className="bg-accent hover:bg-accent/90" title="Book Your Free AI Consultation">
-              Start Your AI Project
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </BookCallButton>
-            <Button asChild variant="outline" size="lg" className="border-primary hover:bg-primary/10">
-              <Link href="/chat" className="flex items-center">
-                <FbcIcon className="mr-2 h-4 w-4" />
-                Talk with F.B/c AI
-              </Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg" className="text-muted-foreground hover:text-foreground">
-              <Link href="/about">Learn My Story</Link>
-            </Button>
-          </div>
+      <div className="min-h-screen w-full flex flex-col gap-6 sm:gap-8 items-center justify-center relative overflow-hidden px-4 py-8">
+        <div className="absolute inset-0">
+          <DotScreenShader />
         </div>
-      </PageShell>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground dark:text-white text-center px-4 pointer-events-none relative z-10">
+          Build AI That Actually <span className="text-accent">Works</span>
+        </h1>
+        <p className="text-base sm:text-lg md:text-xl font-light text-center text-foreground dark:text-white max-w-2xl leading-relaxed pointer-events-none relative z-10 px-4">
+          I'm Farzad Bayat, an AI consultant with 10,000+ hours of hands-on experience. 
+          I build practical AI automation solutions that deliver real business results—not just hype.
+        </p>
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 relative z-10 px-4">
+          <BookCallButton size="lg" className="bg-accent hover:bg-accent/90 shadow-lg text-white" title="Book Your Free AI Consultation">
+            Start Your AI Project
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </BookCallButton>
+          <Button asChild variant="outline" size="lg" className="border-foreground dark:border-white text-foreground dark:text-white hover:bg-foreground/10 dark:hover:bg-white/10 backdrop-blur-sm">
+            <Link href="/chat" className="flex items-center">
+              <FbcIcon className="mr-2 h-4 w-4" />
+              Talk with F.B/c AI
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" size="lg" className="text-foreground dark:text-white hover:text-foreground/80 dark:hover:text-white/80">
+            <Link href="/about">Learn My Story</Link>
+          </Button>
+        </div>
+      </div>
 
 
       {/* Features Section */}
-      <PageShell>
+      <PageShell className="relative overflow-hidden">
+        {/* Subtle Transition Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-background" />
+        
+        {/* Large FBC Icon on Right */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
+          <FbcIconPolished className="w-96 h-96 text-accent/20" />
+        </div>
+        
         <div className="mb-6 flex justify-center">
           <ProgressTracker />
         </div>
@@ -136,7 +131,7 @@ export default function HomePage() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 relative z-10">
           {features.map((feature, i) => (
             <FadeIn key={feature.title} delay={i * 0.06}>
               <MotionCard className="neu-card transition-all hover:shadow-lg">

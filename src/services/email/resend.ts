@@ -45,16 +45,16 @@ export class EmailService {
       })
 
       if (result.error) {
-        console.error('Email send error:', result.error)
+        // Email send error occurred
         return { success: false, error: result.error.message }
       }
 
-      console.log(`✅ Email sent successfully:`, { id: result.data?.id, to: template.to })
+      // Email sent successfully
       return { success: true, id: result.data?.id }
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown email error'
-      console.error('Email service error:', errorMessage)
+      // Email service error occurred
       return { success: false, error: errorMessage }
     }
   }

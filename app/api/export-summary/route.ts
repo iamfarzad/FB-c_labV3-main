@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
-import { getSupabase } from '@/src/services/storage/supabase';
-import { logServerActivity } from '@/lib/server-activity-logger';
-import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/lib/pdf-generator-puppeteer';
+import { getSupabaseStorage } from '@/src/services/storage/supabase';
+import { logServerActivity } from '@/src/core/monitoring/server-activity-logger';
+import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/src/core/pdf-generator-puppeteer';
 import fs from 'fs';
-import { recordCapabilityUsed } from '@/lib/context/capabilities';
+import { recordCapabilityUsed } from '@/src/core/context/capabilities';
 
 export const dynamic = 'force-dynamic';
 
@@ -163,11 +163,11 @@ export async function POST(req: NextRequest) {
       sessionId
     };
 
-    // Generate PDF using the PDF generator
+    // Generate PDF using the PDF generator (client mode)
     const pdfPath = generatePdfPath(sessionId, leadInfo.name);
     
     try {
-      await generatePdfWithPuppeteer(summaryData, pdfPath);
+      await generatePdfWithPuppeteer(summaryData, pdfPath, 'client');
       
       // Read the generated PDF file
       const pdfBuffer = fs.readFileSync(pdfPath);

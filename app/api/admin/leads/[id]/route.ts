@@ -1,7 +1,7 @@
-import { supabaseService } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
 
 export async function PATCH(
   request: NextRequest,
@@ -33,7 +33,8 @@ export async function PATCH(
     }
 
     // Update lead status
-    const { data, error } = await supabaseService
+    const supabase = getSupabaseStorage()
+    const { data, error } = await supabase
       .from("lead_summaries")
       .update({ status })
       .eq("id", id)
@@ -78,7 +79,7 @@ export async function GET(
     const { id } = params;
 
     // Get lead details
-    const { data, error } = await supabaseService
+    const { data, error } = await supabase
       .from("lead_summaries")
       .select("*")
       .eq("id", id)

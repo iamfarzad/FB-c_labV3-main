@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { X, ExternalLink } from 'lucide-react'
-import { Button } from '@/components/ui/primitives/button'
+import { Button } from '@/components/ui/button'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
-import { adminMonitoring } from "@/lib/admin-monitoring"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
+import { adminMonitoring } from "@/src/core/monitoring/admin"
 
 export async function GET(request: NextRequest) {
   // Check rate limiting

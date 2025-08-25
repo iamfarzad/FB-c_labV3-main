@@ -125,6 +125,11 @@ export class SupabaseStorage {
     }
   }
 
+  // Get the regular client for real-time features
+  getClient() {
+    return this.client
+  }
+
   // Service role operations (admin only)
   getServiceClient() {
     if (!this.serviceClient) {

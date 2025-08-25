@@ -1,9 +1,9 @@
-import { supabaseService } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
 import { NextResponse } from "next/server"
-import { getUsageStats } from "@/lib/token-usage-logger"
+import { getUsageStats } from "@/src/core/monitoring"
 
 interface TokenUsageLog {
   id: string
@@ -62,7 +62,8 @@ export async function GET(req: NextRequest) {
     }
 
     // Get real token usage data from token_usage_logs table
-    const { data: logs, error: logsError } = await supabaseService
+    const supabase = getSupabaseStorage()
+    const { data: logs, error: logsError } = await supabase
       .from("token_usage_logs")
       .select("*")
       .gte("created_at", new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString())

@@ -104,7 +104,7 @@ export class GoogleSearchService {
       }
 
     } catch (error) {
-      console.error('Google Search Service error:', error)
+      // Google Search Service error occurred
       throw error
     }
   }

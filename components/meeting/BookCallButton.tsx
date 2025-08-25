@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from 'react'
-import { Button } from '@/components/ui/primitives/button'
+import { Button } from '@/components/ui/button'
 import { useMeeting } from '@/components/providers/meeting-provider'
 
 interface BookCallButtonProps extends React.ComponentProps<typeof Button> {

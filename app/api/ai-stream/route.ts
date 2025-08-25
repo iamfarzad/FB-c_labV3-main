@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
-import { createOptimizedConfig } from "@/lib/gemini-config-enhanced"
-import { getSupabase } from '@/src/services/storage/supabase'
+import { createOptimizedConfig } from "@/src/core/ai/gemini-config-enhanced"
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         },
       ],
     });
-    const supabase = getSupabaseStorage()
+    const supabase = getSupabaseStorage().getClient()
 
     if (enableStreaming) {
       // Streaming response

@@ -2,7 +2,7 @@
 
 import { getAllModules } from '@/src/core/education/modules'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/primitives/button'
+import { Button } from '@/components/ui/button'
 
 export function CourseOutline() {
   const mods = getAllModules()

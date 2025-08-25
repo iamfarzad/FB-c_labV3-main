@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { supabase } from '@/src/services/storage/supabase'
-import type { ActivityItem } from "@/app/(chat)/chat/types/chat"
+import type { ActivityItem } from "@/src/core/types/chat"
 
 export function useRealTimeActivities() {
   const [activities, setActivities] = useState<ActivityItem[]>([])

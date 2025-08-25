@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
-import { withAdminAuth } from "@/lib/api/withAdminAuth"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
+import { withAdminAuth } from "@/src/core/security"
 
 export const GET = withAdminAuth(async function(request: NextRequest) {
   // Check rate limiting

@@ -1,4 +1,4 @@
-import { ContextStorage } from '@/lib/context/context-storage'
+import { ContextStorage } from '@/src/core/context/context-storage'
 
 export async function getMergedContext(sessionId: string) {
   const storage = new ContextStorage()
@@ -17,11 +17,11 @@ export async function getMergedContext(sessionId: string) {
   return snapshot
 }
 
-import { getSupabase } from '@/lib/supabase/server'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { ContextSnapshotSchema, type ContextSnapshot } from './context-schema'
 
 export async function getContextSnapshot(sessionId: string): Promise<ContextSnapshot | null> {
-  const supabase = getSupabase()
+  const supabase = getSupabaseStorage().getClient()
   const { data } = await supabase
     .from('conversation_contexts')
     .select('*')
@@ -44,7 +44,7 @@ export async function getContextSnapshot(sessionId: string): Promise<ContextSnap
 }
 
 export async function updateContext(sessionId: string, patch: Partial<ContextSnapshot>) {
-  const supabase = getSupabase()
+  const supabase = getSupabaseStorage().getClient()
   const { data: existing } = await supabase
     .from('conversation_contexts')
     .select('*')

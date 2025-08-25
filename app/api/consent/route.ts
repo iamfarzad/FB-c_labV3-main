@@ -5,6 +5,9 @@ type ConsentCookie = {
   allowedDomains: string[]
   ts: number
   policyVersion?: string
+  name?: string
+  email?: string
+  companyDomain?: string | undefined
 }
 
 function inferDomainFromEmail(email?: string): string | null {
@@ -29,7 +32,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, companyUrl, policyVersion } = await req.json()
+    const { email, companyUrl, policyVersion, name } = await req.json()
     let domain: string | null = null
     const inferred = inferDomainFromEmail(email)
     if (inferred) domain = inferred
@@ -40,9 +43,10 @@ export async function POST(req: NextRequest) {
     // Always allow linkedin.com as secondary source if a domain exists
     if (allowedDomains.length) allowedDomains.push('linkedin.com')
 
-    const value: ConsentCookie = { allow: true, allowedDomains, ts: Date.now(), policyVersion }
+    const value: ConsentCookie = { allow: true, allowedDomains, ts: Date.now(), policyVersion, name, email, companyDomain: domain || undefined }
     const res = NextResponse.json({ ok: true, allowedDomains })
-    res.cookies.set('fbc-consent', JSON.stringify(value), { httpOnly: true, sameSite: 'lax', secure: true, path: '/', maxAge: 60 * 60 * 24 * 30 })
+    const isProd = process.env.NODE_ENV === 'production';
+    res.cookies.set('fbc-consent', JSON.stringify(value), { httpOnly: true, sameSite: 'lax', secure: isProd, path: '/', maxAge: 60 * 60 * 24 * 30 })
     return res
   } catch (e: any) {
     return NextResponse.json({ error: 'Bad request' }, { status: 400 })

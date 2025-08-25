@@ -1,17 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { GoogleGenAI } from "@google/genai"
 import { createHash } from "crypto"
-import { createOptimizedConfig } from "@/lib/gemini-config-enhanced"
-import { isMockEnabled } from "@/lib/mock-control"
-import { parseJSON, parseHTML } from "@/lib/parse-utils"
-import { SPEC_FROM_VIDEO_PROMPT, CODE_REGION_OPENER, CODE_REGION_CLOSER, SPEC_ADDENDUM } from "@/lib/ai-prompts"
-import { getYouTubeVideoId } from "@/lib/youtube"
-import { getYouTubeTranscript, summarizeTranscript, extractKeyTopics } from "@/lib/youtube-transcript"
-import { selectModelForFeature, estimateTokens } from "@/lib/model-selector"
-import { getSupabase } from '@/src/services/storage/supabase'
-import { enforceBudgetAndLog } from "@/lib/token-usage-logger"
-import { withFullSecurity } from "@/lib/api-security"
-import { recordCapabilityUsed } from "@/lib/context/capabilities"
+import { createOptimizedConfig } from "@/src/core/ai/gemini-config-enhanced"
+import { isMockEnabled } from "@/src/core/mock-control"
+import { parseJSON, parseHTML } from "@/src/core/parse-utils"
+import { SPEC_FROM_VIDEO_PROMPT, CODE_REGION_OPENER, CODE_REGION_CLOSER, SPEC_ADDENDUM } from "@/src/core/ai-prompts"
+import { getYouTubeVideoId } from "@/src/core/youtube"
+import { getYouTubeTranscript, summarizeTranscript, extractKeyTopics } from "@/src/core/youtube-transcript"
+import { selectModelForFeature, estimateTokens } from "@/src/core/ai/model-selector"
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { enforceBudgetAndLog } from "@/src/core/monitoring"
+import { withFullSecurity } from "@/src/core/security"
+import { recordCapabilityUsed } from "@/src/core/context/capabilities"
 
 
 // Timeout wrapper for production stability

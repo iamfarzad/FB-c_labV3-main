@@ -3,7 +3,7 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Mic, X } from "@/lib/icon-mapping"
+import { Mic, X } from "@/src/core/utils/icon-mapping"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 import { useWebSocketVoice } from '@/hooks/use-websocket-voice'

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
-import type { ActivityItem } from '@/app/(chat)/chat/types/chat'
+import type { ActivityItem } from '@/src/core/types/chat'
 
 type ChatContextValue = {
   activityLog: ActivityItem[]

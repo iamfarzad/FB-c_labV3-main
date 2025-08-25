@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { generatePdfWithPuppeteer, generatePdfPath } from '@/lib/pdf-generator-puppeteer'
-import { getSupabase } from '@/src/services/storage/supabase'
+import { generatePdfWithPuppeteer, generatePdfPath } from '@/src/core/pdf-generator-puppeteer'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import fs from 'fs'
 
 export const dynamic = 'force-dynamic'
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     const pdfPath = generatePdfPath(sessionId, leadInfo.name)
-    await generatePdfWithPuppeteer(summaryData as any, pdfPath)
+    await generatePdfWithPuppeteer(summaryData as any, pdfPath, 'client')
     const pdfBuffer = fs.readFileSync(pdfPath)
     fs.unlinkSync(pdfPath)
 

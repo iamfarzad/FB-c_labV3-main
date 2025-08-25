@@ -1,7 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/components/ui/button';
 import {
   ScrollArea,
   ScrollBar,

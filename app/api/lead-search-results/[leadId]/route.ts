@@ -1,7 +1,6 @@
-import { getSupabase } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { supabaseService } from '@/src/services/storage/supabase'
 
 export async function GET(
   req: NextRequest,
@@ -15,7 +14,8 @@ export async function GET(
     }
 
     // Get search results for the lead
-    const { data: searchResults, error } = await supabaseService
+    const supabase = getSupabaseStorage()
+    const { data: searchResults, error } = await supabase
       .from('lead_search_results')
       .select('*')
       .eq('lead_id', leadId)
@@ -57,7 +57,7 @@ export async function POST(
     }
 
     // Get lead information first
-    const { data: lead, error: leadError } = await supabaseService
+    const { data: lead, error: leadError } = await supabase
       .from('lead_summaries')
       .select('name, email, company_name')
       .eq('id', leadId)
@@ -71,7 +71,7 @@ export async function POST(
     }
 
     // Perform new grounded search
-    const { GroundedSearchService } = await import('@/lib/grounded-search-service')
+    const { GroundedSearchService } = await import('@/src/core/grounded-search-service')
     const groundedSearchService = new GroundedSearchService()
     
     const searchResults = await groundedSearchService.searchLead({

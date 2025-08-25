@@ -25,7 +25,7 @@ import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/componen
 import { Task, TaskTrigger, TaskContent, TaskItem } from '@/components/ai-elements/task'
 import { WebPreview, WebPreviewNavigation, WebPreviewUrl, WebPreviewBody } from '@/components/ai-elements/web-preview'
 import { Loader } from '@/components/ai-elements/loader'
-import { Message as ChatMessage } from '@/app/(chat)/chat/types/chat'
+import { Message as ChatMessage } from '@/src/core/types/chat'
 import { useTools } from '@/ui/hooks/useTools'
 
 interface ChatMessagesProps {

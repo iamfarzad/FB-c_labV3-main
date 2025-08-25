@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDemoSession } from '@/lib/demo-budget-manager'
-import { DEMO_LIMITS, FEATURE_BUDGETS } from '@/lib/demo-budget-manager'
+import { getDemoSession } from '@/src/core/monitoring/demo-budget-manager'
+import { DEMO_LIMITS, FEATURE_BUDGETS } from '@/src/core/monitoring/demo-budget-manager'
 
 export async function GET(request: NextRequest) {
   try {

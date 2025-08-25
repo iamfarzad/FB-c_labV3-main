@@ -68,7 +68,7 @@ export function useChat({
         headers['Authorization'] = 'Bearer admin-token'
       }
 
-      console.log(`🚀 Sending to ${endpoint}:`, body)
+      // Sending request to endpoint
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -116,11 +116,11 @@ export function useChat({
               }
             } catch (e) {
               // Skip malformed JSON
-              console.warn('Failed to parse SSE data:', line)
+              // Failed to parse SSE data
             }
           } else if (line.startsWith('event: end')) {
             // Stream completed successfully
-            console.log('✅ Stream completed')
+            // Stream completed
             break
           } else if (line.startsWith('event: error')) {
             const errorLine = lines[i + 1] // Next line should be data
@@ -138,7 +138,7 @@ export function useChat({
           content: accumulatedContent 
         }
         
-        console.log('✅ Message completed:', finalMessage.content.substring(0, 50) + '...')
+        // Message completed
         onFinish?.(finalMessage)
       }
 
@@ -152,7 +152,7 @@ export function useChat({
         setMessages(prev => prev.filter(msg => msg.id !== assistantMessage.id))
       }
       
-      console.error('❌ Chat error:', errorObj)
+              // Chat error occurred
     } finally {
       setIsLoading(false)
       abortRef.current = null

@@ -1,7 +1,7 @@
-import { supabaseService } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/lib/rate-limiting"
+import { adminRateLimit } from "@/src/core/security/rate-limiting"
 
 export async function GET(request: NextRequest) {
   // Check rate limiting
@@ -26,7 +26,8 @@ export async function GET(request: NextRequest) {
     const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000)
 
     if (type === "leads") {
-      const { data: leads } = await supabaseService
+      const supabase = getSupabaseStorage()
+      const { data: leads } = await supabase
         .from("lead_summaries")
         .select("*")
         .gte("created_at", startDate.toISOString())

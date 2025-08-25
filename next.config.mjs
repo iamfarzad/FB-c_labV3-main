@@ -17,8 +17,20 @@ const nextConfig = {
   // Removed static headers() here to avoid conflicting/overly-restrictive connect-src blocking WS.
   // Enable experimental features for better performance
   experimental: {
-               optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
-             },
+    optimizePackageImports: [
+      '@radix-ui/react-icons', 
+      'lucide-react',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-select',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-toast',
+      '@radix-ui/react-tooltip',
+      'framer-motion',
+      'react-hook-form',
+      '@hookform/resolvers'
+    ],
+  },
   // API configuration for security
   serverExternalPackages: [],
   // Webpack configuration for better module resolution
@@ -32,26 +44,12 @@ const nextConfig = {
       crypto: false,
     }
 
-    // Optimize chunks for better loading
-    if (!isServer) {
-      config.optimization.splitChunks = {
-        ...config.optimization.splitChunks,
-        cacheGroups: {
-          ...config.optimization.splitChunks.cacheGroups,
-          default: false,
-          vendors: false,
-          // Bundle common vendor libraries
-          vendor: {
-            name: 'vendor',
-            chunks: 'all',
-            test: /node_modules/,
-            priority: 20,
-          },
-        },
-      }
-    }
-
     return config
+  },
+  // Compiler options for better optimization
+  compiler: {
+    // Remove console.logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   // Environment variables that should be available at build time
   env: {

@@ -8,7 +8,7 @@ import {
   oneDark,
   oneLight,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/src/core/utils';
 
 type CodeBlockContextType = {

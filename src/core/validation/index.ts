@@ -38,6 +38,17 @@ export const sessionInitSchema = z.object({
 })
 
 // ============================================================================
+// TRANSLATION VALIDATION
+// ============================================================================
+
+export const translationRequestSchema = z.object({
+  text: z.string().min(1).max(5000),
+  targetLang: z.string().min(2).max(10),
+  sourceLang: z.string().min(2).max(10).optional(),
+  sessionId: z.string().optional()
+})
+
+// ============================================================================
 // ADMIN VALIDATION
 // ============================================================================
 
@@ -85,6 +96,24 @@ export function sanitizePhone(phone: string): string {
   return phone.replace(/[^\d+\-\(\)\s]/g, '').trim()
 }
 
+export function validateRequest<T extends z.ZodSchema>(
+  schema: T,
+  data: unknown
+): { success: true; data: z.infer<T> } | { success: false; errors: string[] } {
+  try {
+    const result = schema.parse(data)
+    return { success: true, data: result }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { 
+        success: false, 
+        errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+      }
+    }
+    return { success: false, errors: ['Validation failed'] }
+  }
+}
+
 // ============================================================================
 // TYPE EXPORTS
 // ============================================================================
@@ -93,6 +122,7 @@ export type ChatMessage = z.infer<typeof chatMessageSchema>
 export type ChatRequest = z.infer<typeof chatRequestSchema>
 export type LeadCaptureInput = z.infer<typeof leadCaptureSchema>
 export type SessionInitInput = z.infer<typeof sessionInitSchema>
+export type TranslationRequest = z.infer<typeof translationRequestSchema>
 export type LeadUpdateInput = z.infer<typeof leadUpdateSchema>
 export type AdminSearchInput = z.infer<typeof adminSearchSchema>
 export type FileUploadInput = z.infer<typeof fileUploadSchema>

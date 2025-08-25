@@ -36,12 +36,12 @@ const IMPORT_MAPPINGS = {
 // Component replacements
 const COMPONENT_REPLACEMENTS = {
   // Old button imports to new
-  "import { Button } from '@/components/ui/button'": "import { Button } from '@/components/ui/primitives/button'",
-  "import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'": "import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/primitives/card'",
+  "import { Button } from '@/components/ui/primitives/button'": "import { Button } from '@/components/ui/button'",
+"import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/primitives/card'": "import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'",
   
   // Legacy button variants
-  'from "@/components/ui/button-variants"': 'from "@/components/ui/primitives/button"',
-  'from "@/components/ui/card-variants"': 'from "@/components/ui/primitives/card"'
+  'from "@/components/ui/primitives/button"': 'from "@/components/ui/button"',
+'from "@/components/ui/primitives/card"': 'from "@/components/ui/card"'
 }
 
 async function migrateComponent(filePath) {
@@ -107,7 +107,7 @@ async function main() {
   // Find all component files
   const componentFiles = await glob('components/**/*.{ts,tsx}', {
     ignore: [
-      '**/ui/primitives/**', // Skip new design system components
+      '**/ui/primitives/**', // Skip (deleted - now using standard Shadcn components)
       '**/ui/patterns/**',
       '**/ui/layouts/**',
       '**/*.test.ts',

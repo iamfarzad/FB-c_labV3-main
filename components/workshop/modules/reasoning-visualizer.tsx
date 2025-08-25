@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/primitives/button'
+import { Button } from '@/components/ui/button'
 
 export default function ReasoningVisualizer() {
   const steps = [

@@ -6,8 +6,9 @@ import { MeetingProvider } from "@/components/providers/meeting-provider"
 import { DemoSessionProvider } from "@/components/demo-session-manager"
 import { GlobalChrome } from "@/components/GlobalChrome"
 import { Toaster } from "@/components/ui/toaster"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { PermissionManager } from "@/components/permissions/PermissionManager"
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/core/utils"
 import { StructuredData } from "./structured-data"
 import { CanvasProvider } from "@/components/providers/canvas-provider"
 import { ModuleProgressProvider } from "@/hooks/workshop/use-module-progress"
@@ -43,24 +44,26 @@ export default function RootLayout({
       </head>
       <body className={cn("font-sans antialiased", fontSans.variable, fontDisplay.variable, fontMono.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <DemoSessionProvider>
-            <MeetingProvider>
-              <CanvasProvider>
-                <ModuleProgressProvider>
-                  <GlobalChrome>
-                    <div className="min-h-screen relative">
-                      <AnimatedGridPattern
-                        className="-z-10 inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 [mask-image:radial-gradient(500px_circle_at_center,white,transparent)] fill-[hsl(var(--accent))]/10 stroke-[hsl(var(--accent))]/10 text-[hsl(var(--accent))]/20"
-                      />
-                      {children}
-                    </div>
-                    <Toaster />
-                    <PermissionManager />
-                  </GlobalChrome>
-                </ModuleProgressProvider>
-              </CanvasProvider>
-            </MeetingProvider>
-          </DemoSessionProvider>
+          <TooltipProvider>
+            <DemoSessionProvider>
+              <MeetingProvider>
+                <CanvasProvider>
+                  <ModuleProgressProvider>
+                    <GlobalChrome>
+                      <div className="min-h-screen relative">
+                        <AnimatedGridPattern
+                          className="-z-10 inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 [mask-image:radial-gradient(500px_circle_at_center,white,transparent)] fill-[hsl(var(--accent))]/10 stroke-[hsl(var(--accent))]/10 text-[hsl(var(--accent))]/20"
+                        />
+                        {children}
+                      </div>
+                      <Toaster />
+                      <PermissionManager />
+                    </GlobalChrome>
+                  </ModuleProgressProvider>
+                </CanvasProvider>
+              </MeetingProvider>
+            </DemoSessionProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
