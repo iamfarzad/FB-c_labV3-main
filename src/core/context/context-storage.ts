@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { MultimodalContext } from './multimodal-context'
 
 export interface ConversationContext {
   session_id: string
@@ -29,17 +30,39 @@ export class ContextStorage {
 
   async store(sessionId: string, payload: Partial<ConversationContext>): Promise<void> {
     try {
+      // Prepare the data, handling multimodal context separately if needed
+      const dataToStore = {
+        session_id: sessionId,
+        ...payload,
+        updated_at: new Date().toISOString()
+      }
+
+      // If multimodal_context exists, store it as JSON string for now
+      if (dataToStore.multimodal_context) {
+        dataToStore.multimodal_context = JSON.stringify(dataToStore.multimodal_context)
+      }
+
       const { error } = await this.supabase
         .from('conversation_contexts')
-        .upsert({
-          session_id: sessionId,
-          ...payload,
-          updated_at: new Date().toISOString()
-        })
+        .upsert(dataToStore)
 
       if (error) {
-        console.error('Error storing context:', error)
-        throw error
+        // If the column doesn't exist, try without multimodal_context
+        if (error.message?.includes('multimodal_context')) {
+          console.warn('Multimodal context column not found, storing without it')
+          const { multimodal_context, ...dataWithoutMultimodal } = dataToStore
+          const { error: retryError } = await this.supabase
+            .from('conversation_contexts')
+            .upsert(dataWithoutMultimodal)
+
+          if (retryError) {
+            console.error('Error storing context without multimodal:', retryError)
+            throw retryError
+          }
+        } else {
+          console.error('Error storing context:', error)
+          throw error
+        }
       }
     } catch (error) {
       console.error('Context storage failed:', error)
@@ -58,6 +81,16 @@ export class ContextStorage {
       if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
         console.error('Error retrieving context:', error)
         throw error
+      }
+
+      // Parse multimodal context if it exists as string
+      if (data && typeof data.multimodal_context === 'string') {
+        try {
+          data.multimodal_context = JSON.parse(data.multimodal_context)
+        } catch (parseError) {
+          console.warn('Failed to parse multimodal context:', parseError)
+          data.multimodal_context = undefined
+        }
       }
 
       return data

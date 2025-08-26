@@ -589,7 +589,7 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
                   onScreenShare={() => onToolAction?.('screen')}
                   onROI={() => { onToolAction?.('roi') }}
                   onVideoToApp={() => onToolAction?.('video')}
-                  comingSoon={['webcam','screen','video']}
+                  comingSoon={['video']} // Only video-to-app is still coming soon
                 />
                 <Badge className="ml-2 text-[11px] bg-accent/10 text-accent border-accent/20">
                   Context Aware

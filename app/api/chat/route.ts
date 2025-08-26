@@ -9,10 +9,10 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Chat API error:', error)
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Internal server error' 
-      }), 
-      { 
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Internal server error'
+      }),
+      {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       }

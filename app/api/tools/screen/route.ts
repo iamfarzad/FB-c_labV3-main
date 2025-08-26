@@ -7,6 +7,7 @@ import { enforceBudgetAndLog } from '@/src/core/token-usage-logger'
 import { checkDemoAccess, recordDemoUsage, DemoFeature } from '@/src/core/demo-budget-manager'
 import { ScreenShareSchema } from '@/src/core/services/tool-service'
 import { recordCapabilityUsed } from '@/src/core/context/capabilities'
+import { multimodalContextManager } from '@/src/core/context/multimodal-context'
 
 export async function POST(req: NextRequest) {
   try {
@@ -77,6 +78,15 @@ export async function POST(req: NextRequest) {
       try {
         await recordCapabilityUsed(String(sessionId), capability, { insights: response.output.insights, imageSize: image.length })
         if (capability === 'screenshot') await recordCapabilityUsed(String(sessionId), 'screenShare', { alias: true })
+
+        // Add visual analysis to multimodal context
+        await multimodalContextManager.addVisualAnalysis(
+          String(sessionId),
+          analysisResult,
+          type === 'document' ? 'upload' : 'screen',
+          image.length,
+          image
+        )
       } catch {}
     }
     return NextResponse.json(response, { status: 200 })

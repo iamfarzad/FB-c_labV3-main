@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { adminAuthMiddleware } from '@/src/core/auth'
-import { adminRateLimit } from "@/src/core/security/rate-limiting"
+import { adminAuthMiddleware } from '@/app/middleware/auth'
+import { adminRateLimit } from "@/app/middleware/security-rate-limiting"
 import { adminMonitoring } from "@/src/core/monitoring/admin"
 
 export async function GET(request: NextRequest) {

@@ -42,7 +42,7 @@ pnpm server
 
 ## Open the app
 ```bash
-open http://localhost:3000/collab
+open http://localhost:3000/chat
 ```
 
 ## Cursor MCP configuration (BrowserTools)

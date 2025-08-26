@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const supabase = getSupabaseStorage();
+    const supabase = getSupabaseStorage().getClient();
 
     // Get lead information
     let leadInfo = { name: 'Unknown', email: leadEmail || 'unknown@example.com' };

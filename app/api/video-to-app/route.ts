@@ -10,7 +10,7 @@ import { getYouTubeTranscript, summarizeTranscript, extractKeyTopics } from "@/s
 import { selectModelForFeature, estimateTokens } from "@/src/core/ai/model-selector"
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { enforceBudgetAndLog } from "@/src/core/monitoring"
-import { withFullSecurity } from "@/src/core/security"
+import { withFullSecurity } from "@/app/middleware/security"
 import { recordCapabilityUsed } from "@/src/core/context/capabilities"
 
 

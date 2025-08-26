@@ -21,7 +21,7 @@ export const INTELLIGENCE_CONFIG = {
   providerTimeout: PROVIDER_TIMEOUT_MS,
   embedDimension: EMBED_DIM,
   liveEnabled: LIVE_ENABLED,
-  groundingEnabled: GEMINI_GROUNDING_ENABLED,
+  groundingEnabled: true, // Enable existing Google Search grounding
 } as const
 
 

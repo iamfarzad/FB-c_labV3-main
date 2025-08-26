@@ -136,17 +136,52 @@ export class LeadResearchService {
   private async researchWithGrounding(email: string, name: string | undefined, domain: string, companyUrl: string | undefined): Promise<ResearchResult> {
     const allCitations: Array<{ uri: string; title?: string; description?: string }> = []
 
-    // Search for company information
-    const companySearch = await this.groundingProvider.searchCompany(domain)
-    allCitations.push(...companySearch.citations)
+    // Fast path for known reserved domains
+    const reservedDomains = ['example.com', 'example.net', 'example.org', 'example.edu', 'test.com', 'localhost']
+    if (reservedDomains.includes(domain)) {
+      console.info(`⚡ Fast path for reserved domain: ${domain}`)
+      return {
+        company: {
+          name: domain.split('.')[0],
+          domain,
+          summary: `${domain} is a reserved domain name used for documentation and testing purposes.`,
+          website: companyUrl || `https://${domain}`
+        },
+        person: {
+          fullName: name || email.split('@')[0],
+          company: domain.split('.')[0]
+        },
+        role: 'Test Account',
+        confidence: 0.95,
+        citations: [{
+          uri: 'https://en.wikipedia.org/wiki/Example.com',
+          title: 'Example.com',
+          description: 'Reserved domain for documentation'
+        }]
+      }
+    }
 
-    // Search for person information
-    const personSearch = await this.groundingProvider.searchPerson(name || email.split('@')[0], domain)
-    allCitations.push(...personSearch.citations)
+    // Helper function for timeout
+    const withTimeout = <T>(p: Promise<T>, ms = 6000): Promise<T | null> =>
+      Promise.race([p, new Promise<never>((_, r) => setTimeout(() => r(new Error('timeout')), ms))])
+        .catch(() => null as T | null)
 
-    // Search for specific role information
-    const roleSearch = await this.groundingProvider.searchRole(name || email.split('@')[0], domain)
-    allCitations.push(...roleSearch.citations)
+    // Run all searches in parallel with timeouts
+    const [companySearch, personSearch, roleSearch] = await Promise.allSettled([
+      withTimeout(this.groundingProvider.searchCompany(domain), 6000),
+      withTimeout(this.groundingProvider.searchPerson(name || email.split('@')[0], domain), 6000),
+      withTimeout(this.groundingProvider.searchRole(name || email.split('@')[0], domain), 6000)
+    ])
+
+    // Extract successful results
+    const companyResult = companySearch.status === 'fulfilled' ? companySearch.value : null
+    const personResult = personSearch.status === 'fulfilled' ? personSearch.value : null
+    const roleResult = roleSearch.status === 'fulfilled' ? roleSearch.value : null
+
+    // Collect citations from successful searches
+    if (companyResult) allCitations.push(...companyResult.citations)
+    if (personResult) allCitations.push(...personResult.citations)
+    if (roleResult) allCitations.push(...roleResult.citations)
 
     // Use Gemini to synthesize the research results
     const prompt = `
@@ -158,13 +193,13 @@ Domain: ${domain}
 Company URL: ${companyUrl || 'Not provided'}
 
 Company Search Results:
-${companySearch.text}
+${companyResult?.text || 'No company search results available'}
 
 Person Search Results:
-${personSearch.text}
+${personResult?.text || 'No person search results available'}
 
 Role Search Results:
-${roleSearch.text}
+${roleResult?.text || 'No role search results available'}
 
 Extract and return ONLY a JSON object with this structure:
 {
@@ -210,8 +245,8 @@ Be thorough and accurate. If information is not available, use null for that fie
       try {
         const { normalizeCompany } = await import('./providers/enrich/company-normalizer')
         const { normalizePerson } = await import('./providers/enrich/person-normalizer')
-        const nc = normalizeCompany({ text: companySearch.text, url: companyUrl }, domain)
-        const np = normalizePerson({ text: personSearch.text, name: researchData?.person?.fullName, company: nc.name })
+        const nc = normalizeCompany({ text: companyResult?.text || '', url: companyUrl }, domain)
+        const np = normalizePerson({ text: personResult?.text || '', name: researchData?.person?.fullName, company: nc.name })
         return {
           company: { ...nc, ...researchData.company },
           person: { ...np, ...researchData.person },

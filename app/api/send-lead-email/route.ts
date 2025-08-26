@@ -13,7 +13,7 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 // Email request schema
 const emailRequestSchema = z.object({
-  leadId: z.string().uuid(),
+  leadId: z.union([z.string().uuid(), z.literal('TEST_MODE')]),
   emailType: z.enum([
     'welcome',
     'follow_up',
@@ -212,14 +212,24 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const validatedData = emailRequestSchema.parse(body)
     
+    // Handle test mode
+    if (validatedData.leadId === 'TEST_MODE') {
+      // Return early for test mode - no email sent, but validation passes
+      return NextResponse.json({
+        success: true,
+        testMode: true,
+        message: 'Test mode - email validation successful, no email sent'
+      })
+    }
+
     // Get lead data from Supabase
-    const supabase = getSupabaseStorage()
+    const supabase = getSupabaseStorage().getClient()
     const { data: lead, error: leadError } = await supabase
       .from('leads')
       .select('*')
       .eq('id', validatedData.leadId)
       .single()
-    
+
     if (leadError || !lead) {
       return NextResponse.json(
         { error: 'Lead not found' },

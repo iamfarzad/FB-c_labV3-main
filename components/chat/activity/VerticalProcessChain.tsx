@@ -21,7 +21,7 @@ import {
   Zap,
 } from "lucide-react"
 import { cn } from '@/src/core/utils'
-import type { ActivityItem } from "@/src/core/types/chat"
+import type { ActivityItem } from "@/app/(chat)/chat/types/chat"
 
 interface VerticalProcessChainProps {
   activities: ActivityItem[]

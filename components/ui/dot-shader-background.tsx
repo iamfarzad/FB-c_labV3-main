@@ -1,9 +1,9 @@
 'use client'
 
-import { useMemo, useEffect, useState } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { Canvas, ThreeEvent, useFrame, useThree } from '@react-three/fiber'
 import { shaderMaterial, useTrailTexture } from '@react-three/drei'
-import { useTheme } from 'next-themes'
+import { useTheme } from 'next-themes' // lub twój provider
 import * as THREE from 'three'
 
 const DotMaterial = shaderMaterial(
@@ -125,7 +125,6 @@ function Scene() {
       if (hsl.includes('0 0% 96%')) return '#F5F5F5' // light background
       if (hsl.includes('0 0% 10%')) return '#1A1A1A' // dark background
       if (hsl.includes('0 0% 100%')) return '#FFFFFF' // white
-      if (hsl.includes('0 0% 16%')) return '#2A2A2A' // dark card
       return '#FFFFFF' // fallback
     }
     
@@ -171,23 +170,28 @@ function Scene() {
   }, [])
 
   // Check for reduced motion preference
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-    }
-  }, [])
+  const prefersReducedMotion = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false
 
   useEffect(() => {
-    dotMaterial.uniforms.dotColor.value.setHex(themeColors.dotColor.replace('#', '0x'))
-    dotMaterial.uniforms.bgColor.value.setHex(themeColors.bgColor.replace('#', '0x'))
-    dotMaterial.uniforms.dotOpacity.value = themeColors.dotOpacity
-    dotMaterial.uniforms.prefersReducedMotion.value = prefersReducedMotion ? 1.0 : 0.0
+    const uniforms = dotMaterial.uniforms
+    if (uniforms) {
+      uniforms.dotColor?.value.setHex(themeColors.dotColor.replace('#', '0x'))
+      uniforms.bgColor?.value.setHex(themeColors.bgColor.replace('#', '0x'))
+      if (uniforms.dotOpacity) {
+        uniforms.dotOpacity.value = themeColors.dotOpacity
+      }
+      if (uniforms.prefersReducedMotion) {
+        uniforms.prefersReducedMotion.value = prefersReducedMotion ? 1.0 : 0.0
+      }
+    }
   }, [theme, dotMaterial, themeColors, prefersReducedMotion])
 
   useFrame((state) => {
-    dotMaterial.uniforms.time.value = state.clock.elapsedTime
+    if (dotMaterial.uniforms?.time) {
+      dotMaterial.uniforms.time.value = state.clock.elapsedTime
+    }
   })
 
   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
@@ -215,19 +219,41 @@ function Scene() {
 }
 
 export const DotScreenShader = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  const [isClient, setIsClient] = useState(false)
+  // Check for reduced motion preference at component level
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  )
 
+  // Error fallback for when WebGL is not supported
+  const [hasError, setHasError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Listen for changes to reduced motion preference
   useEffect(() => {
-    setIsClient(true)
-    if (typeof window !== 'undefined') {
-      setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    if (typeof window === 'undefined') return
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
     }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
-  // Prevent SSR issues by only rendering on client
-  if (!isClient) {
-    return <div className="w-full h-full bg-background" />
+  // Show loading state briefly, then fallback if needed
+  if (isLoading) {
+    return (
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background animate-pulse" />
+    )
+  }
+
+  if (hasError) {
+    return (
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+    )
   }
 
   return (
@@ -236,10 +262,20 @@ export const DotScreenShader = () => {
         antialias: true,
         powerPreference: 'high-performance',
         outputColorSpace: THREE.SRGBColorSpace,
-        toneMapping: THREE.NoToneMapping
+        toneMapping: THREE.NoToneMapping,
+        failIfMajorPerformanceCaveat: false // Allow software rendering as fallback
       }}
-      // Disable animations if reduced motion is preferred
-      dpr={prefersReducedMotion ? 1 : (typeof window !== 'undefined' ? window.devicePixelRatio : 1)}
+      // Performance optimizations
+      dpr={prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio, 2)} // Cap DPR for performance
+      frameloop={prefersReducedMotion ? 'never' : 'always'} // Disable frame loop if reduced motion
+      camera={{ position: [0, 0, 1], fov: 75 }}
+      style={{ background: 'transparent' }}
+      onCreated={({ gl }) => {
+        // Additional error handling and loading state
+        gl.setPixelRatio(prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio, 2))
+        setIsLoading(false)
+      }}
+      onError={() => setHasError(true)}
     >
       <Scene />
     </Canvas>

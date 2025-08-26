@@ -1,62 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { handleIntelligence } from '@/src/api/intelligence/handler'
 import type { ToolRunResult } from '@/types/intelligence'
-import { LeadResearchService } from '@/src/core/intelligence/lead-research'
-import { ContextStorage } from '@/src/core/context/context-storage'
-import { embedTexts } from '@/src/core/embeddings/gemini'
-import { upsertEmbeddings } from '@/src/core/embeddings/query'
-
-const leadResearchService = new LeadResearchService()
-const contextStorage = new ContextStorage()
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId, email, name, companyUrl, provider = 'google' } = await request.json()
+    const body = await request.json()
+    const { sessionId, email, name, companyUrl, provider = 'google' } = body
 
-    if (!sessionId || !email) return NextResponse.json({ ok: false, error: 'Session ID and email are required' } satisfies ToolRunResult, { status: 400 })
-
-    console.info('🔍 Lead research started:', {
-      sessionId,
-      email,
-      name,
-      companyUrl,
-      provider
-    })
-
-    // Perform lead research
-    const researchResult = await leadResearchService.researchLead(email, name, companyUrl)
-
-    // Store in context
-    await contextStorage.update(sessionId, {
-      company_context: researchResult.company,
-      person_context: researchResult.person,
-      role: researchResult.role,
-      role_confidence: researchResult.confidence
-    })
-
-    // Optional: store embeddings for memory when enabled
-    if (process.env.EMBEDDINGS_ENABLED === 'true') {
-      const texts: string[] = []
-      if (researchResult.company?.summary) texts.push(String(researchResult.company.summary))
-      if (researchResult.person?.summary) texts.push(String(researchResult.person.summary))
-      const vectors = texts.length ? await embedTexts(texts, 1536) : []
-      if (vectors.length) await upsertEmbeddings(sessionId, 'lead_research', texts, vectors)
+    if (!sessionId || !email) {
+      return NextResponse.json({ ok: false, error: 'Session ID and email are required' } satisfies ToolRunResult, { status: 400 })
     }
 
-    console.info('✅ Lead research completed:', {
-      company: researchResult.company,
-      person: researchResult.person,
-      role: researchResult.role,
-      scores: { confidence: researchResult.confidence },
-      citations: researchResult.citations?.length || 0
+    // Use the business logic handler
+    const result = await handleIntelligence({
+      action: 'research-lead',
+      data: { email, name, companyUrl, sessionId, provider }
     })
 
-    return NextResponse.json({ ok: true, output: {
-      company: researchResult.company,
-      person: researchResult.person,
-      role: researchResult.role,
-      scores: { confidence: researchResult.confidence },
-      citations: researchResult.citations || []
-    } } satisfies ToolRunResult)
+    if (!result.success) {
+      return NextResponse.json({ ok: false, error: 'Lead research failed' } satisfies ToolRunResult, { status: 500 })
+    }
+
+    return NextResponse.json({ ok: true, output: result.research } satisfies ToolRunResult)
 
   } catch (error) {
     console.error('❌ Lead research failed:', error)

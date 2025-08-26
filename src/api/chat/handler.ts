@@ -11,7 +11,8 @@ export async function handleChat(body: unknown) {
   async function* textChunks() {
     for await (const chunk of chatService(request)) {
       if (chunk.type === 'text') {
-        yield String(chunk.data)
+        const textData = String(chunk.data)
+        yield textData
       } else if (chunk.type === 'tool' && chunk.data && typeof chunk.data === 'object' && 'error' in chunk.data) {
         throw new Error(String(chunk.data.error))
       }

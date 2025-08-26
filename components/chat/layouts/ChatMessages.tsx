@@ -26,7 +26,7 @@ import { Task, TaskTrigger, TaskContent, TaskItem } from '@/components/ai-elemen
 import { WebPreview, WebPreviewNavigation, WebPreviewUrl, WebPreviewBody } from '@/components/ai-elements/web-preview'
 import { Loader } from '@/components/ai-elements/loader'
 import { Message as ChatMessage } from '@/src/core/types/chat'
-import { useTools } from '@/ui/hooks/useTools'
+import { useTools } from '@/hooks/useTools-ui'
 
 interface ChatMessagesProps {
   messages: ChatMessage[]
@@ -188,8 +188,8 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
   return (
     <Message from={message.role}>
       {/* Avatar using ai-elements */}
-      <MessageAvatar 
-        src={message.role === 'assistant' ? "/api/placeholder-avatar" : "/api/user-avatar"} 
+      <MessageAvatar
+        src={message.role === 'assistant' ? "/api/placeholder-avatar" : "/api/user-avatar"}
         name={message.role === 'assistant' ? "F.B/c AI" : "You"}
       />
       

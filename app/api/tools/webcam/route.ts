@@ -7,6 +7,7 @@ import { createOptimizedConfig } from '@/src/core/gemini-config-enhanced'
 import { selectModelForFeature, estimateTokens } from '@/src/core/model-selector'
 import { enforceBudgetAndLog } from '@/src/core/token-usage-logger'
 import { checkDemoAccess, DemoFeature } from '@/src/core/demo-budget-manager'
+import { multimodalContextManager } from '@/src/core/context/multimodal-context'
 
 export async function POST(req: NextRequest) {
   try {
@@ -74,7 +75,18 @@ export async function POST(req: NextRequest) {
       processedAt: new Date().toISOString()
     }}
     if (sessionId) {
-      try { await recordCapabilityUsed(String(sessionId), 'image', { insights: response.output.insights, imageSize: image.length, type: type || 'webcam' }) } catch {}
+      try {
+        await recordCapabilityUsed(String(sessionId), 'image', { insights: response.output.insights, imageSize: image.length, type: type || 'webcam' })
+
+        // Add visual analysis to multimodal context
+        await multimodalContextManager.addVisualAnalysis(
+          String(sessionId),
+          analysisResult,
+          type || 'webcam',
+          image.length,
+          image
+        )
+      } catch {}
     }
     return NextResponse.json(response, { status: 200 })
   } catch (error: any) {

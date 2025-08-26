@@ -1,5 +1,5 @@
 import { intelligenceService } from '@/src/core/intelligence'
-import { sessionInitSchema } from '@/src/core/validation'
+import { sessionInitSchema } from '@/src/core/validation/index'
 import type { ContextSnapshot } from '@/src/core/types/intelligence'
 
 export interface IntelligenceRequest {
@@ -24,9 +24,57 @@ export async function handleIntelligence(body: IntelligenceRequest): Promise<any
     }
 
     case 'research-lead': {
-      const { email, name, companyUrl } = data as { email: string; name?: string; companyUrl?: string }
+      const { email, name, companyUrl, sessionId } = data as { email: string; name?: string; companyUrl?: string; sessionId?: string }
+
+      console.info('🔍 Lead research started:', {
+        sessionId,
+        email,
+        name,
+        companyUrl
+      })
+
       const result = await intelligenceService.researchLead(email, name, companyUrl)
-      return { success: true, research: result }
+
+      // Store in context if sessionId provided
+      if (sessionId) {
+        const { ContextStorage } = await import('@/src/core/context/context-storage')
+        const contextStorage = new ContextStorage()
+
+        await contextStorage.update(sessionId, {
+          company_context: result.company,
+          person_context: result.person,
+          role: result.role,
+          role_confidence: result.confidence
+        })
+
+        // Optional: store embeddings for memory when enabled
+        if (process.env.EMBEDDINGS_ENABLED === 'true') {
+          const { embedTexts } = await import('@/src/core/embeddings/gemini')
+          const { upsertEmbeddings } = await import('@/src/core/embeddings/query')
+
+          const texts: string[] = []
+          if (result.company?.summary) texts.push(String(result.company.summary))
+          if (result.person?.summary) texts.push(String(result.person.summary))
+          const vectors = texts.length ? await embedTexts(texts, 1536) : []
+          if (vectors.length) await upsertEmbeddings(sessionId, 'lead_research', texts, vectors)
+        }
+      }
+
+      console.info('✅ Lead research completed:', {
+        company: result.company,
+        person: result.person,
+        role: result.role,
+        scores: { confidence: result.confidence },
+        citations: result.citations?.length || 0
+      })
+
+      return { success: true, research: {
+        company: result.company,
+        person: result.person,
+        role: result.role,
+        scores: { confidence: result.confidence },
+        citations: result.citations || []
+      }}
     }
 
     default:

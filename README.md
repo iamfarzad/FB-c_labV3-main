@@ -1,4 +1,8 @@
+
+This is the refactord project froom the oreginal v2
+
 ## Chat Endpoints Overview
+
 
 This project exposes separate chat endpoints for public and admin use:
 
