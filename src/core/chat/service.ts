@@ -1,4 +1,5 @@
 import type { ChatRequest, ChatChunk } from '../types/chat'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // Define the TextProvider interface locally to avoid import issues
 interface TextProvider {
@@ -23,15 +24,25 @@ function createMockProvider(): TextProvider {
 }
 
 export async function* chatService(req: ChatRequest): AsyncIterable<ChatChunk> {
-  const provider = createMockProvider()
+  const useGemini = Boolean(process.env.GEMINI_API_KEY)
+  const provider = useGemini ? null : createMockProvider()
   let chunkId = 0
 
   try {
-    for await (const text of provider.generate({ messages: req.messages })) {
-      yield {
-        id: String(chunkId++),
-        type: 'text',
-        data: text
+    if (useGemini) {
+      const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+      const model = client.getGenerativeModel({ model: 'gemini-2.0-flash-exp' }) as any
+      const contents = req.messages.map(m => ({ role: m.role, parts: [{ text: m.content }] }))
+      const stream = await model.generateContentStream({ contents })
+      // Stream incremental text
+      for await (const event of (stream as any).stream) {
+        const text = typeof event?.text === 'function' ? event.text() : event?.text || ''
+        if (!text) continue
+        yield { id: String(chunkId++), type: 'text', data: text }
+      }
+    } else {
+      for await (const text of provider!.generate({ messages: req.messages })) {
+        yield { id: String(chunkId++), type: 'text', data: text }
       }
     }
 

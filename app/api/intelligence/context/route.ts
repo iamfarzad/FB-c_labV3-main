@@ -1,4 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getContextSnapshot } from '@/src/core/context/context-manager'
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const sessionId = searchParams.get('sessionId') || req.headers.get('x-intelligence-session-id')
+    if (!sessionId) {
+      return NextResponse.json({ error: 'Missing sessionId' }, { status: 400 })
+    }
+
+    const snapshot = await getContextSnapshot(sessionId)
+    if (!snapshot) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+
+    // Derive exploredCount from capabilities; total is UX-driven (16)
+    const exploredCount = Array.isArray(snapshot.capabilities) ? snapshot.capabilities.length : 0
+
+    return NextResponse.json({
+      output: {
+        ...snapshot,
+        stage: 1, // placeholder until stage engine writes real values
+        exploredCount,
+      }
+    }, { headers: { 'Cache-Control': 'no-store' } })
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const fetchCache = 'force-no-store'
+
+import { NextRequest, NextResponse } from 'next/server'
 import type { ToolRunResult } from '@/types/intelligence'
 import { ContextStorage } from '@/src/core/context/context-storage'
 import crypto from 'crypto'

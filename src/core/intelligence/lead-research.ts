@@ -111,7 +111,7 @@ export class LeadResearchService {
       return researchResult
 
     } catch (error) {
-    console.error('Lead research failed', error)
+      // Swallow details in response; upstream can inspect server logs
 
       // Return fallback result
       const fallbackDomain = email.split('@')[1] || 'unknown.com'
