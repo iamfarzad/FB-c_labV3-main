@@ -1,7 +1,10 @@
 import type { Config } from "tailwindcss"
 
-const config = {
-  darkMode: ["class"],
+const config: Config = {
+  darkMode: [
+    'class',
+    '[data-theme="dark"]', // Support attribute strategy
+  ],
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -25,43 +28,64 @@ const config = {
         mono: ["var(--font-mono)", "monospace"],
       },
       colors: {
-        // Minimal Design System - One Source of Truth
+        // 🎨 F.B/c THEME SYSTEM - IMMUTABLE BRAND COLORS
+        // 🚫 NEVER MODIFY BRAND COLORS WITHOUT APPROVAL 🚫
+
+        // Primary brand colors (NEVER CHANGE)
+        brand: 'var(--brand)',          // #ff5b04 - F.B/c Orange
+        brandHover: 'var(--brand-hover)', // #e65200 - Orange hover
+
+        // Surface colors
+        bg: 'var(--bg)',                // Background
+        surface: 'var(--surface)',      // Primary surface
+        surfaceElevated: 'var(--surface-elevated)', // Elevated surface
+
+        // Text colors
+        text: 'var(--text)',            // Primary text
+        textMuted: 'var(--text-muted)', // Muted text
+
+        // Border color
+        border: 'var(--border)',        // Border color
+
+        // Semantic colors (SAFE TO EXTEND)
+        success: 'var(--success)',      // #10b981
+        warning: 'var(--warning)',      // #f59e0b
+        error: 'var(--error)',          // #ef4444
+        info: 'var(--info)',            // #3b82f6
+
+        // 🔄 LEGACY COMPATIBILITY (Safe to remove after migration)
+        // These can be removed once all components use theme tokens
         background: 'hsl(var(--bg))',
-        surface: 'hsl(var(--surface))',
-        border: 'hsl(var(--border))',
-        muted: 'hsl(var(--muted))',
-        foreground: 'hsl(var(--fg))',
-        accent: 'hsl(var(--accent))',
-        'accent-foreground': 'hsl(var(--accent-fg))',
-
-        // Legacy semantic colors for backward compatibility
-        primary: 'hsl(var(--accent))',
-        'primary-foreground': 'hsl(var(--accent-fg))',
-        secondary: 'hsl(var(--surface))',
-        'secondary-foreground': 'hsl(var(--fg))',
-        destructive: 'hsl(0 84% 60%)',
-        'destructive-foreground': 'hsl(var(--fg))',
+        foreground: 'hsl(var(--text))',
+        primary: 'hsl(var(--brand))',
+        'primary-foreground': 'hsl(var(--surface))',
+        secondary: 'hsl(var(--surface-elevated))',
+        'secondary-foreground': 'hsl(var(--text))',
+        muted: 'hsl(var(--surface-elevated))',
+        'muted-foreground': 'hsl(var(--text-muted))',
+        accent: 'hsl(var(--brand))',
+        'accent-foreground': 'hsl(var(--surface))',
+        destructive: 'hsl(var(--error))',
+        'destructive-foreground': 'hsl(var(--surface))',
         input: 'hsl(var(--surface))',
-        ring: 'hsl(var(--accent))',
+        ring: 'hsl(var(--brand))',
         popover: 'hsl(var(--surface))',
-        'popover-foreground': 'hsl(var(--fg))',
+        'popover-foreground': 'hsl(var(--text))',
         card: 'hsl(var(--surface))',
-        'card-foreground': 'hsl(var(--fg))',
+        'card-foreground': 'hsl(var(--text))',
 
-        // Backwards-compat brand aliases
-        "orange-accent": "hsl(var(--accent))",
-        "orange-accent-hover": "var(--color-orange-accent-hover)",
+        // Backwards-compat brand aliases (DEPRECATED - use theme tokens)
+        "orange-accent": "hsl(var(--brand))",
+        "orange-accent-hover": "hsl(var(--brand-hover))",
         "gunmetal": "var(--color-gunmetal)",
         "gunmetal-lighter": "var(--color-gunmetal-lighter)",
         "light-silver": "var(--color-light-silver)",
         "light-silver-darker": "var(--color-light-silver-darker)",
       },
       borderRadius: {
-        sm: 'var(--r-sm)',
-        md: 'var(--r-md)',
-        lg: 'var(--r-lg)',
-        xl: 'var(--r-xl)',
-        full: 'var(--r-pill)'
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
         sm: 'var(--shadow-sm)',
@@ -69,27 +93,20 @@ const config = {
         lg: 'var(--shadow-lg)'
       },
       transitionDuration: {
-        fast: 'var(--dur-fast)',
-        base: 'var(--dur)',
-        slow: 'var(--dur-slow)',
-        // Legacy durations for backward compatibility
         150: "150ms",
         200: "200ms",
         300: "300ms",
         500: "500ms",
       },
       transitionTimingFunction: {
-        smooth: 'var(--ease)',
-        // Legacy timing functions
+        smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
         bounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
       },
-      // Responsive spacing aliases aligned with spacing.ts
       spacing: {
         'responsive-base': 'var(--spacing-responsive-base, 0.5rem)',
         'responsive-md': 'var(--spacing-responsive-md, 0.75rem)',
         'responsive-lg': 'var(--spacing-responsive-lg, 1rem)',
       },
-      // Enhanced backdrop blur scale for glass effects
       backdropBlur: {
         xs: "2px",
         sm: "4px",
@@ -134,7 +151,11 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    require("./tailwind.tokens-guard")
+  ],
 } satisfies Config
 
 export default config

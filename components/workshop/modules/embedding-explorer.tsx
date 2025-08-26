@@ -30,13 +30,16 @@ export default function EmbeddingExplorer() {
     if (!ctx) return
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     const centerX = canvas.width / 2, centerY = canvas.height / 2, scale = 200 * zoomLevel
-    ctx.strokeStyle = "#ddd"; ctx.lineWidth = 1
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || "#e0e0e0"; ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); ctx.stroke()
     selectedWords.forEach((word) => {
       const embedding = sampleEmbeddings[word]; if (!embedding) return
       const x = centerX + embedding[0] * scale; const y = centerY - embedding[1] * scale
-      ctx.fillStyle = word === selectedWord ? "#3b82f6" : "#6b7280"; ctx.beginPath(); ctx.arc(x, y, word === selectedWord ? 8 : 6, 0, Math.PI * 2); ctx.fill()
-      ctx.fillStyle = word === selectedWord ? "#3b82f6" : "#000"; ctx.font = word === selectedWord ? "bold 14px sans-serif" : "12px sans-serif"; ctx.textAlign = "center"; ctx.fillText(word, x, y - 15)
+      const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || "#ff5b04"
+      const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || "#999999"
+      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || "#1a1a1a"
+      ctx.fillStyle = word === selectedWord ? brandColor : mutedColor; ctx.beginPath(); ctx.arc(x, y, word === selectedWord ? 8 : 6, 0, Math.PI * 2); ctx.fill()
+      ctx.fillStyle = word === selectedWord ? brandColor : textColor; ctx.font = word === selectedWord ? "bold 14px sans-serif" : "12px sans-serif"; ctx.textAlign = "center"; ctx.fillText(word, x, y - 15)
     })
     if (showRelationships && selectedWord) {
       const selectedEmbedding = sampleEmbeddings[selectedWord]
@@ -49,10 +52,10 @@ export default function EmbeddingExplorer() {
           const dx = selectedEmbedding[0] - embedding[0]; const dy = selectedEmbedding[1] - embedding[1]
           const distance = Math.sqrt(dx * dx + dy * dy)
           const opacity = Math.max(0, 1 - distance)
-          ctx.strokeStyle = `rgba(59, 130, 246, ${opacity.toFixed(2)})`; ctx.lineWidth = 2 * opacity
+          ctx.strokeStyle = `hsla(var(--brand), ${opacity.toFixed(2)})`; ctx.lineWidth = 2 * opacity
           ctx.beginPath(); ctx.moveTo(selectedX, selectedY); ctx.lineTo(x, y); ctx.stroke()
           const midX = (selectedX + x) / 2; const midY = (selectedY + y) / 2
-          ctx.fillStyle = "#3b82f6"; ctx.font = "10px sans-serif"; ctx.textAlign = "center"; ctx.fillText((1 - distance).toFixed(2), midX, midY - 5)
+          ctx.fillStyle = brandColor; ctx.font = "10px sans-serif"; ctx.textAlign = "center"; ctx.fillText((1 - distance).toFixed(2), midX, midY - 5)
         })
       }
     }
@@ -93,7 +96,7 @@ export default function EmbeddingExplorer() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedWords.map((word) => (
-                      <div key={word} className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer ${word === selectedWord ? 'bg-blue-500 text-white' : 'bg-muted hover:bg-muted/80'}`} onClick={() => setSelectedWord(word === selectedWord ? null : word)}>
+                      <div key={word} className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer ${word === selectedWord ? 'bg-accent text-accent-foreground' : 'bg-muted hover:bg-muted/80'}`} onClick={() => setSelectedWord(word === selectedWord ? null : word)}>
                         {word}
                         <button className="ml-1 text-xs opacity-60 hover:opacity-100" onClick={(e) => { e.stopPropagation(); setSelectedWords(selectedWords.filter((w) => w !== word)); if (selectedWord === word) setSelectedWord(null) }}>×</button>
                       </div>

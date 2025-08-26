@@ -3,6 +3,22 @@
 @tailwind utilities;
 
 /* ===========================================
+   F.B/c THEME SYSTEM - IMMUTABLE BRAND COLORS
+   ===========================================
+   🚫 NEVER MODIFY BRAND COLORS WITHOUT APPROVAL 🚫
+   =========================================== */
+
+/* Import theme system */
+@import "../styles/theme.css";
+
+/* Base app background/text using theme tokens */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ===========================================
    KEYFRAMES & ANIMATIONS
    =========================================== */
 @keyframes grow {

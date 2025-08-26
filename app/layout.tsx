@@ -37,13 +37,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const pathname = undefined as unknown as string // placeholder for types; actual hook used in client shell
+
+  // SSR flash fix: set theme before CSS loads
+  const themeInit = `
+    try {
+      const pref = localStorage.getItem('fbc-theme');
+      const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const mode = pref || sys;
+      document.documentElement.setAttribute('data-theme', mode);
+    } catch {}
+  `;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <StructuredData />
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body className={cn("font-sans antialiased", fontSans.variable, fontDisplay.variable, fontMono.variable)}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TooltipProvider>
             <DemoSessionProvider>
               <MeetingProvider>

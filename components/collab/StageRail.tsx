@@ -78,7 +78,7 @@ export function StageRail({ sessionId }: { sessionId?: string }) {
       role="complementary"
       aria-label="Session progress and stage information"
     >
-      <div className="text-xs text-muted-foreground font-medium tracking-wide" aria-live="polite">Stage {currentStage} of 7</div>
+      <div className="text-xs text-muted-foreground font-medium tracking-wide" aria-live="polite" data-testid="stage-indicator">Stage {currentStage} of 7</div>
       <ol className={cn("flex flex-col gap-2")} role="list">
         {Array.from({ length: 7 }).map((_, i) => {
           const stageNumber = i + 1

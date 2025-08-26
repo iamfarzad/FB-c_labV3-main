@@ -137,6 +137,7 @@ export const PromptInputTextarea = ({
       onKeyDown={handleKeyDown}
       placeholder={placeholder}
       ref={textareaRef}
+      data-testid="chat-input"
       {...props}
     />
   );
@@ -227,6 +228,7 @@ export const PromptInputSubmit = ({
       size={size}
       type="submit"
       variant={variant}
+      data-testid="chat-send"
       {...props}
     >
       {children ?? Icon}

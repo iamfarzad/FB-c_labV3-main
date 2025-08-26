@@ -7,6 +7,7 @@ import { ChatMessages } from '@/components/chat/layouts/ChatMessages'
 import { ChatComposer } from '@/components/chat/layouts/ChatComposer'
 import { VoiceOverlay } from '@/components/chat/VoiceOverlay'
 import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
+import { ConsentOverlay } from '@/components/ui/consent-overlay'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/hooks/useChat-ui'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
@@ -22,6 +23,7 @@ export default function ChatPage() {
   const [stage, setStage] = useState('GREETING')
   const [activityLog, setActivityLog] = useState<any[]>([])
   const [stageProgress, setStageProgress] = useState(0)
+  const [showConsent, setShowConsent] = useState(false)
 
   // Stage progression configuration - using new standardized stages
   const stages = [
@@ -51,6 +53,13 @@ export default function ChatPage() {
   // Initialize session and add demo messages
   useEffect(() => {
     const initSession = async () => {
+      // Check for existing consent cookie
+      const consentCookie = document.cookie.split(';').find(c => c.trim().startsWith('fbc-consent='))
+      if (!consentCookie) {
+        setShowConsent(true)
+        return
+      }
+
       try {
         const response = await fetch('/api/intelligence/session-init', {
           method: 'POST',
@@ -61,7 +70,7 @@ export default function ChatPage() {
             companyUrl: ''
           })
         })
-        
+
         if (response.ok) {
           const data = await response.json()
           setSessionId(data.sessionId)
@@ -124,6 +133,43 @@ export default function ChatPage() {
     if (transcript.trim()) {
       setInput(transcript)
       handleSendMessage(transcript)
+    }
+  }
+
+  const handleConsentSubmit = async (data: { email: string; companyUrl: string }) => {
+    setShowConsent(false)
+
+    try {
+      const response = await fetch('/api/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          companyUrl: data.companyUrl,
+          policyVersion: '1.0'
+        })
+      })
+
+      if (response.ok) {
+        // Initialize session after consent
+        const sessionResponse = await fetch('/api/intelligence/session-init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: data.email,
+            name: data.email.split('@')[0],
+            companyUrl: data.companyUrl
+          })
+        })
+
+        if (sessionResponse.ok) {
+          const sessionData = await sessionResponse.json()
+          setSessionId(sessionData.sessionId)
+          localStorage.setItem('intelligence-session-id', sessionData.sessionId)
+        }
+      }
+    } catch (error) {
+      console.error('Consent submission failed:', error)
     }
   }
 
@@ -205,6 +251,7 @@ export default function ChatPage() {
     <TooltipProvider>
       <ChatLayout
       disabled={false}
+      data-testid="chat-interface"
       header={
         <ChatHeader
           sessionId={sessionId}
@@ -234,6 +281,11 @@ export default function ChatPage() {
       }
       overlay={
         <>
+          <ConsentOverlay
+            isVisible={showConsent}
+            onClose={() => setShowConsent(false)}
+            onSubmit={handleConsentSubmit}
+          />
           <VoiceOverlay
             open={openVoice}
             onCancel={() => setOpenVoice(false)}

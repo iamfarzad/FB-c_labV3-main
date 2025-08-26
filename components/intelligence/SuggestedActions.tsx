@@ -94,6 +94,7 @@ export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onR
               <Button
                 size="sm"
                 className="rounded-full h-9 px-4 bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)] text-white"
+                data-testid="generate-pdf"
               >
                 <FileText className="mr-2 h-4 w-4" /> Share Summary
               </Button>
@@ -126,10 +127,11 @@ export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onR
                   }
                 }}
                 className="gap-2"
+                data-testid="download-pdf"
               >
                 <FileText className="h-4 w-4" /> Download PDF
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFinishOpen(true)} className="gap-2">
+              <DropdownMenuItem onClick={() => setFinishOpen(true)} className="gap-2" data-testid="send-email">
                 <Mail className="h-4 w-4" /> Send via Email
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -235,13 +237,14 @@ export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onR
                   onChange={(e) => setFinishEmail(e.target.value)}
                   placeholder="name@example.com"
                   required
+                  data-testid="email-input"
                 />
               </div>
               <div className="flex justify-end gap-2 pt-1">
                 <Button type="button" variant="outline" onClick={() => setFinishOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)]">
+                <Button type="submit" className="bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)]" data-testid="send-email-submit">
                   Send
                 </Button>
               </div>

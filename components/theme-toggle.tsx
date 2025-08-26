@@ -35,9 +35,30 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("light")
+            localStorage.setItem('fbc-theme', 'light')
+          }}
+        >
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("dark")
+            localStorage.setItem('fbc-theme', 'dark')
+          }}
+        >
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("system")
+            localStorage.removeItem('fbc-theme') // Let system preference take over
+          }}
+        >
+          System
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

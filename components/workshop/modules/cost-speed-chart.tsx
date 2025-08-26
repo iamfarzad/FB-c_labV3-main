@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Slider } from '@/components/ui/slider'
 
 const modelData = [
-  { name: 'GPT‑3.5 Turbo', parameters: 175, tokensPerSecond: 40, costPer1KTokens: 0.002, color: '#34d399' },
-  { name: 'GPT‑4', parameters: 1000, tokensPerSecond: 15, costPer1KTokens: 0.06, color: '#3b82f6' },
-  { name: 'Claude 2', parameters: 137, tokensPerSecond: 20, costPer1KTokens: 0.008, color: '#a855f7' },
-  { name: 'Llama 2 (70B)', parameters: 70, tokensPerSecond: 30, costPer1KTokens: 0.001, color: '#f97316' },
-  { name: 'Mistral 7B', parameters: 7, tokensPerSecond: 45, costPer1KTokens: 0.0005, color: '#ec4899' },
+  { name: 'GPT‑3.5 Turbo', parameters: 175, tokensPerSecond: 40, costPer1KTokens: 0.002, color: 'hsl(var(--brand))' },
+  { name: 'GPT‑4', parameters: 1000, tokensPerSecond: 15, costPer1KTokens: 0.06, color: 'hsl(var(--brand-hover))' },
+  { name: 'Claude 2', parameters: 137, tokensPerSecond: 20, costPer1KTokens: 0.008, color: 'hsl(var(--success))' },
+  { name: 'Llama 2 (70B)', parameters: 70, tokensPerSecond: 30, costPer1KTokens: 0.001, color: 'hsl(var(--info))' },
+  { name: 'Mistral 7B', parameters: 7, tokensPerSecond: 45, costPer1KTokens: 0.0005, color: 'hsl(var(--warning))' },
 ]
 
 export default function CostSpeedChart() {

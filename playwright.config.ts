@@ -20,8 +20,11 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
 
+    /* Enable downloads for PDF testing */
+    acceptDownloads: true,
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
 
     /* Take screenshot only when test fails */
     screenshot: 'only-on-failure',

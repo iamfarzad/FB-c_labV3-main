@@ -34,29 +34,29 @@ export const semanticColors = {
     'accent-foreground': '0 0% 100%',
     destructive: '0 84% 60%',
     'destructive-foreground': '0 0% 98%',
-    border: '0 0% 89%',
-    input: '0 0% 89%',
+    border: '0 0% 88%',
+    input: '0 0% 96%',
     ring: '20 100% 51%',
   },
   dark: {
-    background: '0 0% 3%', // #080808
-    foreground: '0 0% 98%', // #fafafa
-    card: '0 0% 3%',
-    'card-foreground': '0 0% 98%',
-    popover: '0 0% 3%',
-    'popover-foreground': '0 0% 98%',
+    background: '0 0% 10%', // #1a1a1a
+    foreground: '0 0% 96%', // #f5f5f5
+    card: '0 0% 16%', // #2a2a2a
+    'card-foreground': '0 0% 96%',
+    popover: '0 0% 16%',
+    'popover-foreground': '0 0% 96%',
     primary: '20 100% 51%', // #ff5b04
     'primary-foreground': '0 0% 100%',
-    secondary: '0 0% 14%', // #252525
-    'secondary-foreground': '0 0% 98%',
-    muted: '0 0% 14%',
-    'muted-foreground': '0 0% 63%', // #a1a1a1
+    secondary: '0 0% 16%',
+    'secondary-foreground': '0 0% 96%',
+    muted: '0 0% 16%',
+    'muted-foreground': '0 0% 60%', // #999999
     accent: '20 100% 51%',
     'accent-foreground': '0 0% 100%',
-    destructive: '0 62% 30%',
-    'destructive-foreground': '0 85% 97%',
-    border: '0 0% 14%',
-    input: '0 0% 14%',
+    destructive: '0 84% 60%',
+    'destructive-foreground': '0 0% 10%',
+    border: '0 0% 16%',
+    input: '0 0% 16%',
     ring: '20 100% 51%',
   },
 } as const

@@ -51,7 +51,7 @@ const emailTemplates = {
       </ol>
       
       <p><strong>Ready to transform your business with AI?</strong></p>
-      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: #0070f3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Schedule Your Discovery Call</a></p>
+      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: hsl(var(--brand)); color: hsl(var(--surface)); padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Schedule Your Discovery Call</a></p>
       
       <p>Best regards,<br>
       F.B Consulting Team</p>
@@ -83,7 +83,7 @@ const emailTemplates = {
       
       <p><strong>Would you like to see how we achieved these results?</strong></p>
       
-      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: #0070f3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Book a 15-Minute Demo</a></p>
+      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: hsl(var(--brand)); color: hsl(var(--surface)); padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Book a 15-Minute Demo</a></p>
       
       <p>Looking forward to helping you transform ${lead.company || 'your business'}!</p>
       
@@ -101,7 +101,7 @@ const emailTemplates = {
       
       <h3>Report Highlights:</h3>
       
-      <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <div style="background-color: hsl(var(--bg)); padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h4>Estimated Annual Savings: $${data.estimatedSavings || '250,000'}</h4>
         <h4>ROI Timeline: ${data.roiTimeline || '6-8 months'}</h4>
         <h4>Efficiency Gain: ${data.efficiencyGain || '45%'}</h4>
@@ -119,9 +119,9 @@ const emailTemplates = {
       <h3>Implementation Phases:</h3>
       <table style="width: 100%; border-collapse: collapse;">
         <tr>
-          <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Phase</th>
-          <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Duration</th>
-          <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Expected Outcome</th>
+          <th style="text-align: left; padding: 8px; border-bottom: 1px solid hsl(var(--border));">Phase</th>
+          <th style="text-align: left; padding: 8px; border-bottom: 1px solid hsl(var(--border));">Duration</th>
+          <th style="text-align: left; padding: 8px; border-bottom: 1px solid hsl(var(--border));">Expected Outcome</th>
         </tr>
         <tr>
           <td style="padding: 8px;">Discovery & Planning</td>
@@ -141,7 +141,7 @@ const emailTemplates = {
       </table>
       
       <p><strong>Ready to get started?</strong></p>
-      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: #0070f3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Schedule Implementation Call</a></p>
+      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/meetings/book?lead=${lead.id}" style="background-color: hsl(var(--brand)); color: hsl(var(--surface)); padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Schedule Implementation Call</a></p>
       
       <p>Best regards,<br>
       F.B Consulting Team</p>
@@ -157,7 +157,7 @@ const emailTemplates = {
       
       <p>Your AI discovery call has been confirmed for:</p>
       
-      <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <div style="background-color: hsl(var(--bg)); padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3>📅 ${data.meetingDate || 'Tuesday, January 15, 2025'}</h3>
         <h3>🕐 ${data.meetingTime || '2:00 PM EST'}</h3>
         <h3>⏱️ Duration: ${data.duration || '30 minutes'}</h3>
@@ -181,7 +181,7 @@ const emailTemplates = {
         <li>Your budget range for technology investments</li>
       </ul>
       
-      <p><a href="${data.meetingLink || '#'}" style="background-color: #0070f3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Add to Calendar</a></p>
+      <p><a href="${data.meetingLink || '#'}" style="background-color: hsl(var(--brand)); color: hsl(var(--surface)); padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Add to Calendar</a></p>
       
       <p>Looking forward to our conversation!</p>
       
