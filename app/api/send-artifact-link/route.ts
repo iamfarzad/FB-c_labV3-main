@@ -42,11 +42,11 @@ export async function POST(req: NextRequest) {
       <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;">
         <h2>Here is your app link</h2>
         <p>We generated your interactive app. You can open it here:</p>
-        <p><a href="${link}" style="display:inline-block;background:#111827;color:#ffffff;padding:10px 14px;border-radius:6px;text-decoration:none;">Open App</a></p>
+        <p><a href="${link}" style="display:inline-block;background:#1d2a35;color:#e5e9ec;padding:10px 14px;border-radius:6px;text-decoration:none;">Open App</a></p>
         <p style="margin-top:16px;">If the button doesn’t work, copy and paste this URL:</p>
         <p><a href="${link}">${link}</a></p>
-        <hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb;"/>
-        <p style="font-size:12px;color:#6b7280;">F.B/c · AI Strategy & Workshops</p>
+        <hr style="margin:20px 0;border:none;border-top:1px solid #2a3a46;"/>
+        <p style="font-size:12px;color:#a0a5aa;">F.B/c · AI Strategy & Workshops</p>
       </div>
     `
 

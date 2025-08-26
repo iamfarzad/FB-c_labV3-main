@@ -108,7 +108,7 @@ export function DatabaseWithRestApi({
         <g stroke="currentColor" fill="none" strokeWidth="0.4">
           {/* First Button */}
           <g>
-            <rect fill="#18181B" x="14" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--surface)" x="14" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="18" y="7.5"></DatabaseIcon>
             <text x="28" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.first || "GET"}
@@ -116,7 +116,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Second Button */}
           <g>
-            <rect fill="#18181B" x="60" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--surface)" x="60" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="64" y="7.5"></DatabaseIcon>
             <text x="74" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.second || "POST"}
@@ -124,7 +124,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Third Button */}
           <g>
-            <rect fill="#18181B" x="108" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--surface)" x="108" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="112" y="7.5"></DatabaseIcon>
             <text x="122" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.third || "PUT"}
@@ -132,7 +132,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Fourth Button */}
           <g>
-            <rect fill="#18181B" x="150" y="5" width="40" height="10" rx="5"></rect>
+            <rect fill="var(--surface)" x="150" y="5" width="40" height="10" rx="5"></rect>
             <DatabaseIcon x="154" y="7.5"></DatabaseIcon>
             <text x="165" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.fourth || "DELETE"}
@@ -158,7 +158,7 @@ export function DatabaseWithRestApi({
           </mask>
           {/* Blue Grad */}
           <radialGradient id="db-blue-grad" fx="1">
-            <stop offset="0%" stopColor={lightColor || "#ff5b04"} />
+            <stop offset="0%" stopColor={lightColor || "var(--brand)"} />
             <stop offset="100%" stopColor="transparent" />
           </radialGradient>
         </defs>

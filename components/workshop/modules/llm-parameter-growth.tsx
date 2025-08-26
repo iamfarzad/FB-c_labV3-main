@@ -55,7 +55,7 @@ export default function LLMParameterGrowth() {
     const drawNode = (x: number, y: number, color: string) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, nodeRadius, 0, Math.PI * 2); ctx.fill() }
     // input
     const inputX = padding, inputY = height / 2
-    for (let i = 0; i < inputNodes; i++) { const y = inputY - ((inputNodes - 1) / 2 - i) * 40; drawNode(inputX, y, "#34d399") }
+    for (let i = 0; i < inputNodes; i++) { const y = inputY - ((inputNodes - 1) / 2 - i) * 40; drawNode(inputX, y, "var(--success)") }
     // hidden
     for (let layer = 0; layer < hiddenLayers; layer++) {
       const x = padding + layerSpacing * (layer + 1)
@@ -64,7 +64,7 @@ export default function LLMParameterGrowth() {
         ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 0.5
         if (layer === 0) { for (let j = 0; j < inputNodes; j++) { const prevY = inputY - ((inputNodes - 1) / 2 - j) * 40; ctx.beginPath(); ctx.moveTo(inputX + nodeRadius, prevY); ctx.lineTo(x - nodeRadius, y); ctx.stroke() } }
         else { for (let j = 0; j < hiddenNodes; j++) { const prevY = height / 2 - ((hiddenNodes - 1) / 2 - j) * 30; const prevX = padding + layerSpacing * layer; ctx.beginPath(); ctx.moveTo(prevX + nodeRadius, prevY); ctx.lineTo(x - nodeRadius, y); ctx.stroke() } }
-        drawNode(x, y, "#3b82f6")
+        drawNode(x, y, "var(--info)")
       }
     }
     // output
@@ -74,7 +74,7 @@ export default function LLMParameterGrowth() {
       const prevX = padding + layerSpacing * hiddenLayers
       ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 0.5
       for (let j = 0; j < hiddenNodes; j++) { const prevY = height / 2 - ((hiddenNodes - 1) / 2 - j) * 30; ctx.beginPath(); ctx.moveTo(prevX + nodeRadius, prevY); ctx.lineTo(outputX - nodeRadius, y); ctx.stroke() }
-      drawNode(outputX, y, "#ec4899")
+      drawNode(outputX, y, "var(--error)")
     }
   }, [activeTab, canvasRef, selectedModel, visibleModels])
 

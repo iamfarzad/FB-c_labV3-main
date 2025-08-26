@@ -30,14 +30,14 @@ export default function EmbeddingExplorer() {
     if (!ctx) return
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     const centerX = canvas.width / 2, centerY = canvas.height / 2, scale = 200 * zoomLevel
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || "#e0e0e0"; ctx.lineWidth = 1
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || "var(--border)"; ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); ctx.stroke()
     selectedWords.forEach((word) => {
       const embedding = sampleEmbeddings[word]; if (!embedding) return
       const x = centerX + embedding[0] * scale; const y = centerY - embedding[1] * scale
-      const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || "#ff5b04"
-      const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || "#999999"
-      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || "#1a1a1a"
+      const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || "var(--brand)"
+      const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || "var(--text-muted)"
+      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || "var(--text)"
       ctx.fillStyle = word === selectedWord ? brandColor : mutedColor; ctx.beginPath(); ctx.arc(x, y, word === selectedWord ? 8 : 6, 0, Math.PI * 2); ctx.fill()
       ctx.fillStyle = word === selectedWord ? brandColor : textColor; ctx.font = word === selectedWord ? "bold 14px sans-serif" : "12px sans-serif"; ctx.textAlign = "center"; ctx.fillText(word, x, y - 15)
     })

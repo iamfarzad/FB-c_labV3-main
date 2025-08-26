@@ -72,7 +72,7 @@ export default function TestLandingPage() {
               circleText="F.B/c"
               buttonTexts={{ first: "F.B/c AI", second: "production" }}
               badgeTexts={{ first: "Session", second: "Intent", third: "Tools", fourth: "ROI" }}
-              lightColor="#ff5b04"
+              lightColor="var(--brand)"
             />
           </ClientTestLandingWrapper>
         </div>

@@ -51,40 +51,40 @@ export function renderSummaryPdf(
         doc.image(fbcLogoPath, 50, 40, { width: 80 });
         doc
           .fontSize(20)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('F.B/c AI Consulting', 140, 55, { align: 'left' });
       } else {
         // F.B/c text-only header with proper styling
         doc
           .fontSize(24)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('F.B', 50, 50, { align: 'left' });
         doc
           .fontSize(16)
-          .fillColor('#f59e0b')
+          .fillColor('#ff5b04')
           .text('/c', 85, 55, { align: 'left' });
         doc
           .fontSize(18)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text(' AI Consulting', 105, 55, { align: 'left' });
       }
 
       doc
         .fontSize(10)
-        .fillColor('#6b7280')
+        .fillColor('#666666')
         .text('AI-Powered Lead Generation & Consulting', 50, 80, { align: 'left' })
         .moveDown(2);
 
       // 4. Lead Information Section
       doc
         .fontSize(14)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('Lead Information', 50, 120)
         .moveDown(0.5);
 
       doc
         .fontSize(11)
-        .fillColor('#374151')
+        .fillColor('#333333')
         .text(`Name: ${summaryData.leadInfo.name}`, 50)
         .text(`Email: ${summaryData.leadInfo.email}`, 50);
       
@@ -103,13 +103,13 @@ export function renderSummaryPdf(
       if (summaryData.leadResearch?.conversation_summary) {
         doc
           .fontSize(14)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('Lead Research Summary', 50)
           .moveDown(0.5);
 
         doc
           .fontSize(11)
-          .fillColor('#374151')
+          .fillColor('#333333')
           .text(summaryData.leadResearch.conversation_summary, {
             align: 'left',
             lineGap: 4,
@@ -122,13 +122,13 @@ export function renderSummaryPdf(
       if (summaryData.leadResearch?.consultant_brief) {
         doc
           .fontSize(14)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('Consultant Brief', 50)
           .moveDown(0.5);
 
         doc
           .fontSize(11)
-          .fillColor('#374151')
+          .fillColor('#333333')
           .text(summaryData.leadResearch.consultant_brief, {
             align: 'left',
             lineGap: 4,
@@ -141,12 +141,12 @@ export function renderSummaryPdf(
       if (summaryData.leadResearch?.lead_score) {
         doc
           .fontSize(14)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('Lead Score', 50)
           .moveDown(0.5);
 
         const score = summaryData.leadResearch.lead_score;
-        const scoreColor = score > 70 ? '#059669' : score > 40 ? '#d97706' : '#dc2626';
+        const scoreColor = score > 70 ? '#10b981' : score > 40 ? '#f59e0b' : '#ef4444';
         
         doc
           .fontSize(12)
@@ -159,13 +159,13 @@ export function renderSummaryPdf(
       if (summaryData.leadResearch?.ai_capabilities_shown) {
         doc
           .fontSize(14)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('AI Capabilities Identified', 50)
           .moveDown(0.5);
 
         doc
           .fontSize(11)
-          .fillColor('#374151')
+          .fillColor('#333333')
           .text(summaryData.leadResearch.ai_capabilities_shown, {
             align: 'left',
             lineGap: 4,
@@ -178,7 +178,7 @@ export function renderSummaryPdf(
       if (summaryData.conversationHistory.length > 0) {
         doc
           .fontSize(14)
-          .fillColor('#1f2937')
+          .fillColor('#111111')
           .text('Conversation Highlights', 50)
           .moveDown(0.5);
 
@@ -191,13 +191,13 @@ export function renderSummaryPdf(
           
           doc
             .fontSize(10)
-            .fillColor('#6b7280')
+            .fillColor('#666666')
             .text(`${role} - ${timestamp}`, 50)
             .moveDown(0.2);
 
           doc
             .fontSize(10)
-            .fillColor('#374151')
+            .fillColor('#333333')
             .text(message.content.substring(0, 200) + (message.content.length > 200 ? '...' : ''), {
               align: 'left',
               lineGap: 3,
@@ -211,7 +211,7 @@ export function renderSummaryPdf(
       doc.addPage();
       doc
         .fontSize(16)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('Key Insights & Recommendations', 50, 50)
         .moveDown(1);
 
@@ -223,31 +223,31 @@ export function renderSummaryPdf(
 
       doc
         .fontSize(12)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('1. Lead Qualification:', 50)
         .moveDown(0.2);
 
       doc
         .fontSize(11)
-        .fillColor('#374151')
+        .fillColor('#333333')
         .text(qualification, 70)
         .moveDown(0.5);
 
       doc
         .fontSize(12)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('2. Pain Points Identified:', 50)
         .moveDown(0.2);
 
       doc
         .fontSize(11)
-        .fillColor('#374151')
+        .fillColor('#333333')
         .text(summaryData.leadResearch?.conversation_summary ? 'See conversation summary above' : 'Continue discovery in next interaction', 70)
         .moveDown(0.5);
 
       doc
         .fontSize(12)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('3. Recommended Next Steps:', 50)
         .moveDown(0.2);
 
@@ -261,7 +261,7 @@ export function renderSummaryPdf(
       nextSteps.forEach((step, index) => {
         doc
           .fontSize(11)
-          .fillColor('#374151')
+          .fillColor('#333333')
           .text(`• ${step}`, 70);
       });
 
@@ -269,13 +269,13 @@ export function renderSummaryPdf(
 
       doc
         .fontSize(12)
-        .fillColor('#1f2937')
+        .fillColor('#111111')
         .text('4. Follow-up Timeline:', 50)
         .moveDown(0.2);
 
       doc
         .fontSize(11)
-        .fillColor('#374151')
+        .fillColor('#333333')
         .text('Within 24-48 hours', 70)
         .moveDown(2);
 
@@ -284,7 +284,7 @@ export function renderSummaryPdf(
         const bottom = doc.page.height - 50;
         doc
           .fontSize(9)
-          .fillColor('#6b7280')
+          .fillColor('#666666')
           .text(
             'Farzad Bayat | bayatfarzad@gmail.com | +47 123 456 78 | www.farzadbayat.com',
             50,
