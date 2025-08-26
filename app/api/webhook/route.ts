@@ -6,7 +6,7 @@ async function webhookHandler(req: NextRequest) {
     // If we get here, signature was valid
     return NextResponse.json({ ok: true, message: 'Webhook received successfully' })
   } catch (error) {
-    console.error('Webhook handler error:', error)
+    console.error('Webhook handler error', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

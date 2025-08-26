@@ -52,7 +52,7 @@ export const GET = withAdminAuth(async function(request: NextRequest) {
 
     // Add mock status and engagement_type for demo
     const enrichedLeads =
-      leads?.map((lead: any) => ({
+      leads?.map((lead: unknown) => ({
         ...lead,
         status: ["new", "contacted", "qualified", "converted"][Math.floor(Math.random() * 4)],
         engagement_type: lead.ai_capabilities_shown?.[0] || "chat",

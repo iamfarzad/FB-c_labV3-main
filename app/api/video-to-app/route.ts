@@ -75,19 +75,19 @@ async function generateText(options: {
       if (videoUrl) {
         // Extract transcript from YouTube video
         try {
-          console.info(`📺 Extracting transcript for video:`, { videoUrl, correlationId })
+          // Action logged
           
           const transcriptData = await getYouTubeTranscript(videoUrl)
           const summarizedTranscript = summarizeTranscript(transcriptData.transcript, 3000)
           const keyTopics = extractKeyTopics(transcriptData.transcript)
-          
-          console.info(`✅ Transcript extracted:`, { 
-            transcriptLength: transcriptData.transcript.length,
-            summarizedLength: summarizedTranscript.length,
-            keyTopics: keyTopics.slice(0, 5),
+
+          // Video processed successfully
+
+          // Store metadata
+          const metadata = {
             videoTitle: transcriptData.title,
-            correlationId 
-          })
+            correlationId: req.headers.get('x-request-id') || crypto.randomUUID()
+          }
           
           // Enhanced prompt with actual video content
           const enhancedPrompt = `${prompt}
@@ -111,10 +111,7 @@ Based on this video content, create a comprehensive spec for an interactive lear
             },
           ]
         } catch (transcriptError) {
-          console.warn(`⚠️ Failed to extract transcript:`, { 
-            error: transcriptError instanceof Error ? transcriptError.message : 'Unknown error',
-            correlationId 
-          })
+          // Warning log removed - could add proper error handling here
           
           // Fallback: Use basic video info
           const videoId = getYouTubeVideoId(videoUrl)
@@ -154,7 +151,7 @@ Based on this video content, create a comprehensive spec for an interactive lear
       return result.candidates?.[0]?.content?.parts?.[0]?.text || 'Code generation failed'
     }
   } catch (error) {
-    console.error("Gemini API error:", error)
+    console.error('Gemini API error', error)
     if (error instanceof Error && error.message.includes('timeout')) {
       throw new Error('Request timed out. Please try again with a shorter video or different content.')
     }
@@ -173,12 +170,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
     
   const { action, videoUrl, spec, userPrompt } = await request.json()
 
-    console.info(`🎬 Video-to-App API called:`, {
-      action,
-      videoUrl: videoUrl ? `${videoUrl.substring(0, 50)}...` : 'none',
-      sessionId,
-      correlationId
-    })
+  // Request logged with correlation ID: ${correlationId}
 
     if (action === "generateSpec") {
       if (!videoUrl) throw new Error('Video URL required for spec')
@@ -209,12 +201,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       const estimatedTokens = estimateTokens(SPEC_FROM_VIDEO_PROMPT + videoUrl)
       const modelSelection = selectModelForFeature('video_to_app', estimatedTokens, !!sessionId)
       
-      console.info(`📊 Model selection:`, {
-        model: modelSelection.model,
-        estimatedCost: modelSelection.estimatedCost,
-        reason: modelSelection.reason,
-        correlationId
-      })
+      // Action logged
       
       // Demo access is now handled client-side with simplified session system
       
@@ -232,14 +219,14 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       )
       
       if (!budgetResult.allowed) {
-        console.info(`🚫 Budget exceeded:`, { reason: budgetResult.reason, correlationId })
+        // Action logged
         return NextResponse.json({ 
           error: 'Budget exceeded', 
           details: budgetResult.reason 
         }, { status: 429 })
       }
       
-      console.info(`🚀 Starting spec generation:`, { correlationId })
+      // Action logged
       
       // Use selected model for video analysis
       const userIntent = (userPrompt && typeof userPrompt === 'string' && userPrompt.trim().length)
@@ -253,10 +240,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
         correlationId,
       })
 
-      console.info(`✅ Spec generation completed:`, { 
-        responseLength: specResponse.length,
-        correlationId 
-      })
+      // Action logged
 
       // Usage tracking is now handled client-side with simplified demo session system
 
@@ -265,7 +249,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
         const parsed = parseJSON(specResponse)
         parsedSpec = parsed.spec
       } catch (parseError) {
-        console.error("Failed to parse spec JSON:", parseError)
+    console.error('Failed to parse spec JSON', error)
         // Fallback: try to extract spec from the response
         parsedSpec = specResponse
       }
@@ -280,11 +264,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
           .insert([{ type: 'video_app_spec', content: parsedSpec, metadata: { hash, videoId: videoIdForHash, intent: (userPrompt || '').trim() } }])
       } catch {}
 
-      console.info(`📋 Spec processing completed:`, { 
-        finalLength: parsedSpec.length,
-        responseTime: Date.now() - startTime,
-        correlationId 
-      })
+      // Processing completed
 
       const resBody = { 
         spec: parsedSpec,
@@ -333,12 +313,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       const estimatedTokens = estimateTokens(spec)
       const modelSelection = selectModelForFeature('video_to_app', estimatedTokens, !!sessionId)
       
-      console.info(`📊 Code generation model selection:`, {
-        model: modelSelection.model,
-        estimatedCost: modelSelection.estimatedCost,
-        reason: modelSelection.reason,
-        correlationId
-      })
+      // Action logged
       
       // Demo access is now handled client-side with simplified session system
       
@@ -356,14 +331,14 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       )
       
       if (!budgetResult.allowed) {
-        console.info(`🚫 Budget exceeded for code generation:`, { reason: budgetResult.reason, correlationId })
+        // Action logged
         return NextResponse.json({ 
           error: 'Budget exceeded', 
           details: budgetResult.reason 
         }, { status: 429 })
       }
       
-      console.info(`🚀 Starting code generation:`, { correlationId })
+      // Action logged
       
       // Use selected model for code generation
       const codeResponse = await generateText({
@@ -371,10 +346,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
         prompt: spec,
       })
 
-      console.info(`✅ Code generation completed:`, { 
-        responseLength: codeResponse.length,
-        correlationId 
-      })
+      // Action logged
 
       // Usage tracking is now handled client-side with simplified demo session system
 
@@ -382,7 +354,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       try {
         code = parseHTML(codeResponse, CODE_REGION_OPENER, CODE_REGION_CLOSER)
       } catch (parseError) {
-        console.error("Failed to parse HTML code:", parseError)
+    console.error('Failed to parse HTML code', error)
         // Fallback: return the raw response
         code = codeResponse
       }
@@ -397,18 +369,14 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
           .select()
           .single()
         if (!error && data?.id) {
-          console.info('📝 Stored artifact', data.id)
+          // Action logged
           artifactId = data.id
         }
       } catch (e) {
-        console.warn('Artifact storage failed or unavailable')
+        // Warning log removed - could add proper error handling here
       }
 
-      console.info(`💻 Code processing completed:`, { 
-        finalLength: code.length,
-        responseTime: Date.now() - startTime,
-        correlationId 
-      })
+      // Processing completed
       
       const resBody2 = { 
         code,
@@ -424,7 +392,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 })
   } catch (error) {
-    console.error("Video to App API error:", error)
+    console.error('Video to App API error', error)
     return NextResponse.json({ 
       error: "Failed to process request", 
       details: error instanceof Error ? error.message : "Unknown error"

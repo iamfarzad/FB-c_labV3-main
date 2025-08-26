@@ -5,7 +5,7 @@ import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 // Simple per-session token cache + rate limit + idempotency
 const tokens = new Map<string, { token: string; expiresAt: number }>()
 const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { body: any; expires: number }>()
+const idem = new Map<string, { body: unknown; expires: number }>()
 function checkRate(key: string, max: number, windowMs: number) {
   const now = Date.now(); const rec = rl.get(key)
   if (!rec || rec.reset < now) { rl.set(key, { count: 1, reset: now + windowMs }); return true }
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     const body = { token, expiresAt }
     if (sessionId && idemKey) idem.set(`${sessionId}:${idemKey}`, { body, expires: Date.now() + 5 * 60_000 })
     return NextResponse.json(body, { status: 200 })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json({ error: e?.message || 'Failed to mint token' }, { status: 500 })
   }
 }

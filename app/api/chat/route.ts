@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const body: ChatRequest = await req.json()
     return await handleChat(body)
   } catch (error) {
-    console.error('Chat API error:', error)
+    console.error('Chat API error', error)
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : 'Internal server error'

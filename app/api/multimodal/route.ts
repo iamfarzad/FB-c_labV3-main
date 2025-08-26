@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 200 })
 
   } catch (error) {
-    console.error('Multimodal API error:', error)
+    console.error('Multimodal API error', error)
     return NextResponse.json({
       error: error instanceof Error ? error.message : 'Unknown error',
       details: process.env.NODE_ENV === 'development' ? error : undefined
@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Multimodal GET error:', error)
+    console.error('Multimodal GET error', error)
     return NextResponse.json({
       error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })

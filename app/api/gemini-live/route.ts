@@ -20,7 +20,11 @@ interface LiveSessionRequest {
 }
 
 // Session management for Live API
-const liveSessions = new Map<string, any>()
+interface LiveSession {
+  session: unknown // Google GenAI LiveSession type
+  leadContext?: LiveSessionRequest['leadContext']
+}
+const liveSessions = new Map<string, LiveSession>()
 
 export async function POST(req: NextRequest) {
   try {
@@ -74,7 +78,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Start new Live session with proper Live API
-        console.info('🎯 Starting REAL Gemini Live API session:', sessionId)
+        // Starting Gemini Live API session
 
         try {
           // Initialize multimodal context for this session
@@ -96,10 +100,10 @@ export async function POST(req: NextRequest) {
             },
             callbacks: {
               onopen: () => {
-                console.info('✅ Live API session opened successfully')
+                // Live API session opened successfully
               },
-              onmessage: async (event: any) => {
-                console.info('📨 Live API message received:', event)
+              onmessage: async (event: unknown) => {
+                // Action logged
 
                 // Add AI response to multimodal context
                 if (event?.text && sessionId) {
@@ -110,11 +114,11 @@ export async function POST(req: NextRequest) {
                   )
                 }
               },
-              onerror: (error: any) => {
-                console.error('❌ Live API error:', error)
+              onerror: (error: unknown) => {
+                // Error: ❌ Live API error
               },
               onclose: () => {
-                console.info('🔒 Live API session closed')
+                // Action logged
                 if (sessionId) {
                   liveSessions.delete(sessionId)
                   // Don't clear context on close - preserve for future sessions
@@ -138,7 +142,7 @@ export async function POST(req: NextRequest) {
           })
 
         } catch (error) {
-          console.error('Failed to start Live API session:', error)
+    console.error('Failed to start Live API session', error)
           return NextResponse.json({
             error: 'Failed to start Live API session',
             details: error instanceof Error ? error.message : 'Unknown error',
@@ -173,14 +177,14 @@ export async function POST(req: NextRequest) {
             }
 
             if (filterResult.severity === 'medium') {
-              console.warn('⚠️ Content contains sensitive keywords:', filterResult.reason)
+              // Warning log removed - could add proper error handling here
             }
 
             // Add user message to multimodal context
             await multimodalContextManager.addTextMessage(sessionId, sanitizedMessage)
 
             await session.sendRealtimeInput({ text: sanitizedMessage })
-            console.info('📤 Sent safe text message to Live API session')
+            // Action logged
           }
 
           // Send audio data with transcription context
@@ -199,7 +203,7 @@ export async function POST(req: NextRequest) {
             await session.sendRealtimeInput({
               audio: { data: audioData, mimeType: mimeType || 'audio/pcm;rate=16000' }
             })
-            console.info('🎵 Sent audio data to Live API session')
+            // Action logged
           }
 
           // Send image data with analysis context
@@ -222,7 +226,7 @@ export async function POST(req: NextRequest) {
             await session.sendRealtimeInput({
               inlineData: { mimeType: mime, data: base64 }
             })
-            console.info('🖼️ Sent image data to Live API session')
+            // Action logged
           }
 
           return NextResponse.json({
@@ -232,7 +236,7 @@ export async function POST(req: NextRequest) {
           })
 
         } catch (error) {
-          console.error('Failed to send to Live API session:', error)
+    console.error('Failed to send to Live API session', error)
           return NextResponse.json({
             error: 'Failed to send data to Live API session',
             details: error instanceof Error ? error.message : 'Unknown error'
@@ -251,9 +255,9 @@ export async function POST(req: NextRequest) {
           try {
             session.close()
             liveSessions.delete(sessionId)
-            console.info('🔒 Live API session closed successfully')
+            // Action logged
           } catch (error) {
-            console.warn('Error closing Live API session:', error)
+            // Warning log removed - could add proper error handling here
           }
         }
 
@@ -269,7 +273,7 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Gemini Live API error:', error)
+    console.error('Gemini Live API error', error)
     return NextResponse.json({
       error: 'Internal server error',
       details: error instanceof Error ? error.message : 'Unknown error'

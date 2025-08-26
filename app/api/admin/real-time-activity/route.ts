@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
     // Transform leads into activity items
     const activities =
-      recentLeads?.map((lead: any) => ({
+      recentLeads?.map((lead: unknown) => ({
         id: lead.id,
         type: "lead_captured",
         title: "New Lead Captured",

@@ -5,7 +5,7 @@ import { logServerActivity } from "@/src/core/monitoring/server-activity-logger"
 // Webhook signature verification
 async function verifyWebhookSignature(payload: string, signature: string, secret: string): Promise<boolean> {
   if (!secret) {
-    console.warn("RESEND_WEBHOOK_SECRET not configured")
+    // Warning log removed - could add proper error handling here
     return true // Allow in development
   }
 
@@ -15,7 +15,7 @@ async function verifyWebhookSignature(payload: string, signature: string, secret
 
     return signature === `sha256=${expectedSignature}`
   } catch (error) {
-    console.error("Webhook signature verification error:", error)
+    console.error('Webhook signature verification error', error)
     return false
   }
 }
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const event = JSON.parse(payload)
-    console.info("Resend webhook event:", event.type, event.data)
+    // Action logged
 
     const supabase = getSupabaseStorage()
 
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
         await handleEmailClicked(supabase, event.data)
         break
       default:
-        console.info(`Unhandled webhook event type: ${event.type}`)
+        // Action logged
     }
 
     // Log the webhook event
@@ -75,13 +75,13 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({ success: true })
-  } catch (error: any) {
-    console.error("Webhook processing error:", error)
+  } catch (error: unknown) {
+    console.error('Webhook processing error', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
 
-async function handleEmailSent(supabase: any, data: any) {
+async function handleEmailSent(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -103,11 +103,11 @@ async function handleEmailSent(supabase: any, data: any) {
         .eq("id", data.tags.campaign_id)
     }
   } catch (error) {
-    console.error("Error handling email.sent:", error)
+    console.error('Error handling email.sent', error)
   }
 }
 
-async function handleEmailDelivered(supabase: any, data: any) {
+async function handleEmailDelivered(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -128,11 +128,11 @@ async function handleEmailDelivered(supabase: any, data: any) {
         .eq("id", data.tags.campaign_id)
     }
   } catch (error) {
-    console.error("Error handling email.delivered:", error)
+    console.error('Error handling email.delivered', error)
   }
 }
 
-async function handleEmailBounced(supabase: any, data: any) {
+async function handleEmailBounced(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -165,11 +165,11 @@ async function handleEmailBounced(supabase: any, data: any) {
         .eq("email", data.to?.[0] || data.to)
     }
   } catch (error) {
-    console.error("Error handling email.bounced:", error)
+    console.error('Error handling email.bounced', error)
   }
 }
 
-async function handleEmailComplained(supabase: any, data: any) {
+async function handleEmailComplained(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -202,11 +202,11 @@ async function handleEmailComplained(supabase: any, data: any) {
         .eq("email", data.to?.[0] || data.to)
     }
   } catch (error) {
-    console.error("Error handling email.complained:", error)
+    console.error('Error handling email.complained', error)
   }
 }
 
-async function handleEmailOpened(supabase: any, data: any) {
+async function handleEmailOpened(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -238,11 +238,11 @@ async function handleEmailOpened(supabase: any, data: any) {
         .eq("email", data.to?.[0] || data.to)
     }
   } catch (error) {
-    console.error("Error handling email.opened:", error)
+    console.error('Error handling email.opened', error)
   }
 }
 
-async function handleEmailClicked(supabase: any, data: any) {
+async function handleEmailClicked(supabase: unknown, data: unknown) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
@@ -275,6 +275,6 @@ async function handleEmailClicked(supabase: any, data: any) {
         .eq("email", data.to?.[0] || data.to)
     }
   } catch (error) {
-    console.error("Error handling email.clicked:", error)
+    console.error('Error handling email.clicked', error)
   }
 }

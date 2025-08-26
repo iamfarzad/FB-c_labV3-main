@@ -50,8 +50,8 @@ export async function GET(request: NextRequest) {
       expiresAt: session.expiresAt
     })
 
-  } catch (error: any) {
-    console.error('Demo status error:', error)
+  } catch (error: unknown) {
+    console.error('Demo status error', error)
     return NextResponse.json({ 
       error: 'Internal server error',
       message: error.message || 'An unexpected error occurred'

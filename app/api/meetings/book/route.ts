@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { recordCapabilityUsed } from "@/src/core/context/capabilities"
 const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { expires: number; body: any }>()
+const idem = new Map<string, { expires: number; body: unknown }>()
 function checkRate(key: string, max: number, windowMs: number) {
   const now = Date.now(); const rec = rl.get(key)
   if (!rec || rec.reset < now) { rl.set(key, { count: 1, reset: now + windowMs }); return true }
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (error) {
-      console.error("Supabase error:", error)
+      // Error: Supabase error
       return NextResponse.json({ error: "Failed to book meeting" }, { status: 500 })
     }
 
@@ -85,8 +85,8 @@ export async function POST(req: NextRequest) {
       meeting,
       emailSent,
     })
-  } catch (error: any) {
-    console.error("Meeting booking error:", error)
+  } catch (error: unknown) {
+    console.error('Meeting booking error', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

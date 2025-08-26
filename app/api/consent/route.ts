@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const isProd = process.env.NODE_ENV === 'production';
     res.cookies.set('fbc-consent', JSON.stringify(value), { httpOnly: true, sameSite: 'lax', secure: isProd, path: '/', maxAge: 60 * 60 * 24 * 30 })
     return res
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json({ error: 'Bad request' }, { status: 400 })
   }
 }

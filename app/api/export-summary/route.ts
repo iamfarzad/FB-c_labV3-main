@@ -205,7 +205,7 @@ export async function POST(req: NextRequest) {
       });
 
     } catch (pdfError) {
-      console.error('PDF generation error:', pdfError);
+    console.error('PDF generation error', error)
       
       // Fallback to markdown if PDF generation fails
       const markdownContent = generateMarkdownContent(summaryData);
@@ -224,7 +224,7 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Export summary error:', error);
+    console.error('Export summary error', error)
     return new Response(JSON.stringify({ error: 'Failed to generate summary' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

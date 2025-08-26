@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
       const csvRows =
         leads
           ?.map(
-            (lead: any) =>
+            (lead: unknown) =>
               `"${lead.name}","${lead.email}","${lead.company_name || ""}",${lead.lead_score},"${lead.created_at}","${lead.consultant_brief?.replace(/"/g, '""') || ""}","${(lead.ai_capabilities_shown || []).join("; ")}"`,
           )
           .join("\n") || ""

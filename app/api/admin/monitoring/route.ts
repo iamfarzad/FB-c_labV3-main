@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { adminAuthMiddleware } from '@/app/middleware/auth'
 import { adminRateLimit } from "@/app/middleware/security-rate-limiting"
-import { adminMonitoring } from "@/src/core/monitoring/admin"
+import { adminMonitoring } from "@/app/middleware/admin-monitoring"
 
 export async function GET(request: NextRequest) {
   // Check rate limiting
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const userEmail = searchParams.get('userEmail')
     const endpoint = searchParams.get('endpoint')
 
-    let data: any
+    let data: unknown
 
     switch (type) {
       case 'metrics':

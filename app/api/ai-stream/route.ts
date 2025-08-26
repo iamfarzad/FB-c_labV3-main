@@ -6,7 +6,7 @@ import { NextResponse } from "next/server"
 
 interface StreamRequestBody {
   prompt?: string
-  conversationHistory?: any[]
+  conversationHistory?: unknown[]
   enableStreaming?: boolean
   enableTools?: boolean
   sessionId?: string
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     // Convert conversation history to the correct format
     const history = Array.isArray(conversationHistory)
-      ? conversationHistory.map((msg: any) => ({
+      ? conversationHistory.map((msg: unknown) => ({
           role: msg.role === "assistant" ? "model" : "user",
           parts: [{ text: String(msg.content || msg.parts?.[0]?.text || "") }],
         }))
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode("event: done\ndata: [DONE]\n\n"))
             controller.close()
           } catch (error) {
-            console.error("Streaming error:", error)
+    console.error('Streaming error', error)
 
             // Log error
             const channel = supabase.channel(`ai-stream-${sessionId || "default"}`)
@@ -233,8 +233,8 @@ export async function POST(req: NextRequest) {
         model: "gemini-2.5-flash",
       })
     }
-  } catch (error: any) {
-    console.error("Error in AI stream handler:", error)
+  } catch (error: unknown) {
+    console.error('Error in AI stream handler', error)
 
     return NextResponse.json(
       {

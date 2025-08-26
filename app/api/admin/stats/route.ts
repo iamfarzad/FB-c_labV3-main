@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
       avgLeadScore,
       engagementRate,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Stats fetch error:", error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

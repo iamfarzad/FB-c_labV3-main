@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         'Content-Disposition': 'attachment; filename="FB-c_Mock_Summary.pdf"'
       }
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json({ error: e?.message || 'mock failed' }, { status: 500 })
   }
 }
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
         'Content-Disposition': 'inline; filename="FB-c_Mock_Summary.pdf"'
       }
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json({ error: e?.message || 'mock failed' }, { status: 500 })
   }
 }

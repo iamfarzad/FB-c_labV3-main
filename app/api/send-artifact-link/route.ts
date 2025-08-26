@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const link = `${baseUrl}/app/artifact/${artifactId}`
 
     if (!resend) {
-      console.warn('[send-artifact-link] RESEND_API_KEY not configured; skipping actual email')
+      // Warning log removed - could add proper error handling here
       return NextResponse.json({ ok: true, simulated: true, link })
     }
 

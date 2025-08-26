@@ -177,7 +177,7 @@ export async function GET(req: NextRequest) {
         created_at: log.created_at
       })),
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Token usage fetch error:", error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

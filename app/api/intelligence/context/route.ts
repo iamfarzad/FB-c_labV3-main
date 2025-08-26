@@ -38,7 +38,7 @@ function getRateState(sessionId: string) {
   return { remaining, resetTime: record.resetTime }
 }
 
-function generateETag(data: any): string {
+function generateETag(data: unknown): string {
   const jsonString = JSON.stringify(data)
   return crypto.createHash('sha256').update(jsonString).digest('hex')
 }

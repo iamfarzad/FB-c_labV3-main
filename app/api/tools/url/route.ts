@@ -10,7 +10,7 @@ export const fetchCache = 'force-no-store'
 
 // Simple per-session rate limiter and idempotency cache (in-memory)
 const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { expires: number; body: any }>()
+const idem = new Map<string, { expires: number; body: unknown }>()
 
 function checkRate(key: string, max: number, windowMs: number) {
   const now = Date.now()
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    let analysis: any = null
+    let analysis: unknown = null
     if (url) {
       // URL validation and security checks
       try {
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
         
         const results = await URLContextService.analyzeMultipleURLs(urls)
         analysis = results?.[0] || null
-      } catch (error: any) {
+      } catch (error: unknown) {
         return NextResponse.json({ ok: false, error: error.message || 'URL validation failed' }, { 
           status: 400,
           headers: { 'Cache-Control': 'no-store' }
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(response, { headers: { 'Cache-Control': 'no-store' } })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ ok: false, error: error?.message || 'Unknown error' }, { 
       status: 500,
       headers: { 'Cache-Control': 'no-store' }

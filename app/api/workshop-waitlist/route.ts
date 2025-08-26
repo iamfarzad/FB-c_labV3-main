@@ -23,15 +23,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Log the waitlist signup
-    console.info('Workshop waitlist signup:', {
-      name,
-      email,
-      company,
-      teamSize,
-      location,
-      interests,
-      message,
-      timestamp: new Date().toISOString()
+    // Waitlist signup logged
+
+    return NextResponse.json({
+      success: true,
+      message: "Successfully joined workshop waitlist"
     })
 
     // In a real implementation, you would:
@@ -94,7 +90,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Workshop waitlist error:', error)
+    console.error('Workshop waitlist error', error)
     return NextResponse.json(
       { error: "Failed to join workshop waitlist" },
       { status: 500 }

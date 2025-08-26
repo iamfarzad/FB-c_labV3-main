@@ -7,9 +7,9 @@ const contextStorage = new ContextStorage()
 const leadResearchService = new LeadResearchService()
 
 // In-flight dedupe for concurrent research per session (best-effort, dev-friendly)
-const researchInFlight = new Map<string, Promise<any>>()
+const researchInFlight = new Map<string, Promise<unknown>>()
 
-function hasResearch(context: any) {
+function hasResearch(context: unknown) {
   return Boolean(
     context && (
       context.company_context || context.person_context || context.role || context.role_confidence != null
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         }, { onConflict: 'session_id' })
     } catch {}
 
-    console.info('🎯 Session init started:', { sessionId, email, name, companyUrl })
+    // Action logged
 
     // Check for existing context for idempotency
     const existing = await contextStorage.get(sessionId)
@@ -86,18 +86,18 @@ export async function POST(req: NextRequest) {
           snapshot,
         }
 
-        console.info('✅ Session init idempotent: returning existing context', response)
+        // Action logged
         return NextResponse.json(response, { headers: { 'X-Session-Id': sessionId, 'Cache-Control': 'no-store' } })
       }
     }
 
     // Start lead research (async; but do not duplicate if already have research)
     let contextReady = false
-    let researchResult: any = null
+    let researchResult: unknown = null
 
     try {
       if (!hasResearch(existing)) {
-        console.info('🔍 Starting lead research for:', email)
+        // Action logged
         if (!researchInFlight.has(sessionId)) {
           const p = leadResearchService
             .researchLead(email, name, companyUrl, sessionId)
@@ -118,10 +118,10 @@ export async function POST(req: NextRequest) {
       }
 
       contextReady = researchResult != null || hasResearch(existing)
-      console.info('✅ Lead research completed, context ready')
+      // Action logged
       
     } catch (error) {
-      console.error('❌ Lead research failed:', error)
+    console.error('❌ Lead research failed', error)
       // Continue without research results
       contextReady = false
     }
@@ -149,11 +149,11 @@ export async function POST(req: NextRequest) {
         : null,
     }
 
-    console.info('✅ Session init completed:', response)
+    // Action logged
     return NextResponse.json(response, { headers: { 'X-Session-Id': sessionId, 'Cache-Control': 'no-store' } })
 
   } catch (error) {
-    console.error('❌ Session init failed:', error)
+    console.error('❌ Session init failed', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

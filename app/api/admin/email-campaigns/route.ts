@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(data || [])
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Email campaigns fetch error:", error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, campaign: data })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Email campaign creation error:", error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

@@ -4,13 +4,13 @@ import { z } from 'zod'
 import { ContextStorage } from '@/src/core/context/context-storage'
 import type { ContextSnapshot, IntentResult } from '@/types/intelligence'
 import { suggestTools } from '@/src/core/intelligence/tool-suggestion-engine'
-import { withApiGuard } from '@/src/core/api/withApiGuard'
+import { withApiGuard } from '@/app/middleware/withApiGuard'
 
 const contextStorage = new ContextStorage()
 
 const Body = z.object({ sessionId: z.string().min(1), stage: z.string().optional() })
 
-export const POST = withApiGuard({ schema: Body, requireSession: false, rateLimit: { windowMs: 3000, max: 5 }, handler: async ({ body }) => {
+export const POST = withApiGuard({ schema: Body, requireSession: false, rateLimit: { windowMs: 3000, max: 5 }, handler: async ({ body, req }) => {
   const raw = await contextStorage.get(body.sessionId)
   if (!raw) return NextResponse.json({ ok: false, error: 'Context not found' } satisfies ToolRunResult, { status: 404 })
   const snapshot: ContextSnapshot = {

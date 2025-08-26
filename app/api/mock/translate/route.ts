@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     }
     const mocked = `[${targetLang.toUpperCase()} MOCK] ${text}`
     return new Response(JSON.stringify({ translated: mocked }), { status: 200, headers: { 'Content-Type': 'application/json' } })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return new Response(JSON.stringify({ error: 'Mock failed', message: e?.message || 'Unknown' }), { status: 500 })
   }
 }

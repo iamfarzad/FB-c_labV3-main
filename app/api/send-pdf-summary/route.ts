@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
 
     // Prepare minimal data for summary – reuse export-summary query path (lightweight inline)
     const supabase = getSupabaseStorage().getClient()
-    const leadInfo: any = { name: leadName, email: toEmail }
-    let leadResearch: any = null
+    const leadInfo: unknown = { name: leadName, email: toEmail }
+    let leadResearch: unknown = null
 
     try {
       const { data: research } = await supabase
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       .eq('metadata->sessionId', sessionId)
       .order('created_at', { ascending: true })
 
-    const conversationHistory = (activities || []).map((a: any) => ({
+    const conversationHistory = (activities || []).map((a: unknown) => ({
       role: (a.type === 'ai_request' ? 'assistant' : 'user') as 'user' | 'assistant',
       content: String(a.description || a.title || ''),
       timestamp: String(a.created_at)
@@ -81,8 +81,8 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({ success: true })
-  } catch (e: any) {
-    console.error('send-pdf-summary error:', e)
+  } catch (e: unknown) {
+    console.error('send-pdf-summary error', error)
     return NextResponse.json({ error: e?.message || 'Internal error' }, { status: 500 })
   }
 }

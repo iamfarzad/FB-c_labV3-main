@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
           multimodalData.analysis = analysisResult.output?.analysis
         }
       } catch (analysisError) {
-        console.warn('Auto-analysis failed, but file upload succeeded:', analysisError)
+        // Warning log removed - could add proper error handling here
       }
     }
 

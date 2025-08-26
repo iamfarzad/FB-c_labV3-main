@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       { name: "image", value: 0, color: "hsl(210 100% 50%)" },
     ]
 
-    leads?.forEach((lead: any) => {
+    leads?.forEach((lead: unknown) => {
       if (lead.ai_capabilities_shown && Array.isArray(lead.ai_capabilities_shown)) {
         lead.ai_capabilities_shown.forEach((capability: string) => {
           const type = engagementTypes.find((t) => capability.toLowerCase().includes(t.name))
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 
     // Process AI capabilities
     const capabilitiesMap = new Map()
-    leads?.forEach((lead: any) => {
+    leads?.forEach((lead: unknown) => {
       if (lead.ai_capabilities_shown && Array.isArray(lead.ai_capabilities_shown)) {
         lead.ai_capabilities_shown.forEach((cap: string) => {
           capabilitiesMap.set(cap, (capabilitiesMap.get(cap) || 0) + 1)

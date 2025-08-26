@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json<ToolRunResult>({ ok: true, output }, { status: 200 })
-  } catch (error: any) {
+  } catch (error: unknown) {
     const message = error?.name === 'ZodError' ? 'Invalid input' : 'Internal server error'
     const status = error?.name === 'ZodError' ? 400 : 500
     return NextResponse.json<ToolRunResult>({ ok: false, error: message }, { status })

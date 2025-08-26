@@ -64,7 +64,7 @@ Keep tasks specific, actionable, and include relevant file attachments when appr
     })
 
   } catch (error) {
-    console.error('Task generation error:', error)
+    console.error('Task generation error', error)
     return NextResponse.json(
       { error: 'Failed to generate tasks' },
       { status: 500 }

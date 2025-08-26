@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 
 const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { expires: number; body: any }>()
+const idem = new Map<string, { expires: number; body: unknown }>()
 function checkRate(key: string, max: number, windowMs: number) {
   const now = Date.now()
   const rec = rl.get(key)
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(response)
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ ok: false, error: error?.message || 'Unknown error' }, { status: 500 })
   }
 }

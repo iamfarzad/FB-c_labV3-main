@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       .in('status', ['in_progress', 'pending'])
     
     if (updateError) {
-      console.error('Failed to update stale activities:', updateError)
+      // Error: Failed to update stale activities
       return NextResponse.json({ error: 'Failed to cleanup activities' }, { status: 500 })
     }
     
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       .lt('created_at', oneHourAgo)
     
     if (deleteError) {
-      console.error('Failed to delete old completed activities:', deleteError)
+      // Error: Failed to delete old completed activities
     }
     
     // Get current activity counts
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       .select('status')
     
     if (countError) {
-      console.error('Failed to get activity counts:', countError)
+      // Error: Failed to get activity counts
       return NextResponse.json({ error: 'Failed to get activity counts' }, { status: 500 })
     }
     
@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
       statusCounts
     })
     
-  } catch (error: any) {
-    console.error('Activity cleanup error:', error)
+  } catch (error: unknown) {
+    console.error('Activity cleanup error', error)
     return NextResponse.json({ 
       error: 'Internal server error',
       message: error.message || 'An unexpected error occurred'

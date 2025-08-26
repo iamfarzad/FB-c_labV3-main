@@ -29,7 +29,7 @@ const emailRequestSchema = z.object({
 const emailTemplates = {
   welcome: {
     subject: 'Welcome to F.B Consulting - Your AI Transformation Journey Begins',
-    template: (lead: any, data: any) => `
+    template: (lead: unknown, data: unknown) => `
       <h2>Welcome ${lead.name}!</h2>
       
       <p>Thank you for your interest in F.B Consulting's AI solutions.</p>
@@ -60,7 +60,7 @@ const emailTemplates = {
   
   follow_up: {
     subject: 'Following Up - Your AI Transformation Opportunity',
-    template: (lead: any, data: any) => `
+    template: (lead: unknown, data: unknown) => `
       <h2>Hi ${lead.name},</h2>
       
       <p>I wanted to follow up on our recent conversation about AI solutions for ${lead.company || 'your company'}.</p>
@@ -94,7 +94,7 @@ const emailTemplates = {
   
   report: {
     subject: 'Your Personalized AI Implementation Report',
-    template: (lead: any, data: any) => `
+    template: (lead: unknown, data: unknown) => `
       <h2>Your AI Implementation Report is Ready, ${lead.name}!</h2>
       
       <p>Based on our analysis of ${lead.company || 'your company'}, we've prepared a comprehensive report outlining your AI transformation opportunity.</p>
@@ -150,7 +150,7 @@ const emailTemplates = {
   
   meeting_confirmation: {
     subject: 'Meeting Confirmed - AI Discovery Call',
-    template: (lead: any, data: any) => `
+    template: (lead: unknown, data: unknown) => `
       <h2>Meeting Confirmed!</h2>
       
       <p>Hi ${lead.name},</p>
@@ -262,7 +262,7 @@ export async function POST(req: NextRequest) {
     })
     
     if (error) {
-      console.error('Resend error:', error)
+      // Error: Resend error
       return NextResponse.json(
         { error: 'Failed to send email' },
         { status: 500 }
@@ -309,7 +309,7 @@ export async function POST(req: NextRequest) {
     })
     
   } catch (error) {
-    console.error('Email API error:', error)
+    console.error('Email API error', error)
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(

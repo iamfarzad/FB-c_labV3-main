@@ -20,13 +20,13 @@ export async function GET(req: NextRequest) {
       .in("status", ["scheduled", "confirmed"])
 
     if (error) {
-      console.error("Supabase error:", error)
+      // Error: Supabase error
       return NextResponse.json({ error: "Failed to fetch booked slots" }, { status: 500 })
     }
 
     return NextResponse.json(data || [])
-  } catch (error: any) {
-    console.error("Booked slots fetch error:", error)
+  } catch (error: unknown) {
+    console.error('Booked slots fetch error', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

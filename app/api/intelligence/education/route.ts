@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { ToolRunResult } from '@/types/intelligence'
 import { z } from 'zod'
-import { withApiGuard } from '@/src/core/api/withApiGuard'
+import { withApiGuard } from '@/app/middleware/withApiGuard'
 import { ContextStorage } from '@/src/core/context/context-storage'
 
 const Body = z.object({
@@ -25,7 +25,7 @@ export const POST = withApiGuard({
       const existing = await storage.get(sessionId)
       const prev = (existing?.tool_outputs?.education as any) || { completed: [], xp: 0, badges: [] }
       const completed = Array.isArray(prev.completed) ? prev.completed : []
-      if (!completed.some((x: any) => x.moduleId === body.moduleId && x.stepId === body.stepId)) {
+      if (!completed.some((x: unknown) => x.moduleId === body.moduleId && x.stepId === body.stepId)) {
         completed.push({ moduleId: body.moduleId, stepId: body.stepId })
       }
       const xp = (typeof prev.xp === 'number' ? prev.xp : 0) + body.xp
@@ -35,7 +35,7 @@ export const POST = withApiGuard({
       const last_user_message = `${(existing?.last_user_message || '').toString()}\n\n${snippet}`.trim()
       await storage.update(sessionId, { tool_outputs, last_user_message })
       return NextResponse.json({ ok: true, output: { xp: education.xp, completed: education.completed } } satisfies ToolRunResult)
-    } catch (e: any) {
+    } catch (e: unknown) {
       return NextResponse.json({ ok: false, error: 'server_error', details: e?.message || 'unknown' } satisfies ToolRunResult, { status: 500 })
     }
   }

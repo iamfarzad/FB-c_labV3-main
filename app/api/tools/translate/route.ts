@@ -74,7 +74,7 @@ ${cleanText}
     })
 
     return new Response(JSON.stringify({ ok: true, output: { translated } } satisfies ToolRunResult), { status: 200, headers: { 'Content-Type': 'application/json' } })
-  } catch (error: any) {
+  } catch (error: unknown) {
     await logServerActivity({
       type: 'error',
       title: 'Translate Failed',

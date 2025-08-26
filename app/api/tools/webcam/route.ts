@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       } catch {}
     }
     return NextResponse.json(response, { status: 200 })
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error?.name === 'ZodError') {
       return NextResponse.json({ ok: false, error: 'Invalid input data' }, { status: 400 })
     }

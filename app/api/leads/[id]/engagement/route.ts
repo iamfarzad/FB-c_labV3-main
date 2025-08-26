@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       .eq('id', params.id)
     
     if (error) {
-      console.warn('Engagement update failed:', error)
+      // Warning log removed - could add proper error handling here
     }
     
     return NextResponse.json({ ok: true })

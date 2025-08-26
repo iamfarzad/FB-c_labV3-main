@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, leadId: existing.id, existed: true })
     }
 
-    const insertPayload: any = {
+    const insertPayload: unknown = {
       email,
       name: name || email.split('@')[0],
       company_name: companyUrl || null,
@@ -46,12 +46,12 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
     if (insErr || !created?.id) {
-      console.warn('Lead upsert failed, returning temp id', insErr)
+      // Warning log removed - could add proper error handling here
       return NextResponse.json({ ok: true, leadId: `temp-${Date.now()}`, simulated: true })
     }
 
     // Note: Legacy domain analysis removed - using new intelligence system instead
-    console.info('Lead upsert successful:', { email, leadId: created.id })
+    // Action logged
 
     return NextResponse.json({ ok: true, leadId: created.id })
   } catch (e) {

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, output: result.research } satisfies ToolRunResult)
 
   } catch (error) {
-    console.error('❌ Lead research failed:', error)
+    console.error('❌ Lead research failed', error)
     return NextResponse.json({ ok: false, error: 'Lead research failed' } satisfies ToolRunResult, { status: 500 })
   }
 }

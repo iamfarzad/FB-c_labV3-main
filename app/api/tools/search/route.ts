@@ -6,7 +6,7 @@ const groundingProvider = new GoogleGroundingProvider()
 
 // Per-session rate limit + optional idempotency
 const rl = new Map<string, { count: number; reset: number }>()
-const idem = new Map<string, { expires: number; body: any }>()
+const idem = new Map<string, { expires: number; body: unknown }>()
 function checkRate(key: string, max: number, windowMs: number) {
   const now = Date.now()
   const rec = rl.get(key)
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       if (cached && cached.expires > Date.now()) return NextResponse.json(cached.body)
     }
 
-    console.info('🔍 Generic search request:', { query, sessionId })
+    // Action logged
 
     // Apply env gating for URL context
     const urlContextEnabled = (process.env.URL_CONTEXT_ENABLED ?? 'true') === 'true'
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
           queryLength: String(query).length,
           citations: Array.isArray(result.citations) ? result.citations.length : 0,
         })
-        console.info('✅ Recorded search capability for session:', effectiveSessionId)
+        // Action logged
       } catch {}
     }
 
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(body)
 
   } catch (error) {
-    console.error('❌ Search tool error:', error)
+    console.error('❌ Search tool error', error)
     return NextResponse.json({ ok: false, error: 'Search failed', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }

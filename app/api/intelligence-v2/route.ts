@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (error) {
-    console.error('Intelligence API error:', error)
+    console.error('Intelligence API error', error)
     return new Response(
       JSON.stringify({
         success: false,

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response, { status: 200 })
     
   } catch (error) {
-    console.error('Voice transcript API error:', error)
+    console.error('Voice transcript API error', error)
     
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json({ ok: false, error: 'Invalid input data' } satisfies ToolRunResult, { status: 400 })

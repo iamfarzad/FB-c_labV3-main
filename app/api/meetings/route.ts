@@ -32,13 +32,13 @@ export async function GET(req: NextRequest) {
     const { data, error } = await query
 
     if (error) {
-      console.error("Supabase error:", error)
+      // Error: Supabase error
       return NextResponse.json({ error: "Failed to fetch meetings" }, { status: 500 })
     }
 
     return NextResponse.json(data || [])
-  } catch (error: any) {
-    console.error("Meetings fetch error:", error)
+  } catch (error: unknown) {
+    console.error('Meetings fetch error', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(mockResponse)
 
   } catch (error) {
-    console.error('Mock image analysis API error:', error)
+    console.error('Mock image analysis API error', error)
     return NextResponse.json(
       { error: 'Mock API error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

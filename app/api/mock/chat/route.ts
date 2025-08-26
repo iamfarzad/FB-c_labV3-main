@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Mock chat API error:', error)
+    console.error('Mock chat API error', error)
     return NextResponse.json(
       { error: 'Mock API error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

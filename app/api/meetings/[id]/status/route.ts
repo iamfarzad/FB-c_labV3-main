@@ -21,13 +21,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       .single()
 
     if (error) {
-      console.error("Supabase error:", error)
+      // Error: Supabase error
       return NextResponse.json({ error: "Failed to update meeting status" }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, meeting: data })
-  } catch (error: any) {
-    console.error("Meeting status update error:", error)
+  } catch (error: unknown) {
+    console.error('Meeting status update error', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

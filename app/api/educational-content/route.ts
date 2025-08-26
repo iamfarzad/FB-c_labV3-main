@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
           }
           controller.close()
         } catch (error) {
-          console.error("Error in educational content stream:", error)
+    console.error('Error in educational content stream', error)
           controller.error(error)
         }
       },
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("Educational content API error:", error)
+    console.error('Educational content API error', error)
     return NextResponse.json({ error: "Failed to generate educational content" }, { status: 500 })
   }
 }

@@ -23,7 +23,7 @@ export async function GET() {
         ? '🟠 Mock API is ENABLED - All Gemini calls are being mocked'
         : '🟢 Mock API is DISABLED - Using real Gemini API'
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json({ ok: false, error: 'server_error', message: e?.message || 'unknown' }, { status: 500 })
   }
 }
