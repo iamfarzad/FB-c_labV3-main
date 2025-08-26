@@ -56,7 +56,7 @@ export const handleROICalculation = async (result: ROICalculationResult) => {
 
     return await response.json()
   } catch (error) {
-    console.error('ROI calculation error:', error)
+    console.error('ROI calculation error', error)
     throw new Error('Failed to process ROI calculation')
   }
 }
@@ -77,7 +77,7 @@ export const handleVoiceTranscript = async (result: VoiceTranscriptResult) => {
 
     return await response.json()
   } catch (error) {
-    console.error('Voice transcript error:', error)
+    console.error('Voice transcript error', error)
     throw new Error('Failed to process voice transcript')
   }
 }
@@ -98,7 +98,7 @@ export const handleVideoAppResult = async (result: VideoAppResult) => {
 
     return await response.json()
   } catch (error) {
-    console.error('Video to app error:', error)
+    console.error('Video to app error', error)
     throw new Error('Failed to process video to app')
   }
 }
@@ -119,7 +119,7 @@ export const handleScreenShare = async (result: ScreenShareResult) => {
 
     return await response.json()
   } catch (error) {
-    console.error('Screen share analysis error:', error)
+    console.error('Screen share analysis error', error)
     throw new Error('Failed to process screen share analysis')
   }
 }
@@ -140,7 +140,7 @@ export const handleWebcamCapture = async (result: WebcamCaptureResult) => {
 
     return await response.json()
   } catch (error) {
-    console.error('Webcam capture analysis error:', error)
+    console.error('Webcam capture analysis error', error)
     throw new Error('Failed to process webcam capture analysis')
   }
 }

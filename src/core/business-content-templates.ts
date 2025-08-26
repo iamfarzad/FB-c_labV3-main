@@ -149,13 +149,13 @@ export const leadCaptureTemplate: BusinessContentTemplate = {
 
           <div class="fbc-grid-2 mb-4">
             <div class="fbc-input-group">
-              <label class="fbc-input-label" for="lead_company">Company Name</label>
+              <label class="fbc-input-label" for="lead_compunknown">Company Name</label>
               <input 
                 type="text" 
-                id="lead_company" 
-                name="company"
+                id="lead_compunknown" 
+                name="compunknown"
                 class="fbc-business-input" 
-                placeholder="Your company"
+                placeholder="Your compunknown"
               />
             </div>
             

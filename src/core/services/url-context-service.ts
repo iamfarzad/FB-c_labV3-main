@@ -122,8 +122,8 @@ export class URLContextService {
         readingTime,
       };
 
-    } catch (error: any) {
-      console.error('URL Context Analysis Error:', error);
+    } catch (error: unknown) {
+    console.error('URL Context Analysis Error', error)
       
       return {
         url,

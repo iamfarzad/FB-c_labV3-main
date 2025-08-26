@@ -15,7 +15,7 @@ export class EmailService {
   static async sendEmail(template: EmailTemplate) {
     try {
       if (!resend) {
-        console.warn("Resend API key not configured, skipping email send")
+        // Warning log removed - could add proper error handling here
         return { success: true, emailId: 'mock-email-id' }
       }
 
@@ -29,13 +29,13 @@ export class EmailService {
       })
 
       if (error) {
-        console.error("Resend error:", error)
+        // Error: Resend error
         throw new Error(`Failed to send email: ${error.message}`)
       }
 
       return { success: true, emailId: data?.id }
-    } catch (error: any) {
-      console.error("Email service error:", error)
+    } catch (error: unknown) {
+    console.error('Email service error', error)
       throw error
     }
   }

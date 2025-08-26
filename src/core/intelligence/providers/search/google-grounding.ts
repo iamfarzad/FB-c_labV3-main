@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai'
 
 export type GroundedCitation = { uri: string; title?: string; description?: string; source?: 'url' | 'search' }
-export type GroundedAnswer = { text: string; citations: GroundedCitation[]; raw?: any }
+export type GroundedAnswer = { text: string; citations: GroundedCitation[]; raw?: unknown }
 
 export class GoogleGroundingProvider {
   private genAI: GoogleGenAI
@@ -14,20 +14,20 @@ export class GoogleGroundingProvider {
   /**
    * Extract citations from Gemini response metadata
    */
-  private extractCitations(candidate: any): GroundedCitation[] {
+  private extractCitations(candidate: unknown): GroundedCitation[] {
     const citations: GroundedCitation[] = []
 
     // Search grounding citations
     const chunks = candidate?.groundingMetadata?.groundingChunks ?? []
     const searchCitations: GroundedCitation[] = (Array.isArray(chunks) ? chunks : [])
-      .map((c: any) => c.web)
+      .map((c: unknown) => c.web)
       .filter(Boolean)
-      .map((w: any) => ({ uri: w.uri, title: w.title, description: w.snippet, source: 'search' as const }))
+      .map((w: unknown) => ({ uri: w.uri, title: w.title, description: w.snippet, source: 'search' as const }))
 
     // URL Context citations (if available)
     const urlMeta = candidate?.urlContextMetadata?.urlMetadata ?? []
     const urlCitations: GroundedCitation[] = (Array.isArray(urlMeta) ? urlMeta : [])
-      .map((m: any) => ({ uri: m.retrievedUrl || m.url || m.uri, title: m.title, description: m.snippet, source: 'url' as const }))
+      .map((m: unknown) => ({ uri: m.retrievedUrl || m.url || m.uri, title: m.title, description: m.snippet, source: 'url' as const }))
 
     citations.push(...urlCitations, ...searchCitations)
     return citations
@@ -42,7 +42,7 @@ export class GoogleGroundingProvider {
   async groundedAnswer(query: string, urls?: string[]): Promise<GroundedAnswer> {
     try {
       const useUrls = Array.isArray(urls) && urls.length > 0
-      const tools: any[] = [{ googleSearch: {} }]
+      const tools: unknown[] = [{ googleSearch: {} }]
       if (useUrls) tools.unshift({ urlContext: {} })
 
       // When urlContext is enabled, Gemini uses any URLs present in contents.
@@ -61,7 +61,7 @@ export class GoogleGroundingProvider {
         ? (res as any).text()
         : (res as any).text
           ?? (((res as any).candidates?.[0]?.content?.parts || [])
-                .map((p: any) => p.text || '').filter(Boolean).join('\n'))
+                .map((p: unknown) => p.text || '').filter(Boolean).join('\n'))
 
       const candidate = (res as any).candidates?.[0] || {}
 
@@ -70,7 +70,7 @@ export class GoogleGroundingProvider {
 
       return { text, citations, raw: res }
     } catch (error) {
-      console.error('Google grounding search failed:', error)
+    console.error('Google grounding search failed', error)
       return {
         text: `I couldn't find specific information about "${query}". Please try rephrasing your question or provide more context.`,
         citations: [],

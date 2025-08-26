@@ -8,7 +8,7 @@ export interface GoogleSearchResult {
   htmlSnippet?: string;
   cacheId?: string;
   pagemap?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -155,8 +155,8 @@ export class GoogleSearchService {
 
       return data;
 
-    } catch (error: any) {
-      console.error('Google Search Error:', error);
+    } catch (error: unknown) {
+    console.error('Google Search Error', error)
       
       // Return empty response structure on error
       return {

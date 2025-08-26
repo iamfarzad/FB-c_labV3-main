@@ -3,7 +3,7 @@ export function requireConsentCookie(cookieValue?: string): boolean {
   try { const parsed = JSON.parse(cookieValue); return !!parsed.allow } catch { return false }
 }
 
-export function canProceedToStage(currentStage: string, nextStage: string, lead: Record<string, any>): boolean {
+export function canProceedToStage(currentStage: string, nextStage: string, lead: Record<string, unknown>): boolean {
   const requirements: Record<string, string[]> = {
     NAME_COLLECTION: [],
     EMAIL_CAPTURE: ['name'],
@@ -17,6 +17,6 @@ export function canProceedToStage(currentStage: string, nextStage: string, lead:
 }
 
 export function hasConsent(allow: boolean): boolean { return !!allow }
-export function contextReady(ctx: any): boolean { return !!(ctx?.company || ctx?.person || ctx?.role) }
+export function contextReady(ctx: unknown): boolean { return !!(ctx?.company || ctx?.person || ctx?.role) }
 
 

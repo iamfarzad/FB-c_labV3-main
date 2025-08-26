@@ -7,7 +7,7 @@ const enableMocking = process.env.ENABLE_GEMINI_MOCKING === 'true'
 
 // Mock Supabase client for development when environment variables are missing
 const createMockSupabaseClient = () => {
-  console.warn('⚠️ Using mock Supabase client - environment variables missing')
+  // Warning log removed - could add proper error handling here
   
   const mockClient = {
     auth: {
@@ -21,8 +21,8 @@ const createMockSupabaseClient = () => {
       insert: () => ({ data: null, error: new Error('Mock client - insert not available') }),
       update: () => ({ data: null, error: new Error('Mock client - update not available') }),
       delete: () => ({ data: null, error: new Error('Mock client - delete not available') }),
-      eq: function(column: string, value: any) { return this },
-      order: function(column: string, options?: any) { return this },
+      eq: function(column: string, value: unknown) { return this },
+      order: function(column: string, options?: unknown) { return this },
       limit: function(count: number) { return this },
       single: function() { return Promise.resolve({ data: null, error: new Error('Mock client') }) }
     }),
@@ -42,7 +42,7 @@ export const getSupabase = () => {
   // Check if environment variables are available
   if (!config.supabase.url || !config.supabase.anonKey) {
     if (isDevelopment || enableMocking) {
-      console.warn('🔧 Development mode: Using mock Supabase client due to missing environment variables')
+      // Warning log removed - could add proper error handling here
       return createMockSupabaseClient()
     } else {
       console.error('❌ Supabase environment variables are missing. Please check SUPABASE_URL and SUPABASE_ANON_KEY.')
@@ -60,7 +60,7 @@ export const getSupabase = () => {
 }
 
 // Export default instance for backward compatibility
-let supabaseInstance: any = null
+let supabaseInstance: unknown = null
 
 export const supabase = (() => {
   if (!supabaseInstance) {
@@ -68,7 +68,7 @@ export const supabase = (() => {
     
     // If getSupabase returns null (missing env vars in production), use mock client
     if (!supabaseInstance) {
-      console.warn('🔧 Fallback to mock Supabase client due to missing environment variables')
+      // Warning log removed - could add proper error handling here
       supabaseInstance = createMockSupabaseClient()
     }
   }

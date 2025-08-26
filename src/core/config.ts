@@ -76,7 +76,7 @@ export function checkDevelopmentConfig() {
     if (!config.supabase.serviceRoleKey) missingVars.push("SUPABASE_SERVICE_ROLE_KEY")
     
     if (missingVars.length > 0) {
-      console.warn(`⚠️ Supabase environment variables missing for full test execution: ${missingVars.join(", ")}`)
+      // Warning log removed - could add proper error handling here}`)
     }
   }
 }

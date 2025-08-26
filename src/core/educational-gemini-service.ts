@@ -163,7 +163,7 @@ Generate educational HTML content that builds on this context and interaction hi
       }
     }
   } catch (error) {
-    console.error("Error streaming educational content from Gemini:", error)
+    console.error('Error streaming educational content from Gemini', error)
 
     let errorMessage = "An error occurred while generating educational content."
     if (error instanceof Error) {

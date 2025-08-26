@@ -23,7 +23,7 @@ export interface LeadSearchResult {
   url: string;
   title?: string;
   snippet?: string;
-  raw?: any;
+  raw?: unknown;
   created_at: string;
 }
 

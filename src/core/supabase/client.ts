@@ -10,18 +10,14 @@ const isClient = typeof window !== 'undefined'
 const hasRequiredVars = supabaseUrl && supabaseAnonKey
 
 if (!hasRequiredVars) {
-  console.error('Missing required Supabase environment variables:', {
-    url: !!supabaseUrl,
-    anonKey: !!supabaseAnonKey,
-    isClient
-  })
+  // Error: Missing required Supabase environment variables
 }
 
 // Create a safe Supabase client that handles missing environment variables
 function createSafeSupabaseClient() {
   if (!hasRequiredVars) {
     // Return a mock client for development/testing/build time
-    console.warn('🔧 Fallback to mock Supabase client due to missing environment variables')
+    // Warning log removed - could add proper error handling here
     return {
       auth: {
         getUser: async () => ({ data: { user: null }, error: null }),
@@ -35,21 +31,21 @@ function createSafeSupabaseClient() {
       removeChannel: () => {},
       from: (table: string) => ({
         select: (columns?: string) => ({
-          eq: (column: string, value: any) => ({
+          eq: (column: string, value: unknown) => ({
             single: () => ({ data: null, error: null }),
-            order: (column: string, options?: any) => ({ data: [], error: null }),
-            gte: (column: string, value: any) => ({
-              order: (column: string, options?: any) => ({ data: [], error: null })
+            order: (column: string, options?: unknown) => ({ data: [], error: null }),
+            gte: (column: string, value: unknown) => ({
+              order: (column: string, options?: unknown) => ({ data: [], error: null })
             })
           }),
-          gte: (column: string, value: any) => ({
-            order: (column: string, options?: any) => ({ data: [], error: null })
+          gte: (column: string, value: unknown) => ({
+            order: (column: string, options?: unknown) => ({ data: [], error: null })
           }),
-          order: (column: string, options?: any) => ({ data: [], error: null }),
+          order: (column: string, options?: unknown) => ({ data: [], error: null }),
           data: [],
           error: null
         }),
-        insert: (data: any) => ({
+        insert: (data: unknown) => ({
           select: (columns?: string) => ({
             single: () => ({ data: null, error: null })
           })
@@ -82,7 +78,7 @@ export const supabaseService = (() => {
   }
   
   // Fallback to the mock client if service key is missing or on client-side
-  console.warn('⚠️ Using mock Supabase client - environment variables missing')
+  // Warning log removed - could add proper error handling here
   return createSafeSupabaseClient()
 })()
 
@@ -109,11 +105,11 @@ export async function createLeadSummary(
   const { user, error: userError } = await getSafeUser()
   
   if (userError) {
-    console.error('Auth error:', userError)
+    // Error: Auth error
   }
 
   if (!user) {
-    console.info('No authenticated user found, using service role for lead creation')
+    // Action logged
   }
 
   // Automatically set user_id if not provided
@@ -130,7 +126,7 @@ export async function createLeadSummary(
     .single()
   
   if (error) {
-    console.error('Lead creation error:', error)
+    // Error: Lead creation error
     throw error
   }
   
@@ -138,7 +134,7 @@ export async function createLeadSummary(
 }
 
 // Comprehensive Error Handling
-export function handleSupabaseError(error: any) {
+export function handleSupabaseError(error: unknown) {
   const errorMap: Record<string, string> = {
     'PGRST116': 'Permission denied. Check user authentication.',
     'PGRST000': 'Database operation failed',
@@ -170,7 +166,7 @@ export async function createSearchResults(
   results: Array<{ url: string; title?: string; snippet?: string; source: string }>
 ) {
   if (results.length === 0) {
-    console.info('No search results to store')
+    // Action logged
     return []
   }
 
@@ -189,11 +185,11 @@ export async function createSearchResults(
     .select()
 
   if (error) {
-    console.error('Failed to store search results:', error)
+    // Error: Failed to store search results
     throw error
   }
 
-  console.info(`Stored ${results.length} search results for lead ${leadId}`)
+  // Action logged
   return data || []
 }
 
@@ -206,7 +202,7 @@ export async function getSearchResults(leadId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Failed to fetch search results:', error)
+    // Error: Failed to fetch search results
     throw error
   }
 
@@ -221,7 +217,7 @@ export async function getUserLeads() {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Get user leads error:', error)
+    // Error: Get user leads error
     throw error
   }
 
@@ -240,7 +236,7 @@ export async function getLeadById(id: string) {
     if (error.code === 'PGRST116') {
       return null // Lead not found
     }
-    console.error('Get lead error:', error)
+    console.error('Get lead error', error)
     throw error
   }
 

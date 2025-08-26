@@ -18,7 +18,7 @@ export interface TokenUsageLog {
   estimated_cost: number
   success: boolean
   error_message?: string
-  usage_metadata?: any
+  usage_metadata?: unknown
   created_at?: string
 }
 
@@ -66,12 +66,12 @@ export class TokenUsageLogger {
         })
 
       if (error) {
-        console.error('Failed to log token usage:', error)
+        // Error: Failed to log token usage
       } else {
-        console.info(`Token usage logged: ${log.feature} - ${log.total_tokens} tokens - $${log.estimated_cost.toFixed(4)}`)
+        // Object logged`)
       }
     } catch (error) {
-      console.error('Token usage logging failed:', error)
+    console.error('Token usage logging failed', error)
     }
   }
 
@@ -137,7 +137,7 @@ export class TokenUsageLogger {
         current_monthly_requests: monthlyRequests || 0
       }
     } catch (error) {
-      console.error('Failed to get user plan budget:', error)
+    console.error('Failed to get user plan budget', error)
       return null
     }
   }
@@ -201,7 +201,7 @@ export class TokenUsageLogger {
     outputTokens: number,
     success: boolean = true,
     errorMessage?: string,
-    usageMetadata?: any
+    usageMetadata?: unknown
   ): Promise<{
     allowed: boolean
     reason?: string
@@ -314,7 +314,7 @@ export class TokenUsageLogger {
         featureBreakdown
       }
     } catch (error) {
-      console.error('Failed to get usage stats:', error)
+    console.error('Failed to get usage stats', error)
       return {
         totalTokens: 0,
         totalCost: 0,
@@ -343,7 +343,7 @@ export const enforceBudgetAndLog = (
   outputTokens: number,
   success?: boolean,
   errorMessage?: string,
-  usageMetadata?: any
+  usageMetadata?: unknown
 ) => {
   return TokenUsageLogger.getInstance().enforceBudgetAndLog(
     userId, sessionId, feature, model, inputTokens, outputTokens, success, errorMessage, usageMetadata

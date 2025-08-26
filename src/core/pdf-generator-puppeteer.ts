@@ -54,7 +54,7 @@ export async function generatePdfWithPuppeteer(
         await browser.close();
       }
     } catch (err) {
-      console.error('Puppeteer failed, falling back to pdf-lib:', (err as any)?.message || err)
+    console.error('Puppeteer failed, falling back to pdf-lib?.message || err)', error)
       await generatePdfWithPdfLib(summaryData, outputPath)
       return
     }
@@ -80,7 +80,7 @@ async function generatePdfWithPdfLib(summaryData: SummaryData, outputPath: strin
     }
   }
 
-  const drawText = (text: string, opts?: { size?: number; color?: any; bold?: boolean }) => {
+  const drawText = (text: string, opts?: { size?: number; color?: unknown; bold?: boolean }) => {
     const size = opts?.size ?? 11
     const color = opts?.color ?? rgb(0.1, 0.1, 0.1)
     currentPage.drawText(text, { x: marginX, y, size, color, font: opts?.bold ? fontBold : font })
@@ -184,7 +184,7 @@ function generateHtmlContent(data: SummaryData): string {
   // Embed brand logo as data URI if available via env; avoid fs/path for serverless safety
   const logoDataUri = process.env.NEXT_PUBLIC_PDF_LOGO_DATA_URI || buildDefaultOrbLogoDataUri()
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.farzadbayat.com'
-  const esc = (s: any) => String(s || '')
+  const esc = (s: unknown) => String(s || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

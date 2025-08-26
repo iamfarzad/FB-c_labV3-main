@@ -8,6 +8,7 @@ export interface ActivityItem {
   title: string
   description: string
   timestamp: Date
+  metadata?: Record<string, unknown>
 }
 
 export interface ChatMessage {
@@ -15,13 +16,13 @@ export interface ChatMessage {
   role: 'user' | 'assistant' | 'system'
   content: string
   timestamp?: Date
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export interface ChatSession {
   id: string
   messages: ChatMessage[]
-  context?: Record<string, any>
+  context?: Record<string, unknown>
   createdAt: Date
   updatedAt: Date
 }
@@ -52,7 +53,7 @@ export interface Message {
       industry?: string
       companySize?: string
       stage?: string
-      customData?: Record<string, any>
+      customData?: Record<string, unknown>
     }
   }
 }

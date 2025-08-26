@@ -6,7 +6,7 @@ interface ServerActivityData {
   title: string
   description?: string
   status?: "pending" | "in_progress" | "completed" | "failed"
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 /**
@@ -32,26 +32,18 @@ export async function logServerActivity(activityData: ServerActivityData): Promi
     if (error) {
       // Check if it's a missing table error
       if (error.message && error.message.includes('relation "public.activities" does not exist')) {
-        console.warn("⚠️ Activities table missing - logging to console only")
-        console.info("[Server Activity Logged]:", {
-          type: activityData.type,
-          title: activityData.title,
-          description: activityData.description,
-          status: activityData.status,
-          metadata: activityData.metadata,
-          timestamp: new Date().toISOString()
-        })
+        // Database table doesn't exist yet - using fallback ID
         return `console_fallback_${Date.now()}`
       }
       
-      console.error("Failed to log server activity to database:", error.message || error)
+      // Error: Failed to log server activity to database
       return `fallback_${Date.now()}`
     }
 
-    console.info(`✅ Server activity logged: ${activityData.title} (ID: ${data.id})`)
+    // Activity logged to database
     return data.id
   } catch (error) {
-    console.error("Server activity logging error:", error)
+    console.error('Server activity logging error', error)
     return `fallback_${Date.now()}`
   }
 }

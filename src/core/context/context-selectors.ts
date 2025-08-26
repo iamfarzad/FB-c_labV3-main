@@ -1,8 +1,8 @@
-export function selectCompanyName(ctx: any): string | undefined {
+export function selectCompanyName(ctx: unknown): string | undefined {
   return ctx?.company?.name || ctx?.lead?.company
 }
 
-export function selectRole(ctx: any): string | undefined {
+export function selectRole(ctx: unknown): string | undefined {
   return ctx?.role || ctx?.person?.role
 }
 

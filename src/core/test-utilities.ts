@@ -16,7 +16,7 @@ export class UITestRunner {
     this.tests.push(test)
   }
 
-  async runAllTests(): Promise<{ passed: number; failed: number; results: any[] }> {
+  async runAllTests(): Promise<{ passed: number; failed: number; results: unknown[] }> {
     const results = []
     let passed = 0
     let failed = 0

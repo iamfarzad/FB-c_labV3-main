@@ -113,7 +113,7 @@ export class TokenCostCalculator {
     const pricing = PROVIDER_PRICING[provider]?.[model]
 
     if (!pricing) {
-      console.warn(`No pricing found for ${provider}/${model}`)
+      // Warning log removed - could add proper error handling here
       return {
         inputCost: 0,
         outputCost: 0,
@@ -172,7 +172,7 @@ export class TokenCostCalculator {
     return `$${cost.toFixed(4)}`
   }
 
-  static calculateDailyCosts(usageLogs: any[]): Record<string, number> {
+  static calculateDailyCosts(usageLogs: unknown[]): Record<string, number> {
     const dailyCosts: Record<string, number> = {}
 
     usageLogs.forEach((log) => {
@@ -183,7 +183,7 @@ export class TokenCostCalculator {
     return dailyCosts
   }
 
-  static calculateProviderBreakdown(usageLogs: any[]): Record<string, { cost: number; usage: number }> {
+  static calculateProviderBreakdown(usageLogs: unknown[]): Record<string, { cost: number; usage: number }> {
     const breakdown: Record<string, { cost: number; usage: number }> = {}
 
     usageLogs.forEach((log) => {

@@ -65,7 +65,7 @@ export class GeminiLiveAPI {
       return fullResponse;
 
     } catch (error) {
-      console.error('Grounded search failed:', error);
+    console.error('Grounded search failed', error)
       
       // Fallback to enhanced prompt if API fails
       return this.generateFallbackResponse(leadContext, userMessage);
@@ -74,7 +74,7 @@ export class GeminiLiveAPI {
 
   private async performRealWebSearch(leadContext: LeadContext) {
     try {
-      console.info(`🔍 Starting real web search for ${leadContext.name}...`)
+      // Action logged
       
       // Generate a proper UUID for the lead ID
       const tempLeadId = crypto.randomUUID()
@@ -87,15 +87,15 @@ export class GeminiLiveAPI {
         leadId: tempLeadId
       })
 
-      console.info(`🔍 Real web search completed for ${leadContext.name}: ${searchResults.length} results`)
+      // Action logged
       return searchResults
     } catch (error) {
-      console.error('Real web search failed, using fallback:', error)
+    console.error('Real web search failed, using fallback', error)
       return []
     }
   }
 
-  private buildEnhancedPrompt(leadContext: LeadContext, userMessage: string, searchResults: any[]) {
+  private buildEnhancedPrompt(leadContext: LeadContext, userMessage: string, searchResults: unknown[]) {
     const searchContext = searchResults.length > 0 
       ? `\n\nSEARCH RESULTS FOUND:\n${searchResults.map(result => 
           `- ${result.source}: ${result.title || result.url}\n  ${result.snippet || 'No snippet available'}`

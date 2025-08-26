@@ -6,20 +6,20 @@ export interface ConversationContext {
   email: string
   name?: string
   company_url?: string
-  company_context?: any
-  person_context?: any
+  company_context?: unknown
+  person_context?: unknown
   role?: string
   role_confidence?: number
-  intent_data?: any
+  intent_data?: unknown
   last_user_message?: string
   ai_capabilities_shown?: string[]
-  tool_outputs?: Record<string, any>
+  tool_outputs?: Record<string, unknown>
   created_at?: string
   updated_at?: string
 }
 
 export class ContextStorage {
-  private supabase: any
+  private supabase: unknown
 
   constructor() {
     this.supabase = createClient(
@@ -49,23 +49,23 @@ export class ContextStorage {
       if (error) {
         // If the column doesn't exist, try without multimodal_context
         if (error.message?.includes('multimodal_context')) {
-          console.warn('Multimodal context column not found, storing without it')
+          // Warning log removed - could add proper error handling here
           const { multimodal_context, ...dataWithoutMultimodal } = dataToStore
           const { error: retryError } = await this.supabase
             .from('conversation_contexts')
             .upsert(dataWithoutMultimodal)
 
           if (retryError) {
-            console.error('Error storing context without multimodal:', retryError)
+            // Error: Error storing context without multimodal
             throw retryError
           }
         } else {
-          console.error('Error storing context:', error)
+    console.error('Error storing context', error)
           throw error
         }
       }
     } catch (error) {
-      console.error('Context storage failed:', error)
+    console.error('Context storage failed', error)
       throw error
     }
   }
@@ -79,7 +79,7 @@ export class ContextStorage {
         .single()
 
       if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-        console.error('Error retrieving context:', error)
+    console.error('Error retrieving context', error)
         throw error
       }
 
@@ -88,14 +88,14 @@ export class ContextStorage {
         try {
           data.multimodal_context = JSON.parse(data.multimodal_context)
         } catch (parseError) {
-          console.warn('Failed to parse multimodal context:', parseError)
+          // Warning log removed - could add proper error handling here
           data.multimodal_context = undefined
         }
       }
 
       return data
     } catch (error) {
-      console.error('Context retrieval failed:', error)
+    console.error('Context retrieval failed', error)
       return null
     }
   }
@@ -111,11 +111,11 @@ export class ContextStorage {
         .eq('session_id', sessionId)
 
       if (error) {
-        console.error('Error updating context:', error)
+        // Error: Error updating context
         throw error
       }
     } catch (error) {
-      console.error('Context update failed:', error)
+    console.error('Context update failed', error)
       throw error
     }
   }
@@ -128,11 +128,11 @@ export class ContextStorage {
         .eq('session_id', sessionId)
 
       if (error) {
-        console.error('Error deleting context:', error)
+        // Error: Error deleting context
         throw error
       }
     } catch (error) {
-      console.error('Context deletion failed:', error)
+    console.error('Context deletion failed', error)
       throw error
     }
   }

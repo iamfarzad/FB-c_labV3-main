@@ -10,7 +10,7 @@ export interface AdminContext {
     systemHealth: 'healthy' | 'warning' | 'error'
   }
   leads: {
-    recentLeads: any[]
+    recentLeads: unknown[]
     leadStats: {
       total: number
       new: number
@@ -18,22 +18,22 @@ export interface AdminContext {
       converted: number
       averageScore: number
     }
-    topLeads: any[]
-    leadTrends: any[]
+    topLeads: unknown[]
+    leadTrends: unknown[]
   }
   meetings: {
-    upcomingMeetings: any[]
-    completedMeetings: any[]
+    upcomingMeetings: unknown[]
+    completedMeetings: unknown[]
     meetingStats: {
       total: number
       scheduled: number
       completed: number
       cancelled: number
     }
-    calendarAvailability: any[]
+    calendarAvailability: unknown[]
   }
   emails: {
-    activeCampaigns: any[]
+    activeCampaigns: unknown[]
     emailStats: {
       sent: number
       opened: number
@@ -42,15 +42,15 @@ export interface AdminContext {
       openRate: number
       clickRate: number
     }
-    recentEmails: any[]
-    templates: any[]
+    recentEmails: unknown[]
+    templates: unknown[]
   }
   costs: {
     tokenUsage: {
       total: number
       byModel: Record<string, number>
       byFeature: Record<string, number>
-      costBreakdown: any[]
+      costBreakdown: unknown[]
     }
     costStats: {
       totalCost: number
@@ -97,10 +97,10 @@ export interface AdminContext {
     }
   }
   activity: {
-    recentActivities: any[]
-    systemAlerts: any[]
-    userActions: any[]
-    errorLogs: any[]
+    recentActivities: unknown[]
+    systemAlerts: unknown[]
+    userActions: unknown[]
+    errorLogs: unknown[]
   }
   systemStatus: {
     lastUpdated: string
@@ -161,12 +161,12 @@ export async function buildAdminContext(): Promise<AdminContext> {
 
     return context
   } catch (error) {
-    console.error('Error building admin context:', error)
+    console.error('Error building admin context', error)
     throw new Error('Failed to build admin context')
   }
 }
 
-async function fetchLeadsData(supabase: any, since: Date) {
+async function fetchLeadsData(supabase: unknown, since: Date) {
   const { data: leads, error } = await supabase
     .from('leads')
     .select('*')
@@ -176,12 +176,12 @@ async function fetchLeadsData(supabase: any, since: Date) {
   if (error) throw error
 
   const total = leads?.length || 0
-  const newLeads = leads?.filter((l: any) => l.status === 'new') || []
-  const engagedLeads = leads?.filter((l: any) => l.status === 'engaged') || []
-  const convertedLeads = leads?.filter((l: any) => l.status === 'converted') || []
+  const newLeads = leads?.filter((l: unknown) => l.status === 'new') || []
+  const engagedLeads = leads?.filter((l: unknown) => l.status === 'engaged') || []
+  const convertedLeads = leads?.filter((l: unknown) => l.status === 'converted') || []
   
   const averageScore = leads?.length > 0 
-    ? leads.reduce((sum: number, l: any) => sum + (l.score || 0), 0) / leads.length 
+    ? leads.reduce((sum: number, l: unknown) => sum + (l.score || 0), 0) / leads.length 
     : 0
 
   return {
@@ -193,12 +193,12 @@ async function fetchLeadsData(supabase: any, since: Date) {
       converted: convertedLeads.length,
       averageScore: Math.round(averageScore * 100) / 100
     },
-    topLeads: leads?.filter((l: any) => l.score > 7).slice(0, 5) || [],
+    topLeads: leads?.filter((l: unknown) => l.score > 7).slice(0, 5) || [],
     leadTrends: [] // TODO: Implement trend analysis
   }
 }
 
-async function fetchMeetingsData(supabase: any, since: Date) {
+async function fetchMeetingsData(supabase: unknown, since: Date) {
   const { data: meetings, error } = await supabase
     .from('meetings')
     .select('*')
@@ -208,8 +208,8 @@ async function fetchMeetingsData(supabase: any, since: Date) {
   if (error) throw error
 
   const now = new Date()
-  const upcomingMeetings = meetings?.filter((m: any) => new Date(m.scheduled_at) > now) || []
-  const completedMeetings = meetings?.filter((m: any) => m.status === 'completed') || []
+  const upcomingMeetings = meetings?.filter((m: unknown) => new Date(m.scheduled_at) > now) || []
+  const completedMeetings = meetings?.filter((m: unknown) => m.status === 'completed') || []
 
   return {
     upcomingMeetings: upcomingMeetings.slice(0, 10),
@@ -218,13 +218,13 @@ async function fetchMeetingsData(supabase: any, since: Date) {
       total: meetings?.length || 0,
       scheduled: upcomingMeetings.length,
       completed: completedMeetings.length,
-      cancelled: meetings?.filter((m: any) => m.status === 'cancelled').length || 0
+      cancelled: meetings?.filter((m: unknown) => m.status === 'cancelled').length || 0
     },
     calendarAvailability: [] // TODO: Implement calendar integration
   }
 }
 
-async function fetchEmailsData(supabase: any, since: Date) {
+async function fetchEmailsData(supabase: unknown, since: Date) {
   const { data: emails, error } = await supabase
     .from('email_campaigns')
     .select('*')
@@ -233,21 +233,21 @@ async function fetchEmailsData(supabase: any, since: Date) {
 
   if (error) throw error
 
-  const activeCampaigns = emails?.filter((e: any) => e.status === 'active') || []
-  const sentEmails = emails?.filter((e: any) => e.status === 'sent') || []
+  const activeCampaigns = emails?.filter((e: unknown) => e.status === 'active') || []
+  const sentEmails = emails?.filter((e: unknown) => e.status === 'sent') || []
 
   return {
     activeCampaigns: activeCampaigns.slice(0, 5),
     emailStats: {
       sent: sentEmails.length,
-      opened: sentEmails.reduce((sum: number, e: any) => sum + (e.opened_count || 0), 0),
-      clicked: sentEmails.reduce((sum: number, e: any) => sum + (e.clicked_count || 0), 0),
-      bounced: sentEmails.reduce((sum: number, e: any) => sum + (e.bounced_count || 0), 0),
+      opened: sentEmails.reduce((sum: number, e: unknown) => sum + (e.opened_count || 0), 0),
+      clicked: sentEmails.reduce((sum: number, e: unknown) => sum + (e.clicked_count || 0), 0),
+      bounced: sentEmails.reduce((sum: number, e: unknown) => sum + (e.bounced_count || 0), 0),
       openRate: sentEmails.length > 0 
-        ? (sentEmails.reduce((sum: number, e: any) => sum + (e.opened_count || 0), 0) / sentEmails.length) * 100 
+        ? (sentEmails.reduce((sum: number, e: unknown) => sum + (e.opened_count || 0), 0) / sentEmails.length) * 100 
         : 0,
       clickRate: sentEmails.length > 0 
-        ? (sentEmails.reduce((sum: number, e: any) => sum + (e.clicked_count || 0), 0) / sentEmails.length) * 100 
+        ? (sentEmails.reduce((sum: number, e: unknown) => sum + (e.clicked_count || 0), 0) / sentEmails.length) * 100 
         : 0
     },
     recentEmails: sentEmails.slice(0, 10),
@@ -255,7 +255,7 @@ async function fetchEmailsData(supabase: any, since: Date) {
   }
 }
 
-async function fetchCostsData(supabase: any, since: Date) {
+async function fetchCostsData(supabase: unknown, since: Date) {
   const { data: tokenUsage, error } = await supabase
     .from('token_usage')
     .select('*')
@@ -264,14 +264,14 @@ async function fetchCostsData(supabase: any, since: Date) {
 
   if (error) throw error
 
-  const totalTokens = tokenUsage?.reduce((sum: number, t: any) => sum + (t.tokens_used || 0), 0) || 0
-  const totalCost = tokenUsage?.reduce((sum: number, t: any) => sum + (t.cost || 0), 0) || 0
+  const totalTokens = tokenUsage?.reduce((sum: number, t: unknown) => sum + (t.tokens_used || 0), 0) || 0
+  const totalCost = tokenUsage?.reduce((sum: number, t: unknown) => sum + (t.cost || 0), 0) || 0
 
   // Group by model and feature
   const byModel: Record<string, number> = {}
   const byFeature: Record<string, number> = {}
   
-  tokenUsage?.forEach((t: any) => {
+  tokenUsage?.forEach((t: unknown) => {
     byModel[t.model || 'unknown'] = (byModel[t.model || 'unknown'] || 0) + (t.tokens_used || 0)
     byFeature[t.feature || 'unknown'] = (byFeature[t.feature || 'unknown'] || 0) + (t.tokens_used || 0)
   })
@@ -296,7 +296,7 @@ async function fetchCostsData(supabase: any, since: Date) {
   }
 }
 
-async function fetchAnalyticsData(supabase: any, since: Date) {
+async function fetchAnalyticsData(supabase: unknown, since: Date) {
   const { data: interactions, error } = await supabase
     .from('interactions')
     .select('*')
@@ -307,7 +307,7 @@ async function fetchAnalyticsData(supabase: any, since: Date) {
 
   const totalInteractions = interactions?.length || 0
   const averageSessionDuration = interactions?.length > 0 
-    ? interactions.reduce((sum: number, i: any) => sum + (i.duration || 0), 0) / interactions.length 
+    ? interactions.reduce((sum: number, i: unknown) => sum + (i.duration || 0), 0) / interactions.length 
     : 0
 
   return {
@@ -330,7 +330,7 @@ async function fetchAnalyticsData(supabase: any, since: Date) {
   }
 }
 
-async function fetchAIPerformanceData(supabase: any, since: Date) {
+async function fetchAIPerformanceData(supabase: unknown, since: Date) {
   const { data: aiMetrics, error } = await supabase
     .from('ai_performance')
     .select('*')
@@ -346,10 +346,10 @@ async function fetchAIPerformanceData(supabase: any, since: Date) {
       userSatisfaction: 4.5 // out of 5, TODO: Calculate from ratings
     },
     featureUsage: {
-      chat: aiMetrics?.filter((m: any) => m.feature === 'chat').length || 0,
-      imageAnalysis: aiMetrics?.filter((m: any) => m.feature === 'image-analysis').length || 0,
-      documentAnalysis: aiMetrics?.filter((m: any) => m.feature === 'document-analysis').length || 0,
-      voiceProcessing: aiMetrics?.filter((m: any) => m.feature === 'voice-processing').length || 0
+      chat: aiMetrics?.filter((m: unknown) => m.feature === 'chat').length || 0,
+      imageAnalysis: aiMetrics?.filter((m: unknown) => m.feature === 'image-analysis').length || 0,
+      documentAnalysis: aiMetrics?.filter((m: unknown) => m.feature === 'document-analysis').length || 0,
+      voiceProcessing: aiMetrics?.filter((m: unknown) => m.feature === 'voice-processing').length || 0
     },
     errorAnalysis: {
       commonErrors: ['rate_limit_exceeded', 'invalid_input', 'model_unavailable'], // TODO: Extract from error logs
@@ -359,7 +359,7 @@ async function fetchAIPerformanceData(supabase: any, since: Date) {
   }
 }
 
-async function fetchActivityData(supabase: any, since: Date) {
+async function fetchActivityData(supabase: unknown, since: Date) {
   const { data: activities, error } = await supabase
     .from('activities')
     .select('*')
@@ -371,13 +371,13 @@ async function fetchActivityData(supabase: any, since: Date) {
 
   return {
     recentActivities: activities?.slice(0, 20) || [],
-    systemAlerts: activities?.filter((a: any) => a.type === 'alert').slice(0, 10) || [],
-    userActions: activities?.filter((a: any) => a.type === 'user_action').slice(0, 10) || [],
-    errorLogs: activities?.filter((a: any) => a.type === 'error').slice(0, 10) || []
+    systemAlerts: activities?.filter((a: unknown) => a.type === 'alert').slice(0, 10) || [],
+    userActions: activities?.filter((a: unknown) => a.type === 'user_action').slice(0, 10) || [],
+    errorLogs: activities?.filter((a: unknown) => a.type === 'error').slice(0, 10) || []
   }
 }
 
-function determineSystemHealth(leadsData: any, meetingsData: any, costsData: any): 'healthy' | 'warning' | 'error' {
+function determineSystemHealth(leadsData: unknown, meetingsData: unknown, costsData: unknown): 'healthy' | 'warning' | 'error' {
   // Simple health check based on data availability and basic metrics
   if (!leadsData || !meetingsData || !costsData) return 'error'
   

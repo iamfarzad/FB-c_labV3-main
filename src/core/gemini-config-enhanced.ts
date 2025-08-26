@@ -23,7 +23,7 @@ export interface ConversationMessage {
 }
 
 export interface OptimizedContent {
-  contents: any[];
+  contents: unknown[];
   estimatedTokens: number;
   usedCache: boolean;
   summary?: string;
@@ -31,7 +31,7 @@ export interface OptimizedContent {
 
 export class GeminiConfigEnhanced {
   private static instance: GeminiConfigEnhanced;
-  private conversationCache = new Map<string, { content: any[], timestamp: number, tokens: number }>();
+  private conversationCache = new Map<string, { content: unknown[], timestamp: number, tokens: number }>();
   private systemPromptCache = new Map<string, { content: string, timestamp: number, tokens: number }>();
 
   static getInstance(): GeminiConfigEnhanced {
@@ -241,7 +241,7 @@ export class GeminiConfigEnhanced {
   /**
    * Format messages for Gemini API
    */
-  private formatMessages(messages: ConversationMessage[]): any[] {
+  private formatMessages(messages: ConversationMessage[]): unknown[] {
     return messages.map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: msg.content }]
@@ -286,7 +286,7 @@ export class GeminiConfigEnhanced {
       this.conversationCache.delete(key);
     });
 
-    console.info(`🧹 Cleared ${expiredKeys.length} expired cache entries`);
+    // Action logged
   }
 
   /**
@@ -309,7 +309,7 @@ export class GeminiConfigEnhanced {
   clearAllCache(): void {
     this.conversationCache.clear();
     this.systemPromptCache.clear();
-    console.info('🧹 All cache entries cleared');
+    // Action logged
   }
 }
 

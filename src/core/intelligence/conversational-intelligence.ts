@@ -31,7 +31,7 @@ export class ConversationalIntelligence {
     return this.research.researchLead(input.email, input.name, input.companyUrl, input.sessionId)
   }
 
-  async detectRoleFromResearch(research: any) {
+  async detectRoleFromResearch(research: unknown) {
     return detectRole(research)
   }
 

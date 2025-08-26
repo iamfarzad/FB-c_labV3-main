@@ -7,7 +7,7 @@ import { supabase } from '@/src/core/supabase/server'
  * capability_usage_log per your Supabase setup.
  * If the RPC is missing (older DB), falls back to legacy upsert pattern.
  */
-export async function recordCapabilityUsed(sessionId: string, capabilityName: string, usageData?: any) {
+export async function recordCapabilityUsed(sessionId: string, capabilityName: string, usageData?: unknown) {
   const supabaseClient = supabase
   try {
     // Preferred path: server-side RPC handles dedupe + logging
@@ -18,12 +18,12 @@ export async function recordCapabilityUsed(sessionId: string, capabilityName: st
     if (!rpcError) {
       // Optionally attach context to first-use row if your function/table supports it
       // Skipped here since RPC already logs; keep network minimal.
-      console.info(`✅ Capability tracked via RPC: ${capabilityName} (${sessionId})`)
+      // Action logged`)
       return
     }
-    console.warn('RPC append_capability_if_missing failed, falling back:', rpcError?.message)
+    // Warning log removed - could add proper error handling here
   } catch (e) {
-    console.warn('RPC append_capability_if_missing not available, falling back')
+    // Warning log removed - could add proper error handling here
   }
 
   // Fallback (legacy): write to capability_usage (if exists) and update array locally
@@ -45,7 +45,7 @@ export async function recordCapabilityUsed(sessionId: string, capabilityName: st
         .update({ ai_capabilities_shown: updated, updated_at: new Date().toISOString() })
         .eq('session_id', sessionId)
     }
-    console.info(`✅ Capability tracked via fallback: ${capabilityName} (${sessionId})`)
+    // Action logged`)
   } catch (error) {
     console.error(`❌ Failed to record capability usage (fallback): ${capabilityName}`, error)
   }

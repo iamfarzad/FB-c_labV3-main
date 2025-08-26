@@ -89,7 +89,7 @@ export class MultimodalContextManager {
 
     // Note: Like FB-c_labV2, we don't store multimodal context in database
     // It's managed purely in memory for now to avoid schema complications
-    console.info(`🎯 Initialized multimodal context for session: ${sessionId} (in-memory only)`)
+    // Action logged`)
     return context
   }
 
@@ -112,7 +112,7 @@ export class MultimodalContextManager {
     context.metadata.totalTokens += Math.ceil(content.length / 4)
 
     await this.saveContext(sessionId, context)
-    console.info(`💬 Added text message to multimodal context: ${sessionId}`)
+    // Action logged
   }
 
   async addVoiceMessage(sessionId: string, transcription: string, duration: number, metadata?: Partial<AudioEntry['metadata']>): Promise<void> {
@@ -150,7 +150,7 @@ export class MultimodalContextManager {
     context.metadata.totalTokens += Math.ceil(transcription.length / 4)
 
     await this.saveContext(sessionId, context)
-    console.info(`🎤 Added voice message to multimodal context: ${sessionId}`)
+    // Action logged
   }
 
   async addVisualAnalysis(sessionId: string, analysis: string, type: 'webcam' | 'screen' | 'upload', imageSize?: number, imageData?: string): Promise<void> {
@@ -189,7 +189,7 @@ export class MultimodalContextManager {
     context.metadata.totalTokens += Math.ceil(analysis.length / 4)
 
     await this.saveContext(sessionId, context)
-    console.info(`👁️ Added visual analysis to multimodal context: ${sessionId}`)
+    // Action logged
   }
 
   async getContext(sessionId: string): Promise<MultimodalContext | null> {
@@ -263,7 +263,7 @@ export class MultimodalContextManager {
   private async saveContext(sessionId: string, context: MultimodalContext): Promise<void> {
     // Update memory only (like FB-c_labV2 approach)
     this.activeContexts.set(sessionId, context)
-    console.info(`💾 Updated multimodal context for session: ${sessionId} (in-memory only)`)
+    // Action logged`)
   }
 
   private extractTopics(messages: ConversationEntry[]): string[] {
@@ -293,7 +293,7 @@ export class MultimodalContextManager {
   async clearSession(sessionId: string): Promise<void> {
     // Clear from memory only (like FB-c_labV2 approach)
     this.activeContexts.delete(sessionId)
-    console.info(`🧹 Cleared multimodal context for session: ${sessionId} (in-memory only)`)
+    // Action logged`)
   }
 
   // Get all active sessions (for monitoring)

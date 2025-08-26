@@ -38,7 +38,7 @@ export async function getYouTubeTranscript(videoUrl: string): Promise<VideoTrans
 
     // Combine all transcript items into a single text
     const fullTranscript = transcriptItems
-      .map((item: any) => item.text)
+      .map((item: unknown) => item.text)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim()
@@ -49,12 +49,12 @@ export async function getYouTubeTranscript(videoUrl: string): Promise<VideoTrans
       const { getYouTubeVideoTitle } = await import('./youtube')
       title = await getYouTubeVideoTitle(videoUrl)
     } catch (e) {
-      console.warn('Could not fetch video title:', e)
+      // Warning log removed - could add proper error handling here
     }
 
     return {
       transcript: fullTranscript,
-      items: transcriptItems.map((item: any) => ({
+      items: transcriptItems.map((item: unknown) => ({
         text: item.text,
         duration: item.duration,
         offset: item.offset
@@ -63,7 +63,7 @@ export async function getYouTubeTranscript(videoUrl: string): Promise<VideoTrans
       title
     }
   } catch (error) {
-    console.error('Failed to extract transcript:', error)
+    console.error('Failed to extract transcript', error)
     
     // Fallback: Try alternative method or provide helpful error
     if (error instanceof Error) {

@@ -44,7 +44,7 @@ export class MultimodalClient {
   /**
    * Send a text message to multimodal context
    */
-  async sendText(options: TextMessageOptions): Promise<any> {
+  async sendText(options: TextMessageOptions): Promise<unknown> {
     return this.sendToMultimodal({
       modality: 'text',
       content: options.content,
@@ -58,7 +58,7 @@ export class MultimodalClient {
   /**
    * Send voice transcription to multimodal context
    */
-  async sendVoice(options: VoiceMessageOptions): Promise<any> {
+  async sendVoice(options: VoiceMessageOptions): Promise<unknown> {
     return this.sendToMultimodal({
       modality: 'voice',
       metadata: {
@@ -73,7 +73,7 @@ export class MultimodalClient {
   /**
    * Send visual analysis to multimodal context
    */
-  async sendVision(options: VisionMessageOptions): Promise<any> {
+  async sendVision(options: VisionMessageOptions): Promise<unknown> {
     return this.sendToMultimodal({
       modality: 'vision',
       content: options.content,
@@ -90,7 +90,7 @@ export class MultimodalClient {
   /**
    * Upload file with optional auto-analysis for images/videos
    */
-  async uploadFile(options: FileUploadOptions): Promise<any> {
+  async uploadFile(options: FileUploadOptions): Promise<unknown> {
     const formData = new FormData()
     formData.append('file', options.file)
 
@@ -116,7 +116,7 @@ export class MultimodalClient {
   /**
    * Analyze image using webcam tool
    */
-  async analyzeImage(imageData: string, options: MultimodalOptions = {}): Promise<any> {
+  async analyzeImage(imageData: string, options: MultimodalOptions = {}): Promise<unknown> {
     const response = await fetch(`${this.baseUrl}/api/tools/webcam`, {
       method: 'POST',
       headers: {
@@ -140,7 +140,7 @@ export class MultimodalClient {
   /**
    * Analyze screen capture
    */
-  async analyzeScreen(imageData: string, options: MultimodalOptions = {}): Promise<any> {
+  async analyzeScreen(imageData: string, options: MultimodalOptions = {}): Promise<unknown> {
     const response = await fetch(`${this.baseUrl}/api/tools/screen`, {
       method: 'POST',
       headers: {
@@ -164,7 +164,7 @@ export class MultimodalClient {
   /**
    * Get multimodal context summary
    */
-  async getContext(sessionId: string): Promise<any> {
+  async getContext(sessionId: string): Promise<unknown> {
     const response = await fetch(`${this.baseUrl}/api/multimodal?sessionId=${sessionId}`, {
       headers: this.defaultHeaders
     })
@@ -179,7 +179,7 @@ export class MultimodalClient {
   /**
    * Unified method to send any multimodal data
    */
-  private async sendToMultimodal(data: any): Promise<any> {
+  private async sendToMultimodal(data: unknown): Promise<unknown> {
     const response = await fetch(`${this.baseUrl}/api/multimodal`, {
       method: 'POST',
       headers: this.defaultHeaders,

@@ -35,7 +35,7 @@ export async function *streamPerplexity(params: {
   options?: PerplexityOptions
 }): AsyncGenerator<StreamEvent, void, unknown> {
   const { apiKey, messages, options } = params
-  const body: Record<string, any> = {
+  const body: Record<string, unknown> = {
     model: options?.model ?? 'sonar-pro',
     stream: true,
     messages,

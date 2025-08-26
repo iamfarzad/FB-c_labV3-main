@@ -78,7 +78,7 @@ export class WebRTCAudioProcessor {
         const state = this.peerConnection?.connectionState || "unknown"
         this.isConnected = state === "connected"
         this.onConnectionStateChange?.(state)
-        console.info("WebRTC connection state:", state)
+        // Action logged
       }
 
       // Set up data channel for audio streaming
@@ -88,7 +88,7 @@ export class WebRTCAudioProcessor {
       })
 
       dataChannel.onopen = () => {
-        console.info("WebRTC data channel opened")
+        // Action logged
       }
 
       dataChannel.onmessage = (event) => {
@@ -97,9 +97,9 @@ export class WebRTCAudioProcessor {
         }
       }
 
-      console.info("✅ WebRTC audio processor initialized")
+      // Action logged
     } catch (error) {
-      console.error("❌ Failed to initialize WebRTC audio processor:", error)
+    console.error('❌ Failed to initialize WebRTC audio processor', error)
       throw error
     }
   }
@@ -140,10 +140,10 @@ export class WebRTCAudioProcessor {
       // Set up audio processing
       await this.setupAudioProcessing()
 
-      console.info("✅ Audio capture started with WebRTC")
+      // Action logged
       return this.localStream
     } catch (error) {
-      console.error("❌ Failed to start audio capture:", error)
+    console.error('❌ Failed to start audio capture', error)
       throw error
     }
   }
@@ -206,9 +206,9 @@ export class WebRTCAudioProcessor {
       source.connect(this.audioProcessor)
       this.audioProcessor.connect(this.audioContext.destination)
 
-      console.info("✅ Real-time audio processing set up")
+      // Action logged
     } catch (error) {
-      console.error("❌ Failed to set up audio processing:", error)
+    console.error('❌ Failed to set up audio processing', error)
       throw error
     }
   }
@@ -227,7 +227,7 @@ export class WebRTCAudioProcessor {
         dataChannel.send(audioData)
       }
     } catch (error) {
-      console.error("❌ Failed to send audio data:", error)
+    console.error('❌ Failed to send audio data', error)
       throw error
     }
   }
@@ -249,7 +249,7 @@ export class WebRTCAudioProcessor {
       await this.peerConnection.setLocalDescription(offer)
       return offer
     } catch (error) {
-      console.error("❌ Failed to create offer:", error)
+    console.error('❌ Failed to create offer', error)
       throw error
     }
   }
@@ -264,9 +264,9 @@ export class WebRTCAudioProcessor {
       }
 
       await this.peerConnection.setRemoteDescription(description)
-      console.info("✅ Remote description set")
+      // Action logged
     } catch (error) {
-      console.error("❌ Failed to set remote description:", error)
+    console.error('❌ Failed to set remote description', error)
       throw error
     }
   }
@@ -282,7 +282,7 @@ export class WebRTCAudioProcessor {
 
       await this.peerConnection.addIceCandidate(candidate)
     } catch (error) {
-      console.error("❌ Failed to add ICE candidate:", error)
+    console.error('❌ Failed to add ICE candidate', error)
       throw error
     }
   }
@@ -309,7 +309,7 @@ export class WebRTCAudioProcessor {
 
       return await this.peerConnection.getStats()
     } catch (error) {
-      console.error("❌ Failed to get connection stats:", error)
+    console.error('❌ Failed to get connection stats', error)
       return null
     }
   }
@@ -344,9 +344,9 @@ export class WebRTCAudioProcessor {
       }
 
       this.isConnected = false
-      console.info("✅ WebRTC audio processor cleaned up")
+      // Action logged
     } catch (error) {
-      console.error("❌ Error during cleanup:", error)
+    console.error('❌ Error during cleanup', error)
     }
   }
 

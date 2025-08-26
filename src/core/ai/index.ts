@@ -3,43 +3,43 @@ export interface TextProvider {
 }
 
 export function getProvider(): TextProvider {
-  console.log('getProvider called, GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY)
+  // Action logged
 
   // Development mock when no API key
   if (!process.env.GEMINI_API_KEY) {
-    console.log('Using mock provider')
+    // Action logged
     return createMockProvider()
   }
 
-  console.log('Using Gemini provider')
+  // Action logged
   return createGeminiProvider()
 }
 
 function createMockProvider(): TextProvider {
-  console.log('createMockProvider called')
+  // Action logged
 
   const provider: TextProvider = {
     async *generate({ messages }) {
-      console.log('Mock provider generate called with messages:', messages)
+      // Action logged
 
       const lastMessage = messages[messages.length - 1]?.content || 'Hello'
-      console.log('Last message:', lastMessage)
+      // Action logged
 
       // Simulate realistic streaming response
       const response = `Thank you for your message: "${lastMessage}". This is a mock response for development. I'm here to help you with your business analysis and automation strategies.`
-      console.log('Mock response:', response)
+      // Action logged
 
       const words = response.split(' ')
-      console.log(`Will yield ${words.length} words`)
+      // Action logged
 
       for (let i = 0; i < words.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 50)) // Simulate network delay
         const word = i === 0 ? words[i] : ' ' + words[i]
-        console.log(`Yielding word ${i + 1}: "${word}"`)
+        // Action logged
         yield word
       }
 
-      console.log('Mock provider finished yielding')
+      // Action logged
     }
   }
 

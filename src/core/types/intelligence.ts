@@ -32,7 +32,7 @@ export interface ContextSnapshot {
 export interface IntentResult {
   type: 'consulting' | 'workshop' | 'other'
   confidence: number
-  slots: Record<string, any>
+  slots: Record<string, unknown>
 }
 
 export interface Suggestion {

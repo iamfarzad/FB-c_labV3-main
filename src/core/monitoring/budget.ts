@@ -104,7 +104,7 @@ export class DemoBudgetManager {
         return session
       }
     } catch (error) {
-      console.warn('Failed to load session from database:', error)
+      // Warning log removed - could add proper error handling here
     }
 
     // Create new session
@@ -143,7 +143,7 @@ export class DemoBudgetManager {
         completed_features: []
       })
     } catch (error) {
-      console.warn('Failed to save session to database:', error)
+      // Warning log removed - could add proper error handling here
     }
 
     this.sessionCache.set(id, newSession)
@@ -265,7 +265,7 @@ export class DemoBudgetManager {
         })
         .eq('session_id', sessionId)
     } catch (error) {
-      console.error('Failed to update session in database:', error)
+    console.error('Failed to update session in database', error)
     }
   }
 
@@ -274,7 +274,7 @@ export class DemoBudgetManager {
       const session = await this.getOrCreateSession(sessionId)
       return session
     } catch (error) {
-      console.error('Failed to get demo status:', error)
+    console.error('Failed to get demo status', error)
       return null
     }
   }

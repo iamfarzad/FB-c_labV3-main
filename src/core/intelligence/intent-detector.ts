@@ -17,7 +17,7 @@ export function detectIntent(userMessage: string): IntentResult {
   if (scores.consulting > scores.workshop && scores.consulting > 0) type = 'consulting'
   else if (scores.workshop > 0) type = 'workshop'
   const confidence = type === 'other' ? 0.4 : Math.min(0.9, (scores[type] || 1) / 3)
-  const slots: Record<string, any> = {}
+  const slots: Record<string, unknown> = {}
   return { type, confidence, slots }
 }
 

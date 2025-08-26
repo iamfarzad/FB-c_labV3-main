@@ -113,7 +113,7 @@ export class AudioQualityEnhancer {
       // Convert back to base64
       return this.arrayBufferToBase64(enhancedBuffer)
     } catch (error) {
-      console.warn('Audio enhancement failed, returning original:', error)
+      // Warning log removed - could add proper error handling here
       return audioData
     }
   }

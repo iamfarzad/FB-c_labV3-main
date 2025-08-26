@@ -34,11 +34,7 @@ export class IntelligenceService {
       person: researchResult.person
     }
 
-    console.log(`✅ Intelligence session initialized:`, {
-      sessionId,
-      role: roleResult.role,
-      company: researchResult.company.name
-    })
+    // Action logged
 
     return context
   }

@@ -19,7 +19,7 @@ interface SearchResult {
 export class GroundedSearchService {
   async searchLead(params: SearchLeadParams): Promise<SearchResult[]> {
     try {
-      console.info(`🔍 Starting grounded search for ${params.name} (${params.email})`)
+      // Action logged`)
       
       // For now, return mock search results
       // In a real implementation, this would integrate with search APIs
@@ -43,11 +43,11 @@ export class GroundedSearchService {
         await this.saveSearchResults(params.leadId, mockResults)
       }
 
-      console.info(`✅ Found ${mockResults.length} search results for ${params.name}`)
+      // Action logged
       return mockResults
 
     } catch (error) {
-      console.error('❌ Grounded search failed:', error)
+    console.error('❌ Grounded search failed', error)
       throw error
     }
   }
@@ -69,13 +69,13 @@ export class GroundedSearchService {
         .insert(searchRecords)
 
       if (error) {
-        console.error('Failed to save search results:', error)
+        // Error: Failed to save search results
       } else {
-        console.info(`💾 Saved ${results.length} search results to database`)
+        // Action logged
       }
 
     } catch (error) {
-      console.error('Error saving search results:', error)
+    console.error('Error saving search results', error)
     }
   }
 
@@ -88,7 +88,7 @@ export class GroundedSearchService {
         .order('created_at', { ascending: false })
 
       if (error) {
-        console.error('Failed to fetch search results:', error)
+        // Error: Failed to fetch search results
         return []
       }
 
@@ -100,7 +100,7 @@ export class GroundedSearchService {
       })) || []
 
     } catch (error) {
-      console.error('Error fetching search results:', error)
+    console.error('Error fetching search results', error)
       return []
     }
   }

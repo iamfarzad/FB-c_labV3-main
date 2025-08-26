@@ -82,7 +82,7 @@ export class MeetingScheduler {
         return []
       }
 
-      const bookedTimes = new Set(bookedSlots.map((slot: any) => slot.meeting_time))
+      const bookedTimes = new Set(bookedSlots.map((slot: unknown) => slot.meeting_time))
 
       return this.TIME_SLOTS.map((time) => ({
         date,
@@ -90,7 +90,7 @@ export class MeetingScheduler {
         available: !bookedTimes.has(time),
       }))
     } catch (error) {
-      console.error("Failed to get available slots:", error)
+    console.error('Failed to get available slots', error)
       return []
     }
   }
@@ -110,8 +110,8 @@ export class MeetingScheduler {
       }
 
       return { success: true, meeting: result.meeting }
-    } catch (error: any) {
-      console.error("Failed to book meeting:", error)
+    } catch (error: unknown) {
+    console.error('Failed to book meeting', error)
       return { success: false, error: error.message }
     }
   }
@@ -132,7 +132,7 @@ export class MeetingScheduler {
 
       return meetings || []
     } catch (error) {
-      console.error("Failed to get meetings:", error)
+    console.error('Failed to get meetings', error)
       return []
     }
   }
@@ -147,7 +147,7 @@ export class MeetingScheduler {
 
       return response.ok
     } catch (error) {
-      console.error("Failed to update meeting status:", error)
+    console.error('Failed to update meeting status', error)
       return false
     }
   }

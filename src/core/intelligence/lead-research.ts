@@ -49,18 +49,18 @@ export class LeadResearchService {
     // Check cache first
     const cached = this.cache.get(cacheKey)
     if (cached) {
-      console.info('Using cached research result for:', email)
+      // Action logged
       return cached
     }
 
     try {
-      console.info('Starting lead research for:', email)
+      // Action logged
 
       const domain = email.split('@')[1]
 
       // Known profile fallback for Farzad Bayat
       if (email === 'farzad@talktoeve.com' && (name?.toLowerCase().includes('farzad') || !name)) {
-        console.info('🎯 Using known profile for Farzad Bayat')
+        // Action logged
         
         // Record capability usage for search
         if (sessionId) {
@@ -107,11 +107,11 @@ export class LeadResearchService {
       // Cache the result
       this.cache.set(cacheKey, researchResult)
 
-      console.info('Lead research completed:', researchResult)
+      // Action logged
       return researchResult
 
     } catch (error) {
-      console.error('Lead research failed:', error)
+    console.error('Lead research failed', error)
 
       // Return fallback result
       const fallbackDomain = email.split('@')[1] || 'unknown.com'
@@ -139,7 +139,7 @@ export class LeadResearchService {
     // Fast path for known reserved domains
     const reservedDomains = ['example.com', 'example.net', 'example.org', 'example.edu', 'test.com', 'localhost']
     if (reservedDomains.includes(domain)) {
-      console.info(`⚡ Fast path for reserved domain: ${domain}`)
+      // Action logged
       return {
         company: {
           name: domain.split('.')[0],
@@ -234,7 +234,7 @@ Be thorough and accurate. If information is not available, use null for that fie
       ? (result as any).text()
       : (result as any).text
         ?? (((result as any).candidates?.[0]?.content?.parts || [])
-              .map((p: any) => p.text || '')
+              .map((p: unknown) => p.text || '')
               .filter(Boolean)
               .join('\n'))
 

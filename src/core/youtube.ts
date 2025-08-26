@@ -29,7 +29,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
     }
   } catch (e) {
     // Ignore URL parsing errors, means it's likely not a valid URL format
-    console.warn("URL parsing failed:", e)
+    // Warning log removed - could add proper error handling here
   }
   // Fallback using simplified Regex for other potential edge cases not caught by URL parsing
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -60,7 +60,7 @@ export function getYoutubeEmbedUrl(url: string): string {
   }
 
   // This fallback is unlikely to be hit if validation is working
-  console.warn("Could not extract video ID for embedding, using original URL:", url)
+  // Warning log removed - could add proper error handling here
   return url
 }
 
