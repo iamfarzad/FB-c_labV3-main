@@ -53,7 +53,7 @@ export function AIPerformanceMetrics({ period }: AIPerformanceMetricsProps) {
       const data = await response.json()
       setPerformance(data)
     } catch (error) {
-      console.error("Failed to fetch AI performance metrics:", error)
+    console.error('Failed to fetch AI performance metrics', error)
     } finally {
       setLoading(false)
     }

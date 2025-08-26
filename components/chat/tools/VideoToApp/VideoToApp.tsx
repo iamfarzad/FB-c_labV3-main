@@ -469,7 +469,7 @@ export function VideoToApp({
               </div>
               <div>
                 <label className="block text-sm mb-1">Company website (optional)</label>
-                <Input value={gateCompany} onChange={(e) => setGateCompany(e.target.value)} placeholder="https://yourcompany.com" />
+                <Input value={gateCompunknown} onChange={(e) => setGateCompany(e.target.value)} placeholder="https://yourcompany.com" />
               </div>
               <div className="flex justify-end gap-2 pt-1">
                 <button type="button" className="h-9 rounded-md border px-3 text-sm border-border/50 bg-card/60 text-muted-foreground hover:text-foreground" onClick={() => setEmailGateOpen(false)} disabled={isSubmittingGate}>Cancel</button>

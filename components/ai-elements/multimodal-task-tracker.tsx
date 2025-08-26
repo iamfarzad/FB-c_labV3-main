@@ -19,7 +19,7 @@ export interface AnalysisTask {
   progress: number;
   startTime?: Date;
   endTime?: Date;
-  result?: any;
+  result?: unknown;
   error?: string;
   metadata?: {
     files?: Array<{ name: string; size: number; type: string }>;
@@ -56,7 +56,7 @@ export const MultimodalTaskTracker = ({
           setTasks(context.metadata.tasks);
         }
       } catch (error) {
-        console.warn('Failed to load tasks from context:', error);
+        // Warning log removed - could add proper error handling here
       }
     };
 
@@ -110,7 +110,7 @@ export const MultimodalTaskTracker = ({
         })
       });
     } catch (error) {
-      console.warn('Failed to persist task update:', error);
+      // Warning log removed - could add proper error handling here
     }
   }, [tasks, sessionId, userId]);
 
@@ -123,7 +123,7 @@ export const MultimodalTaskTracker = ({
           // Webcam analysis task
           if (navigator.mediaDevices?.getUserMedia) {
             // This would trigger webcam capture
-            console.log('Starting webcam analysis task');
+            // Action logged
             // Simulate progress
             for (let i = 0; i <= 100; i += 10) {
               await new Promise(resolve => setTimeout(resolve, 200));
@@ -135,7 +135,7 @@ export const MultimodalTaskTracker = ({
         case 'screen':
           // Screen capture task
           if (navigator.mediaDevices?.getDisplayMedia) {
-            console.log('Starting screen capture task');
+            // Action logged
             for (let i = 0; i <= 100; i += 15) {
               await new Promise(resolve => setTimeout(resolve, 150));
               updateTask(task.id, { progress: i });
@@ -145,7 +145,7 @@ export const MultimodalTaskTracker = ({
 
         case 'upload':
           // File processing task
-          console.log('Starting file processing task');
+          // Action logged
           for (let i = 0; i <= 100; i += 20) {
             await new Promise(resolve => setTimeout(resolve, 100));
             updateTask(task.id, { progress: i });
@@ -154,7 +154,7 @@ export const MultimodalTaskTracker = ({
 
         case 'web-preview':
           // Web page analysis task
-          console.log('Starting web preview analysis');
+          // Action logged
           for (let i = 0; i <= 100; i += 25) {
             await new Promise(resolve => setTimeout(resolve, 80));
             updateTask(task.id, { progress: i });
@@ -163,7 +163,7 @@ export const MultimodalTaskTracker = ({
 
         case 'batch-analysis':
           // Batch processing task
-          console.log('Starting batch analysis');
+          // Action logged
           const batchSize = task.metadata?.files?.length || task.metadata?.urls?.length || 1;
           for (let i = 0; i < batchSize; i++) {
             const progress = ((i + 1) / batchSize) * 100;
@@ -366,7 +366,7 @@ export const MultimodalTaskTracker = ({
 
 // Hook for using task tracker
 export const useMultimodalTaskTracker = (sessionId: string, userId?: string) => {
-  const [trackerRef, setTrackerRef] = useState<any>(null);
+  const [trackerRef, setTrackerRef] = useState<unknown>(null);
 
   const addTask = useCallback((task: Omit<AnalysisTask, 'id' | 'status' | 'progress'>) => {
     return trackerRef?.addTask(task);

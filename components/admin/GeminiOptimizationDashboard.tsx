@@ -71,7 +71,7 @@ export function GeminiOptimizationDashboard() {
 
       setLastUpdated(new Date())
     } catch (error) {
-      console.error('Failed to fetch optimization stats:', error)
+    console.error('Failed to fetch optimization stats', error)
     } finally {
       setIsLoading(false)
     }
@@ -84,7 +84,7 @@ export function GeminiOptimizationDashboard() {
         await fetchStats() // Refresh stats after cleanup
       }
     } catch (error) {
-      console.error('Failed to perform cache cleanup:', error)
+    console.error('Failed to perform cache cleanup', error)
     }
   }
 

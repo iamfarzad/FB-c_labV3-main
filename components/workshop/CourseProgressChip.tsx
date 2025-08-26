@@ -11,7 +11,7 @@ export function CourseProgressChip({ className }: { className?: string }) {
   const [state, setState] = useState<Stored>({ completed: [], xp: 0, badges: [] })
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
       if (raw) setState(JSON.parse(raw))
     } catch {}
   }, [])

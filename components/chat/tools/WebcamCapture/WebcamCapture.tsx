@@ -74,7 +74,7 @@ export function WebcamCapture({
       setIsVideoOn(true)
       setIsAudioOn(true)
     } catch (error) {
-      console.error("Error accessing camera:", error)
+    console.error('Error accessing camera', error)
       setError("Failed to access camera")
       toast({
         title: "Camera Error",

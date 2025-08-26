@@ -26,7 +26,7 @@ export function VideoToAppLauncher({ className }: { className?: string }) {
         <Input id="yt-url" placeholder="https://youtu.be/..." value={url} onChange={(e) => { setUrl(e.target.value); setError(null) }} />
         <Button onClick={() => {
           if (!isYoutube(url)) { setError('Enter a valid YouTube URL'); return }
-          try { window.localStorage.setItem('fbc:video:last', url) } catch {}
+          try { if (typeof window !== 'undefined') window.localStorage.setItem('fbc:video:last', url) } catch {}
           window.location.href = `/chat?video=${encodeURIComponent(url)}`
         }}>Open Video → App</Button>
       </div>

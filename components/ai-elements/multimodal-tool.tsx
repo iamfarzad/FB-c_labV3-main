@@ -12,8 +12,8 @@ export interface MultimodalToolProps {
   type: MultimodalToolType;
   sessionId: string;
   userId?: string;
-  input?: any;
-  onComplete?: (result: any) => void;
+  input?: unknown;
+  onComplete?: (result: unknown) => void;
   onError?: (error: Error) => void;
 }
 
@@ -26,7 +26,7 @@ export const MultimodalTool = ({
   onError
 }: MultimodalToolProps) => {
   const [state, setState] = useState<ToolUIPart['state']>('input-available');
-  const [output, setOutput] = useState<any>(null);
+  const [output, setOutput] = useState<unknown>(null);
   const [errorText, setErrorText] = useState<string>('');
 
   const executeTool = useCallback(async () => {

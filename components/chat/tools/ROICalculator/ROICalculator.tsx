@@ -101,9 +101,12 @@ export function ROICalculator({
       setResult(data.output);
       setCurrentStep("results");
       if (!isAuto) toast({ title: "ROI Calculation Complete", description: "Your ROI analysis is ready!" });
-      // mark capability as explored
-      markCapabilityUsed("roi")
-      try { localStorage.setItem(cacheKey, JSON.stringify({ output: data.output, ts: Date.now() })) } catch {}
+
+      // mark capability as explored (only in browser)
+      if (typeof window !== 'undefined') {
+        markCapabilityUsed("roi")
+        try { localStorage.setItem(cacheKey, JSON.stringify({ output: data.output, ts: Date.now() })) } catch {}
+      }
       setLastHash(cacheKey)
 
       // Emit structured chat message for inline rendering
@@ -122,7 +125,7 @@ export function ROICalculator({
         props.onEmitMessage?.(msg as any)
       } catch {}
     } catch (error) {
-      console.error('ROI calculation error:', error);
+    console.error('ROI calculation error', error)
       toast({ 
         title: "Calculation Error", 
         description: (error as Error).message || "Failed to calculate ROI", 
@@ -138,10 +141,10 @@ export function ROICalculator({
           <div className="space-y-4">
             <h3 className="font-semibold">Company Information</h3>
             <div>
-              <Label htmlFor="companySize">Company Size</Label>
-              <Select value={companyInfo.companySize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
+              <Label htmlFor="compunknownSize">Company Size</Label>
+              <Select value={compunknownInfo.compunknownSize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select company size" />
+                  <SelectValue placeholder="Select compunknown size" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="startup">Startup (1-10 employees)</SelectItem>
@@ -153,7 +156,7 @@ export function ROICalculator({
             </div>
             <div>
               <Label htmlFor="industry">Industry</Label>
-              <Select value={companyInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
+              <Select value={compunknownInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select industry" />
                 </SelectTrigger>
@@ -171,7 +174,7 @@ export function ROICalculator({
               <Label htmlFor="useCase">Primary Use Case</Label>
               <Input
                 id="useCase"
-                value={companyInfo.useCase}
+                value={compunknownInfo.useCase}
                 onChange={(e) => setCompanyInfo(prev => ({ ...prev, useCase: e.target.value }))}
                 placeholder="e.g., Process automation, Customer service, Data analysis"
               />

@@ -44,6 +44,9 @@ const CAPABILITIES: Record<CapabilityKey, string> = {
 const STORAGE_KEY = "fbc_capabilities_used_v1"
 
 export function markCapabilityUsed(key: CapabilityKey) {
+  // Only access localStorage in browser environment
+  if (typeof window === 'undefined') return
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     const set = new Set<CapabilityKey>(raw ? (JSON.parse(raw) as CapabilityKey[]) : [])
@@ -56,10 +59,13 @@ export function ProgressTracker({ className }: { className?: string }) {
   const [used, setUsed] = useState<Set<CapabilityKey>>(new Set())
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      setUsed(new Set(raw ? (JSON.parse(raw) as CapabilityKey[]) : []))
-    } catch {}
+    // Only access localStorage in browser environment
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        setUsed(new Set(raw ? (JSON.parse(raw) as CapabilityKey[]) : []))
+      } catch {}
+    }
   }, [])
 
   const total = useMemo(() => Object.keys(CAPABILITIES).length, [])

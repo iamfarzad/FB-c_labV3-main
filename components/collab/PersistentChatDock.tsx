@@ -39,7 +39,7 @@ export function PersistentChatDock({ currentFeature, onOpenFeature }: Persistent
         <Conversation className="relative h-full">
           <ConversationContent className="mx-auto w-full max-w-3xl space-y-2 p-4 pb-24">
             {uiMessages.map(m => (
-              <Message key={m.id} from={m.role as any}>
+              <Message key={m.id} from={m.role as unknown}>
                 <MessageContent>
                   {!!m.text && <Response>{m.text}</Response>}
                   {!!m.sources?.length && (
@@ -96,7 +96,7 @@ export function PersistentChatDock({ currentFeature, onOpenFeature }: Persistent
               placeholder="Message F.B/c…"
               className="min-h-[56px] md:min-h-[64px]"
               value={input}
-              onChange={handleInputChange as any}
+              onChange={handleInputChange as unknown}
             />
             <div className="flex items-center justify-end p-1">
               <PromptInputSubmit status={isLoading ? 'submitted' : undefined} className="rounded-full" />

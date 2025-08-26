@@ -9,7 +9,7 @@ export interface VideoToAppProps {
   sessionId?: string
   onClose?: () => void
   onCancel?: () => void
-  onAnalysisComplete?: (data: any) => void
+  onAnalysisComplete?: (data: unknown) => void
   onAppGenerated: (url: string) => void
 }
 
@@ -17,7 +17,7 @@ export interface VideoToAppModalProps {
   videoUrl?: string
   onClose: () => void
   onCancel?: () => void
-  onAnalysisComplete?: (data: any) => void
+  onAnalysisComplete?: (data: unknown) => void
 }
 
 export interface VideoToAppCardProps {

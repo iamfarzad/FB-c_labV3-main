@@ -53,7 +53,7 @@ export function EmailCampaignManager() {
       const data = await response.json()
       setCampaigns(data)
     } catch (error) {
-      console.error("Failed to fetch campaigns:", error)
+    console.error('Failed to fetch campaigns', error)
     }
   }
 
@@ -90,7 +90,7 @@ export function EmailCampaignManager() {
         },
       ])
     } catch (error) {
-      console.error("Failed to fetch segments:", error)
+    console.error('Failed to fetch segments', error)
     }
   }
 
@@ -123,7 +123,7 @@ export function EmailCampaignManager() {
         alert("Failed to send campaign")
       }
     } catch (error) {
-      console.error("Failed to send campaign:", error)
+    console.error('Failed to send campaign', error)
       alert("Failed to send campaign")
     } finally {
       setSending(null)
@@ -154,7 +154,7 @@ export function EmailCampaignManager() {
         })
       }
     } catch (error) {
-      console.error("Failed to create campaign:", error)
+    console.error('Failed to create campaign', error)
     }
   }
 

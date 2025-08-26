@@ -17,7 +17,7 @@ interface ChatComposerProps {
   value: string
   onChange: (value: string) => void
   onSubmit: (message: string) => void
-  onToolAction?: (tool: string, data?: any) => void
+  onToolAction?: (tool: string, data?: unknown) => void
   isLoading?: boolean
   placeholder?: string
   topSlot?: React.ReactNode

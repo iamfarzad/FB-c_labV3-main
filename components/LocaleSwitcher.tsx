@@ -38,7 +38,7 @@ export function LocaleSwitcher() {
       // Navigate to the same page with the new locale
       await router.push(router.asPath, router.asPath, { locale: newLocale })
     } catch (error) {
-      console.error('Error changing locale:', error)
+    console.error('Error changing locale', error)
     } finally {
       setIsChanging(false)
     }

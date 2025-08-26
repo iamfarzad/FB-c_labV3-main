@@ -28,8 +28,8 @@ export interface AnalysisBranch {
     id: string;
     role: 'user' | 'assistant';
     content: string;
-    tools?: any[];
-    sources?: any[];
+    tools?: unknown[];
+    sources?: unknown[];
   }>;
   status: 'active' | 'completed' | 'abandoned';
   score?: number;
@@ -106,7 +106,7 @@ export const MultimodalBranching = ({
     ));
   }, []);
 
-  const addMessageToBranch = useCallback((branchId: string, message: any) => {
+  const addMessageToBranch = useCallback((branchId: string, message: unknown) => {
     setBranches(prev => prev.map(branch =>
       branch.id === branchId
         ? {
@@ -412,7 +412,7 @@ export const useMultimodalBranching = (sessionId: string, userId?: string) => {
     return newBranch;
   }, []);
 
-  const addMessageToBranch = useCallback((branchId: string, message: any) => {
+  const addMessageToBranch = useCallback((branchId: string, message: unknown) => {
     setBranches(prev => prev.map(branch =>
       branch.id === branchId
         ? {

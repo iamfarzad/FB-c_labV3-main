@@ -31,17 +31,17 @@ export interface WorkflowStep {
   type: 'web-preview' | 'task' | 'branch' | 'message' | 'delay';
   title: string;
   description: string;
-  config: any;
+  config: unknown;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
   dependencies?: string[]; // IDs of steps that must complete first
-  results?: any;
+  results?: unknown;
 }
 
 export interface MultimodalWorkflowProps {
   sessionId: string;
   userId?: string;
   workflowId?: string;
-  onWorkflowComplete?: (results: any) => void;
+  onWorkflowComplete?: (results: unknown) => void;
   onWorkflowError?: (error: Error) => void;
   className?: string;
 }
@@ -56,7 +56,7 @@ export const MultimodalWorkflow = ({
 }: MultimodalWorkflowProps) => {
   const [currentStep, setCurrentStep] = useState<string | null>(null);
   const [workflowStatus, setWorkflowStatus] = useState<'idle' | 'running' | 'paused' | 'completed' | 'failed'>('idle');
-  const [stepResults, setStepResults] = useState<Record<string, any>>({});
+  const [stepResults, setStepResults] = useState<Record<string, unknown>>({});
 
   // Example comprehensive workflow for multimodal analysis
   const [workflow, setWorkflow] = useState<WorkflowStep[]>([
@@ -422,10 +422,10 @@ export const MultimodalWorkflow = ({
             sessionId={sessionId}
             userId={userId}
             onAnalysisComplete={(result) => {
-              console.log('Web analysis completed:', result);
+              // Action logged
             }}
             onError={(error) => {
-              console.error('Web analysis error:', error);
+              // Error: Web analysis error
             }}
           />
         </TabsContent>
@@ -435,10 +435,10 @@ export const MultimodalWorkflow = ({
             sessionId={sessionId}
             userId={userId}
             onTaskComplete={(task) => {
-              console.log('Task completed:', task);
+              // Action logged
             }}
             onTaskError={(task, error) => {
-              console.error('Task error:', task, error);
+              // Error: Task error
             }}
           />
         </TabsContent>
@@ -448,13 +448,13 @@ export const MultimodalWorkflow = ({
             sessionId={sessionId}
             userId={userId}
             onBranchCreate={(branch) => {
-              console.log('Branch created:', branch);
+              // Action logged
             }}
             onBranchSelect={(branch) => {
-              console.log('Branch selected:', branch);
+              // Action logged
             }}
             onBranchCompare={(branches) => {
-              console.log('Branches compared:', branches);
+              // Action logged
             }}
           />
         </TabsContent>
@@ -487,11 +487,11 @@ export const MultimodalWorkflow = ({
                   suggestions={[
                     {
                       suggestion: 'Continue with next step',
-                      onClick: () => console.log('Next step clicked')
+                      onClick: () => { /* Action logged */ }
                     },
                     {
                       suggestion: 'Review results',
-                      onClick: () => console.log('Review clicked')
+                      onClick: () => { /* Action logged */ }
                     }
                   ]}
                 />

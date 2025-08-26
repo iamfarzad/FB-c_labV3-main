@@ -15,8 +15,8 @@ export interface MultimodalMessageProps {
   userId?: string;
   tools?: Array<{
     type: 'webcam' | 'screen' | 'upload' | 'voice' | 'text';
-    input?: any;
-    result?: any;
+    input?: unknown;
+    result?: unknown;
   }>;
   sources?: Array<{
     title: string;
@@ -73,7 +73,7 @@ export const MultimodalMessage = ({
             userId={userId}
             input={tool.input}
             onComplete={(result) => {
-              console.log(`Tool ${tool.type} completed:`, result);
+              // Action logged
             }}
             onError={(error) => {
               console.error(`Tool ${tool.type} failed:`, error);

@@ -12,7 +12,7 @@ import {
   Lightbulb, Copy, Check, Clock, AlertCircle, Sparkles,
   TrendingUp, Users, Calendar, Mail, DollarSign, Activity
 } from "lucide-react"
-import { useChat } from "@/ui/hooks/useChat"
+import { useChat } from "@/hooks/useChat-ui"
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from '@/src/core/utils'
 

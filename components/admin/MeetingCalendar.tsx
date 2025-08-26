@@ -28,14 +28,14 @@ export function MeetingCalendar() {
   const fetchMeetings = async () => {
     setLoading(true)
     try {
-      const filters: any = {}
+      const filters: unknown = {}
       if (statusFilter !== "all") filters.status = statusFilter
       if (selectedDate) filters.date = selectedDate
 
       const meetingsData = await MeetingScheduler.getMeetings(filters)
       setMeetings(meetingsData)
     } catch (error) {
-      console.error("Failed to fetch meetings:", error)
+    console.error('Failed to fetch meetings', error)
     } finally {
       setLoading(false)
     }
@@ -54,7 +54,7 @@ export function MeetingCalendar() {
         setUpdateNotes("")
       }
     } catch (error) {
-      console.error("Failed to update meeting status:", error)
+    console.error('Failed to update meeting status', error)
     }
   }
 

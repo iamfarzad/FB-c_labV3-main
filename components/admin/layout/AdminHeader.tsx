@@ -29,7 +29,7 @@ export function AdminHeader() {
         console.error("Logout failed")
       }
     } catch (error) {
-      console.error("Logout error:", error)
+    console.error('Logout error', error)
     } finally {
       setIsLoading(false)
     }

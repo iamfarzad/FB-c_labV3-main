@@ -39,7 +39,7 @@ export function EmailTestPanel() {
 
       const data = await response.json()
       setTestResults(data)
-    } catch (error: any) {
+    } catch (error: unknown) {
       setTestResults({
         success: false,
         message: "Failed to run email test",

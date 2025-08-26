@@ -220,7 +220,7 @@ export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onR
                   setFinishOpen(false)
                   toast({ title: 'Email sent', description: 'Summary was emailed to the recipient.' })
                 } catch (e) {
-                  console.error('Email error:', e)
+    console.error('Email error', error)
                   toast({ title: 'Email failed', description: 'Could not send the email.', variant: 'destructive' })
                 }
               }}

@@ -47,20 +47,20 @@ const quickActions = [
     title: "Add New Lead",
     description: "Capture a new lead",
     icon: Plus,
-    action: () => console.info("Add lead"),
+    action: () => console.log('Action triggered'),
   },
   // Button will be swapped at render to open MeetingOverlay
   {
     title: "Send Email",
     description: "Create email campaign",
     icon: Mail,
-    action: () => console.info("Send email"),
+    action: () => console.log('Action triggered'),
   },
   {
     title: "View Analytics",
     description: "Check performance",
     icon: TrendingUp,
-    action: () => console.info("View analytics"),
+    action: () => console.log('Action triggered'),
   },
 ]
 
@@ -114,7 +114,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.info('Add lead')}
+              onClick={() => console.log('Button clicked')}
             >
               <Plus className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -140,7 +140,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.info('Send email')}
+              onClick={() => console.log('Button clicked')}
             >
               <Mail className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -153,7 +153,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.info('View analytics')}
+              onClick={() => console.log('Button clicked')}
             >
               <TrendingUp className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">

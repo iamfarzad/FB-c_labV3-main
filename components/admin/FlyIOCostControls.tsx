@@ -39,7 +39,7 @@ export function FlyIOCostControls() {
         setBudget(data.monthlyBudget || 0)
       }
     } catch (error) {
-      console.error("Error:", error)
+    console.error('Error', error)
       setError("Failed to load Fly.io usage data")
       setUsage({
         currentMonthCost: 12.45,

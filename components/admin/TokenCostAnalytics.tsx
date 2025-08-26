@@ -41,7 +41,7 @@ export function TokenCostAnalytics() {
         setTotalCost(data.totalCost || 0)
       }
     } catch (error) {
-      console.error("Failed to fetch token usage data:", error)
+    console.error('Failed to fetch token usage data', error)
       // Set mock data for development
       setUsageData([
         {

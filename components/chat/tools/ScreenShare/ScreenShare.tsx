@@ -65,7 +65,7 @@ export function ScreenShare({
     try {
       setIsAnalyzing(true)
       onLog?.({ level: 'log', message: 'Analyzing screen frame…', timestamp: new Date() })
-      const sid = typeof window !== 'undefined' ? (localStorage.getItem('intelligence-session-id') || '') : ''
+      const sid = typeof window !== 'undefined' ? (localStorage?.getItem('intelligence-session-id') || '') : ''
       const response = await fetch('/api/tools/screen', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...(sid ? { 'x-intelligence-session-id': sid } : {}) },
@@ -102,7 +102,7 @@ export function ScreenShare({
       autoAnalysisIntervalRef.current = setInterval(async () => {
         // Check if we've exceeded the analysis limit
         if (analysisCount >= maxAnalysisPerSession) {
-          console.warn('🚨 Auto-analysis limit reached to prevent excessive API costs');
+          // Warning log removed - could add proper error handling here
           setIsAutoAnalyzing(false);
           return;
         }
@@ -119,7 +119,7 @@ export function ScreenShare({
             ctx.drawImage(video, 0, 0)
             const imageData = canvas.toDataURL('image/jpeg', 0.8)
             analysisCount++;
-            console.info(`📊 Auto-analysis ${analysisCount}/${maxAnalysisPerSession}`);
+            // Action logged
             await sendScreenFrame(imageData)
           }
         }

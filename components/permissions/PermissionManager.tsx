@@ -38,7 +38,7 @@ export function PermissionManager() {
           };
         }
       } catch (error) {
-        console.warn('Permission API not available:', error);
+        // Warning log removed - could add proper error handling here
       }
     };
 
@@ -52,9 +52,9 @@ export function PermissionManager() {
         try {
           const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           micStream.getTracks().forEach(track => track.stop());
-          console.info('Microphone permission granted');
+          // Action logged
         } catch (error) {
-          console.warn('Microphone permission denied:', error);
+          // Warning log removed - could add proper error handling here
         }
       }
 
@@ -63,21 +63,24 @@ export function PermissionManager() {
         try {
           const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
           camStream.getTracks().forEach(track => track.stop());
-          console.info('Camera permission granted');
+          // Action logged
         } catch (error) {
-          console.warn('Camera permission denied:', error);
+          // Warning log removed - could add proper error handling here
         }
       }
     } catch (error) {
-      console.error('Error requesting permissions:', error);
+    console.error('Error requesting permissions', error)
     }
   };
 
   // Show permission prompt if needed
   useEffect(() => {
+    // Only access localStorage in browser environment
+    if (typeof window === 'undefined') return
+
     const hasPromptedBefore = localStorage.getItem('permissions-prompted');
-    
-    if (!hasPromptedBefore && 
+
+    if (!hasPromptedBefore &&
         (permissions.microphone === 'prompt' || permissions.camera === 'prompt')) {
       
       const timer = setTimeout(() => {

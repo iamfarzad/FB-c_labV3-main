@@ -51,7 +51,7 @@ export interface UnifiedMessage {
     edited?: boolean
     sources?: Array<{ url: string; title?: string; description?: string }>
     citations?: Array<{ uri: string; title?: string }>
-    tools?: Array<{ type: string; data: any }>
+    tools?: Array<{ type: string; data: unknown }>
     suggestions?: string[]
     imageUrl?: string
     activities?: Array<{ type: 'in' | 'out'; label: string }>
@@ -70,7 +70,7 @@ export interface UnifiedChatInterfaceProps {
   mode?: 'full' | 'dock'
   onSendMessage?: (message: string) => void
   onClearMessages?: () => void
-  onToolAction?: (tool: string, data?: any) => void
+  onToolAction?: (tool: string, data?: unknown) => void
   onAssistantInject?: (message: UnifiedMessage) => void
   className?: string
   // Optional slot rendered as a sticky header inside the scrollable message list
@@ -92,7 +92,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
         setCopiedMessageId(message.id)
         setTimeout(() => setCopiedMessageId(null), 2000)
       } catch (error) {
-        console.error('Failed to copy:', error)
+    console.error('Failed to copy', error)
       }
     }, [message.content, message.id])
     
@@ -109,7 +109,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
           setTranslation(data.translated)
         }
       } catch (error) {
-        console.error('Translation failed:', error)
+    console.error('Translation failed', error)
       } finally {
         setIsTranslating(false)
       }
@@ -273,7 +273,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                   <Suggestion 
                     key={`${message.id}-sug-${i}`} 
                     suggestion={suggestion} 
-                    onClick={() => console.log('Suggestion clicked:', suggestion)} 
+                    onClick={() => console.log('Suggestion clicked')} 
                   />
                 ))}
               </Suggestions>
@@ -301,7 +301,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                 aria-label="Edit message"
                 variant="ghost"
                 size="sm"
-                onClick={() => console.log('Edit message:', message.id)}
+                onClick={() => console.log('Suggestion clicked')}
               >
                 <Edit className="w-3 h-3" />
               </Action>
@@ -466,7 +466,7 @@ export const UnifiedChatInterface: React.FC<UnifiedChatInterfaceProps> = ({
   // Listen for tool analysis events to append assistant messages
   useEffect(() => {
     const handler = (e: Event) => {
-      const ce = e as CustomEvent<{ content: string; sources?: any; type?: string }>
+      const ce = e as CustomEvent<{ content: string; sources?: unknown; type?: string }>
       const payload = ce.detail || { content: '' }
       const msg: UnifiedMessage = {
         id: `msg-${Date.now()}-tool`,

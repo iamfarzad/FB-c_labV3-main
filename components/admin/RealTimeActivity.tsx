@@ -20,7 +20,7 @@ interface RealTimeActivityItem {
     location?: string
   }
   timestamp: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export function RealTimeActivity() {
@@ -40,7 +40,7 @@ export function RealTimeActivity() {
       setActivities(data.activities || [])
       setActiveUsers(data.activeUsers || 0)
     } catch (error) {
-      console.error("Failed to fetch real-time activities:", error)
+    console.error('Failed to fetch real-time activities', error)
     } finally {
       setLoading(false)
     }
@@ -50,7 +50,7 @@ export function RealTimeActivity() {
     const channel = supabase
       .channel("admin-activity-feed")
       .on("postgres_changes", { event: "*", schema: "public", table: "lead_summaries" }, (payload) => {
-        console.info("New lead activity:", payload)
+        // Action logged
         // Add new activity to the feed
         const newActivity: RealTimeActivityItem = {
           id: payload.new?.id || Date.now().toString(),

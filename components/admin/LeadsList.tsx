@@ -51,7 +51,7 @@ export function LeadsList({ searchTerm, period }: LeadsListProps) {
       const data = await response.json()
       setLeads(data.leads || [])
     } catch (error) {
-      console.error("Failed to fetch leads:", error)
+    console.error('Failed to fetch leads', error)
     } finally {
       setLoading(false)
     }
@@ -83,7 +83,7 @@ export function LeadsList({ searchTerm, period }: LeadsListProps) {
       })
       fetchLeads() // Refresh the list
     } catch (error) {
-      console.error("Failed to update lead status:", error)
+    console.error('Failed to update lead status', error)
     }
   }
 

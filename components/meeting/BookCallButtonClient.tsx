@@ -28,13 +28,8 @@ export function BookCallButton({
   }
 
   return (
-    <Button {...rest} onClick={handleClick}>
-      {children ?? 'Book a Call'}
+    <Button onClick={handleClick} {...rest}>
+      {children}
     </Button>
   )
 }
-
-export default BookCallButton
-
-
-

@@ -13,7 +13,7 @@ import { cn } from '@/src/core/utils';
 export interface WebPreviewAnalysisProps {
   sessionId: string;
   userId?: string;
-  onAnalysisComplete?: (result: any) => void;
+  onAnalysisComplete?: (result: unknown) => void;
   onError?: (error: Error) => void;
   className?: string;
 }
@@ -27,7 +27,7 @@ export const WebPreviewAnalysis = ({
 }: WebPreviewAnalysisProps) => {
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [analysisResult, setAnalysisResult] = useState<unknown>(null);
   const [error, setError] = useState<string>('');
 
   const handleAnalyze = useCallback(async () => {

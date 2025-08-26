@@ -42,7 +42,7 @@ export function CanvasOrchestrator() {
               mode="canvas"
               videoUrl={(props?.videoUrl as string) || ''}
               onClose={closeCanvas}
-              onAppGenerated={props?.onAppGenerated as any}
+              onAppGenerated={props?.onAppGenerated as unknown}
               hideHeader
             />
           </div>

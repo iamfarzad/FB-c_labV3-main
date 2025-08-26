@@ -25,6 +25,9 @@ type Stored = {
 const STORAGE_KEY = "fbc_education_progress_v1"
 
 function load(): Stored {
+  // Only access localStorage in browser environment
+  if (typeof window === 'undefined') return { completed: [], xp: 0, badges: [] }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { completed: [], xp: 0, badges: [] }
@@ -35,6 +38,9 @@ function load(): Stored {
 }
 
 function save(data: Stored) {
+  // Only access localStorage in browser environment
+  if (typeof window === 'undefined') return
+
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) } catch {}
 }
 
@@ -45,6 +51,9 @@ export function GamifiedSection({ module, sessionId, className, onAskAI }: Props
 
   useEffect(() => { setState(load()) }, [])
   useEffect(() => {
+    // Only access browser APIs in browser environment
+    if (typeof window === 'undefined') return
+
     try {
       const m = document.cookie.match(/(?:^|; )demo-session-id=([^;]+)/)
       if (m && m[1]) setSid(decodeURIComponent(m[1]))
@@ -89,8 +98,10 @@ export function GamifiedSection({ module, sessionId, className, onAskAI }: Props
     if (step.kind === 'quiz') {
       try {
         const contextText = `Education context:\n- Module: ${module.title}\n- Step: ${step.title}\n- Earned: +${step.xp} XP\n\nAsk for: next best practical exercise or tailored ROI scenario.`
-        window.localStorage.setItem('fbc:education:last', contextText)
-        window.location.href = '/chat?education=1'
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('fbc:education:last', contextText)
+          window.location.href = '/chat?education=1'
+        }
       } catch {}
     }
   }, [completedIds, module.id, module.badge, module.steps.length, sessionId, state.badges, state.completed, state.xp])

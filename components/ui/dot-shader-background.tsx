@@ -111,13 +111,22 @@ function Scene() {
   const gridSize = 100
 
   const getThemeColors = () => {
-    // Use CSS custom properties instead of hard-coded colors
+    // Default colors for server-side rendering
+    if (typeof window === 'undefined') {
+      return {
+        dotColor: '#FFFFFF',
+        bgColor: '#121212',
+        dotOpacity: 0.05
+      }
+    }
+
+    // Use CSS custom properties in browser environment
     const root = document.documentElement
     const computedStyle = getComputedStyle(root)
-    
+
     const dotColor = computedStyle.getPropertyValue('--foreground').trim() || '#FFFFFF'
     const bgColor = computedStyle.getPropertyValue('--background').trim() || '#121212'
-    
+
     // Convert HSL to hex for Three.js
     const hslToHex = (hsl: string) => {
       if (hsl.startsWith('#')) return hsl
@@ -127,10 +136,10 @@ function Scene() {
       if (hsl.includes('0 0% 100%')) return '#FFFFFF' // white
       return '#FFFFFF' // fallback
     }
-    
+
     const dotColorHex = hslToHex(dotColor)
     const bgColorHex = hslToHex(bgColor)
-    
+
     switch (theme) {
       case 'dark':
         return {
@@ -266,13 +275,13 @@ export const DotScreenShader = () => {
         failIfMajorPerformanceCaveat: false // Allow software rendering as fallback
       }}
       // Performance optimizations
-      dpr={prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio, 2)} // Cap DPR for performance
+      dpr={prefersReducedMotion ? 1 : (typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1)} // Cap DPR for performance
       frameloop={prefersReducedMotion ? 'never' : 'always'} // Disable frame loop if reduced motion
       camera={{ position: [0, 0, 1], fov: 75 }}
       style={{ background: 'transparent' }}
       onCreated={({ gl }) => {
         // Additional error handling and loading state
-        gl.setPixelRatio(prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio, 2))
+        gl.setPixelRatio(prefersReducedMotion ? 1 : (typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1))
         setIsLoading(false)
       }}
       onError={() => setHasError(true)}

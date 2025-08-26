@@ -43,7 +43,7 @@ interface MessageComponentProps {
   isLast: boolean
   isLoading?: boolean
   sessionId?: string | null
-  onExecuteTool?: (type: string, input: any, sessionId?: string) => Promise<any>
+  onExecuteTool?: (type: string, input: unknown, sessionId?: string) => Promise<unknown>
 }
 
 export function ChatMessages({
@@ -140,7 +140,7 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
       setCopiedMessageId(message.id)
       setTimeout(() => setCopiedMessageId(null), 2000)
     } catch (error) {
-      console.error('Failed to copy:', error)
+      // Copy failed - could show toast notification here
     }
   }
 
@@ -158,7 +158,7 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
         setTranslation(result.output.translated)
       }
     } catch (error) {
-      console.error('Translation failed:', error)
+      // Translation failed - could show error notification here
     } finally {
       setIsTranslating(false)
     }
@@ -504,7 +504,9 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
             />
             <Suggestion 
               suggestion="Schedule consultation call" 
-              onClick={(suggestion) => console.log('Booking consultation:', suggestion)} 
+              onClick={(suggestion) => {
+                // Handle consultation booking - feature coming soon
+              }} 
             />
           </Suggestions>
         )}
@@ -530,7 +532,9 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
               aria-label="Edit message"
               variant="ghost"
               size="sm"
-              onClick={() => console.log('Edit message:', message.id)}
+              onClick={() => {
+                // Handle message edit - feature coming soon
+              }}
             >
               <Edit className="w-3 h-3" />
             </Action>

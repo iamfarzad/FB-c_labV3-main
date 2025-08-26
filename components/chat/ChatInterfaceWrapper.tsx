@@ -8,18 +8,18 @@ import { ChatComposer } from './layouts/ChatComposer'
 import { ChatSidebar } from './layouts/ChatSidebar'
 
 interface ChatInterfaceWrapperProps {
-  messages?: any[]
+  messages?: unknown[]
   isLoading?: boolean
   sessionId?: string | null
   mode?: string
   onSendMessage?: (message: string) => void
   onClearMessages?: () => void
-  onToolAction?: (action: any) => void
+  onToolAction?: (action: unknown) => void
   className?: string
   stickyHeaderSlot?: React.ReactNode
   composerTopSlot?: React.ReactNode
-  context?: any
-  activityLog?: any[]
+  context?: unknown
+  activityLog?: unknown[]
   stages?: Array<{ id: string; label: string; done?: boolean; current?: boolean }>
   currentStage?: string
   stageProgress?: number

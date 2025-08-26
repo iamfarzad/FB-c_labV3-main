@@ -131,10 +131,7 @@ export function BusinessContentRenderer({
             if (oldScript.parentNode) {
               oldScript.parentNode.replaceChild(newScript, oldScript)
             } else {
-              console.warn(
-                'Script tag found without a parent node:',
-                oldScript
-              )
+              // Warning log removed - could add proper error handling here
             }
           } catch (e) {
             console.error(

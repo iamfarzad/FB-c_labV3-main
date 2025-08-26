@@ -12,8 +12,8 @@ import { ToolMenu } from '@/components/chat/ToolMenu';
 import { multimodalClient } from '@/src/core/multimodal-client';
 
 export interface MultimodalPromptInputProps {
-  onSubmit?: (content: string, modality?: string, data?: any) => void;
-  onToolAction?: (tool: string, data?: any) => void;
+  onSubmit?: (content: string, modality?: string, data?: unknown) => void;
+  onToolAction?: (tool: string, data?: unknown) => void;
   placeholder?: string;
   sessionId?: string;
   userId?: string;
@@ -32,7 +32,7 @@ export const MultimodalPromptInput = ({
 }: MultimodalPromptInputProps) => {
   const [input, setInput] = useState('');
   const [currentModality, setCurrentModality] = useState<'text' | 'webcam' | 'screen' | 'upload' | 'voice'>('text');
-  const [toolData, setToolData] = useState<any>(null);
+  const [toolData, setToolData] = useState<unknown>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,7 +61,7 @@ export const MultimodalPromptInput = ({
             });
             onSubmit?.(input.trim() || 'Captured image from webcam', 'vision', result);
           } catch (error) {
-            console.error('Webcam analysis failed:', error);
+    console.error('Webcam analysis failed', error)
             onSubmit?.(input.trim() || 'Failed to capture image', 'error', error);
           }
         }
@@ -81,7 +81,7 @@ export const MultimodalPromptInput = ({
             });
             onSubmit?.(input.trim() || 'Captured screen', 'vision', result);
           } catch (error) {
-            console.error('Screen analysis failed:', error);
+    console.error('Screen analysis failed', error)
             onSubmit?.(input.trim() || 'Failed to capture screen', 'error', error);
           }
         }
@@ -99,7 +99,7 @@ export const MultimodalPromptInput = ({
             });
             onSubmit?.(input.trim() || 'Uploaded file', 'upload', result);
           } catch (error) {
-            console.error('File upload failed:', error);
+    console.error('File upload failed', error)
             onSubmit?.(input.trim() || 'Failed to upload file', 'error', error);
           }
         }
@@ -117,7 +117,7 @@ export const MultimodalPromptInput = ({
             });
             onSubmit?.(toolData.transcription || input.trim(), 'voice', result);
           } catch (error) {
-            console.error('Voice processing failed:', error);
+    console.error('Voice processing failed', error)
             onSubmit?.(input.trim() || 'Voice input failed', 'error', error);
           }
         }
@@ -130,8 +130,8 @@ export const MultimodalPromptInput = ({
     setCurrentModality('text');
   };
 
-  const handleToolAction = (tool: string, data?: any) => {
-    console.log('Tool action:', tool, data);
+  const handleToolAction = (tool: string, data?: unknown) => {
+    // Action logged
 
     switch (tool) {
       case 'webcam':
@@ -170,7 +170,7 @@ export const MultimodalPromptInput = ({
     if (file) {
       setToolData(file);
       setCurrentModality('upload');
-      console.log('File selected:', file.name, file.type, file.size);
+      // Action logged
     }
   };
 

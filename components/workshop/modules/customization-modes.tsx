@@ -49,7 +49,7 @@ export default function CustomizationModes() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="space-y-2"><label className="text-sm font-medium">Knowledge Base</label><div className="bg-muted/30 p-3 rounded-md text-sm"><div className="flex justify-between items-center mb-2"><span className="font-medium">company_handbook.pdf</span><Badge variant="outline">Indexed</Badge></div><div className="flex justify-between items-center mb-2"><span className="font-medium">product_specs.docx</span><Badge variant="outline">Indexed</Badge></div><div className="flex justify-between items-center"><span className="font-medium">customer_faqs.md</span><Badge variant="outline">Indexed</Badge></div></div></div>
-                      <div className="space-y-2"><label className="text-sm font-medium">User Query</label><Textarea className="min-h-[100px]" defaultValue="What is our company's vacation policy?" /></div>
+                      <div className="space-y-2"><label className="text-sm font-medium">User Query</label><Textarea className="min-h-[100px]" defaultValue="What is our compunknown's vacation policy?" /></div>
                     </CardContent>
                     <CardFooter><Button className="w-full">Generate Response with RAG</Button></CardFooter>
                   </Card>

@@ -54,7 +54,7 @@ export function InteractionAnalytics({ period }: InteractionAnalyticsProps) {
       const data = await response.json()
       setAnalytics(data)
     } catch (error) {
-      console.error("Failed to fetch analytics:", error)
+    console.error('Failed to fetch analytics', error)
     } finally {
       setLoading(false)
     }

@@ -22,7 +22,7 @@ export function StageRail({ sessionId }: { sessionId?: string }) {
 
   // Memoized context fetching to prevent unnecessary re-renders
   const fetchContext = useMemo(() => async () => {
-    const id = sessionId || (typeof window !== 'undefined' ? localStorage.getItem('intelligence-session-id') || undefined : undefined)
+    const id = sessionId || (typeof window !== 'undefined' ? (localStorage.getItem('intelligence-session-id') || undefined) : undefined)
     if (!id) return
     
     setIsLoading(true)
@@ -38,7 +38,7 @@ export function StageRail({ sessionId }: { sessionId?: string }) {
       const explored = Number(out?.exploredCount || out?.capabilities?.length || 0)
       setCtx({ stage, exploredCount: explored, total: 16 })
     } catch (error) {
-      console.warn('Failed to fetch context:', error)
+      // Warning log removed - could add proper error handling here
     } finally {
       setIsLoading(false)
     }
@@ -57,14 +57,14 @@ export function StageRail({ sessionId }: { sessionId?: string }) {
     try { 
       window.addEventListener('chat-capability-used', onUsed as EventListener) 
     } catch (error) {
-      console.warn('Failed to add event listener:', error)
+      // Warning log removed - could add proper error handling here
     }
     
     return () => { 
       try { 
         window.removeEventListener('chat-capability-used', onUsed as EventListener) 
       } catch (error) {
-        console.warn('Failed to remove event listener:', error)
+        // Warning log removed - could add proper error handling here
       }
     }
   }, [fetchContext])

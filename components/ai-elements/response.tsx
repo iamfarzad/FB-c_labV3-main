@@ -267,7 +267,7 @@ const components: Options['components'] = {
         language={language}
       >
         <CodeBlockCopyButton
-          onCopy={() => console.info('Copied code to clipboard')}
+          onCopy={() => console.log('Code copied')}
           onError={() => console.error('Failed to copy code to clipboard')}
         />
       </CodeBlock>
