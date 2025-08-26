@@ -157,9 +157,9 @@ function buildDefaultOrbLogoDataUri(): string {
 <svg width="36" height="36" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <radialGradient id="g" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0b1220" stop-opacity="0.10"/>
-      <stop offset="70%" stop-color="#0b1220" stop-opacity="0.30"/>
-      <stop offset="100%" stop-color="#0b1220" stop-opacity="0.50"/>
+      <stop offset="0%" stop-color="var(--bg)" stop-opacity="0.10"/>
+      <stop offset="70%" stop-color="var(--bg)" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="var(--bg)" stop-opacity="0.50"/>
     </radialGradient>
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="2" result="b"/>
@@ -207,10 +207,10 @@ function generateHtmlContent(data: SummaryData): string {
     
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, Arial, sans-serif;
-      color: #1f2937;
+      color: var(--text);
       line-height: 1.6;
       font-size: 10pt;
-      background: #f9fafb;
+      background: var(--surface);
     }
     
     .container {
@@ -305,7 +305,7 @@ function generateHtmlContent(data: SummaryData): string {
       left: 0;
       width: 60px;
       height: 3px;
-      background: linear-gradient(90deg, #f59e0b 0%, #f97316 100%);
+      background: linear-gradient(90deg, var(--brand) 0%, #f97316 100%);
       border-radius: 2px;
     }
     
@@ -371,7 +371,7 @@ function generateHtmlContent(data: SummaryData): string {
     }
     
     .score-value.high { color: #059669; }
-    .score-value.medium { color: #f59e0b; }
+    .score-value.medium { color: var(--brand); }
     .score-value.low { color: #dc2626; }
     
     .score-label {
@@ -395,7 +395,7 @@ function generateHtmlContent(data: SummaryData): string {
     }
     
     .score-bar-fill.high { background: linear-gradient(90deg, #059669 0%, #10b981 100%); }
-    .score-bar-fill.medium { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+    .score-bar-fill.medium { background: linear-gradient(90deg, var(--brand) 0%, #fbbf24 100%); }
     .score-bar-fill.low { background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%); }
     
     /* Conversation Items */
@@ -480,7 +480,7 @@ function generateHtmlContent(data: SummaryData): string {
       content: '→';
       position: absolute;
       left: 0;
-      color: #f59e0b;
+      color: var(--brand);
       font-weight: 600;
     }
     
@@ -680,7 +680,7 @@ function generateHtmlContent(data: SummaryData): string {
         <h2>Next Steps</h2>
         <div style="display:flex; gap:16px; align-items:center; margin:16px 0;">
           <a href="${appUrl}/meetings/book" style="background:#111827;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600">Book 30‑min Discovery Call</a>
-          <a href="${appUrl}/workshop" style="background:#f59e0b;color:#111827;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600">View Workshop</a>
+          <a href="${appUrl}/workshop" style="background:var(--brand);color:#111827;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600">View Workshop</a>
         </div>
         <p style="color:#475569">Recommended: a focused 30‑minute discovery to confirm scope, quantify ROI, and agree the first milestone.</p>
       </div>

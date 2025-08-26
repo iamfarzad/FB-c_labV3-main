@@ -290,10 +290,10 @@ export class EmailService {
           <meta charset="utf-8">
           <title>Test Email - F.B/c</title>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; padding: 20px; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #111111; padding: 20px; }
             .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
             .header { text-align: center; margin-bottom: 30px; }
-            .status { background: #d1fae5; color: #065f46; padding: 15px; border-radius: 6px; text-align: center; }
+            .status { background: #10b981; color: #ffffff; padding: 15px; border-radius: 6px; text-align: center; }
           </style>
         </head>
         <body>
@@ -318,9 +318,9 @@ export class EmailService {
             
             <p>If you received this email, the webhook integration should also be working properly.</p>
             
-            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e1e5e9;">
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e5e5;">
             
-            <p style="text-align: center; color: #6b7280; font-size: 14px;">
+            <p style="text-align: center; color: #666666; font-size: 14px;">
               F.B/c - AI Consulting & Strategy<br>
               www.farzadbayat.com
             </p>

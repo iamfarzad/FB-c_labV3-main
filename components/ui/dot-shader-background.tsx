@@ -11,7 +11,7 @@ const DotMaterial = shaderMaterial(
     time: 0,
     resolution: new THREE.Vector2(),
     dotColor: new THREE.Color('var(--brand)'), // Will be overridden by theme
-    bgColor: new THREE.Color('#1a1a1a'),   // Will be overridden by theme
+    bgColor: new THREE.Color('var(--surface)'),   // Will be overridden by theme
     mouseTrail: null,
     render: 0,
     rotation: 0,
@@ -115,7 +115,7 @@ function Scene() {
     if (typeof window === 'undefined') {
       return {
         dotColor: 'var(--brand)',
-        bgColor: '#1a1a1a',
+        bgColor: 'var(--surface)',
         dotOpacity: 0.05
       }
     }
@@ -125,16 +125,16 @@ function Scene() {
     const computedStyle = getComputedStyle(root)
 
     const dotColor = computedStyle.getPropertyValue('--brand').trim() || 'var(--brand)'
-    const bgColor = computedStyle.getPropertyValue('--bg').trim() || '#0b1620'
+    const bgColor = computedStyle.getPropertyValue('--bg').trim() || 'var(--bg)'
 
     // Convert HSL to hex for Three.js
     const hslToHex = (hsl: string) => {
       if (hsl.startsWith('#')) return hsl
       // Simple conversion for common values
       if (hsl.includes('20 100% 51%')) return 'var(--brand)' // brand color
-      if (hsl.includes('0 0% 96%')) return '#f5f5f5' // light background
-      if (hsl.includes('0 0% 10%')) return '#1a1a1a' // dark background
-      if (hsl.includes('0 0% 100%')) return '#ffffff' // white
+      if (hsl.includes('0 0% 96%')) return 'var(--bg)' // light background
+      if (hsl.includes('0 0% 10%')) return 'var(--surface)' // dark background
+      if (hsl.includes('0 0% 100%')) return 'var(--surface)' // white
       if (hsl.startsWith('#')) return hsl // already hex
       return 'var(--brand)' // brand fallback
     }
