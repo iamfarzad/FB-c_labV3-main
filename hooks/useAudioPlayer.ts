@@ -126,7 +126,7 @@ export function useAudioPlayer(options: UseAudioPlayerOptions = {}) {
     try {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
     } catch (error) {
-      console.warn('Web Audio API not supported:', error)
+      // Warning log removed - could add proper error handling here
     }
   }, [])
 
@@ -226,7 +226,7 @@ export function useAudioPlayer(options: UseAudioPlayerOptions = {}) {
           const audioBuffer = await audioContextRef.current!.decodeAudioData(bytes.buffer)
           buffers.push(audioBuffer)
         } catch (error) {
-          console.warn('Failed to decode audio chunk:', error)
+          // Warning log removed - could add proper error handling here
         }
       }
 
@@ -275,7 +275,7 @@ export function useAudioPlayer(options: UseAudioPlayerOptions = {}) {
       onPlay?.()
 
     } catch (error) {
-      console.error('Streaming audio playback failed:', error)
+    console.error('Streaming audio playback failed', error)
       // Fallback to regular concatenation method
       const fullAudioData = chunks.join('')
       return playAudioData(fullAudioData)

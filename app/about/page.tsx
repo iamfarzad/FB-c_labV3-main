@@ -1,3 +1,5 @@
+'use client'
+
 import { PageHeader, PageShell } from "@/components/page-shell"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -10,20 +12,6 @@ import { MotionCard } from "@/components/ui/motion-card"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
 import { CitationsDemo } from "@/components/experience/citations-demo"
-
-export const metadata: Metadata = {
-  title: "About Farzad Bayat - Self-Taught AI Consultant with 10,000+ Hours Experience",
-  description: "Learn about Farzad Bayat, an expert AI consultant with 10,000+ hours of hands-on experience. From TV production to AI automation - discover his journey building practical AI solutions.",
-  keywords: ["Farzad Bayat", "AI consultant", "AI automation expert", "AI implementation", "business AI"],
-  openGraph: {
-    title: "About Farzad Bayat - Self-Taught AI Consultant with 10,000+ Hours Experience",
-    description: "Learn about Farzad Bayat, an expert AI consultant with 10,000+ hours of hands-on experience. From TV production to AI automation.",
-    url: "https://farzadbayat.com/about",
-  },
-  alternates: {
-    canonical: "https://farzadbayat.com/about",
-  },
-}
 
 const coreValues = [
   { icon: Target, text: "Deliver real business value through AI automation, not hype" },

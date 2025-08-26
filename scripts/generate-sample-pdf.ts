@@ -62,7 +62,7 @@ const sampleData = {
 };
 
 async function generateSamplePdfs() {
-  console.log('Generating sample PDFs...');
+  // Action logged
   
   // Ensure samples directory exists
   const samplesDir = path.join(process.cwd(), 'public', 'samples');
@@ -75,11 +75,11 @@ async function generateSamplePdfs() {
   try {
     await generatePdfWithPuppeteer(sampleData, clientPdfPath, 'client');
     const clientStats = fs.statSync(clientPdfPath);
-    console.log(`✅ Client PDF generated successfully!`);
-    console.log(`📄 File location: ${clientPdfPath}`);
-    console.log(`📊 File size: ${(clientStats.size / 1024).toFixed(2)} KB`);
+    // Action logged
+    // Action logged
+    // Action logged.toFixed(2)} KB`);
   } catch (error) {
-    console.error('❌ Client PDF generation failed:', error);
+    console.error('❌ Client PDF generation failed', error)
   }
 
   // Generate internal admin PDF
@@ -87,14 +87,14 @@ async function generateSamplePdfs() {
   try {
     await generatePdfWithPuppeteer(sampleData, internalPdfPath, 'internal');
     const internalStats = fs.statSync(internalPdfPath);
-    console.log(`✅ Internal PDF generated successfully!`);
-    console.log(`📄 File location: ${internalPdfPath}`);
-    console.log(`📊 File size: ${(internalStats.size / 1024).toFixed(2)} KB`);
+    // Action logged
+    // Action logged
+    // Action logged.toFixed(2)} KB`);
   } catch (error) {
-    console.error('❌ Internal PDF generation failed:', error);
+    console.error('❌ Internal PDF generation failed', error)
   }
 
-  console.log('🎉 PDF generation completed successfully!');
+  // Action logged
 }
 
 generateSamplePdfs().catch(console.error);

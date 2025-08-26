@@ -55,7 +55,7 @@ export function useMediaPlayer({
         throw new Error('MediaPlayer is only available in the browser');
       }
     } catch (error) {
-      console.warn('Failed to initialize MediaService:', error);
+      // Warning log removed - could add proper error handling here
       setInitError(error instanceof Error ? error : new Error('Failed to initialize MediaService'));
     }
 
@@ -69,10 +69,10 @@ export function useMediaPlayer({
   }, []);
 
   // Helper to safely access media service methods
-  const withMediaService = <T extends (...args: any[]) => any>(
-    fn: (service: NonNullable<typeof mediaService.current>, ...args: any[]) => any
+  const withMediaService = <T extends (...args: unknown[]) => any>(
+    fn: (service: NonNullable<typeof mediaService.current>, ...args: unknown[]) => any
   ) => {
-    return (...args: any[]) => {
+    return (...args: unknown[]) => {
       if (!mediaService.current) {
         const error = initError || new Error('MediaService not initialized');
         onError?.(error);

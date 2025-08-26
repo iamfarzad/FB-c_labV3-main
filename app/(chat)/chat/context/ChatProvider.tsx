@@ -18,10 +18,11 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       id: item.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       timestamp: item.timestamp || new Date(),
       type: item.type as ActivityItem['type'],
-      title: (item as any).title || (item as any).content || 'Activity',
-      description: (item as any).description || (item as any).content || '',
-      status: (item as any).status || 'completed',
-      metadata: (item as any).metadata || {},
+      content: item.content || item.title || 'Activity',
+      title: item.title || item.content || 'Activity',
+      description: item.description || item.content || '',
+      status: item.status || 'completed',
+      metadata: item.metadata || {},
     }
     setActivityLog((prev) => [newItem, ...prev].slice(0, 50))
   }

@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react'
 
 export interface ToolInput {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface ToolOutput {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface ToolResult {

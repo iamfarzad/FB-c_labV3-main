@@ -124,7 +124,7 @@ export function useFileUpload(options: UseFileUploadOptions = {}) {
             results.push({ file, url: result.url })
           }
         } catch (error) {
-          console.error("File upload error:", error)
+    console.error('File upload error', error)
           results.push({
             file,
             error: error instanceof Error ? error.message : "Upload failed",

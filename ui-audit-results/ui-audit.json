@@ -33,14 +33,7 @@
   },
   "accessibility": {
     "violations": [],
-    "warnings": [
-      "Ensure all interactive elements have proper ARIA labels",
-      "Verify color contrast ratios meet WCAG AA standards (4.5:1)",
-      "Add keyboard navigation support for all interactive elements",
-      "Ensure focus management for modal dialogs and overlays",
-      "Add proper semantic HTML structure",
-      "Verify screen reader compatibility"
-    ]
+    "warnings": []
   },
   "functionality": {
     "health": {
@@ -50,48 +43,46 @@
       "ok": true
     },
     "chatSSE": {
-      "ok": true
+      "ok": false,
+      "error": "socket hang up"
     },
     "intelligence": {
-      "ok": true
+      "ok": false,
+      "error": ""
     },
     "pdf": {
-      "ok": true
+      "ok": false,
+      "error": ""
     },
     "userAvatar": {
-      "ok": true
+      "ok": false,
+      "error": ""
     },
     "placeholderAvatar": {
-      "ok": true
+      "ok": false,
+      "error": ""
     },
     "roi": {
-      "ok": true
+      "ok": false,
+      "error": ""
     },
     "upload": {
       "ok": false
     },
     "geminiLive": {
-      "ok": true
+      "ok": false,
+      "error": ""
     }
   },
   "parityWithBackend": {
     "passed": [
       "health",
-      "consent",
-      "chatSSE",
-      "intelligence",
-      "pdf",
-      "userAvatar",
-      "placeholderAvatar",
-      "roi"
+      "consent"
     ],
     "expectedFailures": [
       "upload"
     ],
-    "skipped": [
-      "liveAudioStreamingIfDisabled",
-      "liveAudioStreamingIfDisabled"
-    ]
+    "skipped": []
   },
   "actionItems": [
     {

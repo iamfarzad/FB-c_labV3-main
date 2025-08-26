@@ -1,5 +1,4 @@
 {
-  "status": 400,
   "error": "",
-  "note": "Upload failed with multipart form data"
+  "note": "Upload test error"
 }

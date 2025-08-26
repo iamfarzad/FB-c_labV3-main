@@ -71,10 +71,10 @@ function deleteFile(filePath) {
   try {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath)
-      console.log(`✅ Deleted: ${filePath}`)
+      // Log removed
       return true
     } else {
-      console.log(`⚠️  Not found: ${filePath}`)
+      // Log removed
       return false
     }
   } catch (error) {
@@ -88,7 +88,7 @@ function cleanupEmptyDirectories(dirPath) {
     const files = fs.readdirSync(dirPath)
     if (files.length === 0) {
       fs.rmdirSync(dirPath)
-      console.log(`🗑️  Removed empty directory: ${dirPath}`)
+      // Log removed
       return true
     }
   } catch (error) {
@@ -98,7 +98,7 @@ function cleanupEmptyDirectories(dirPath) {
 }
 
 async function main() {
-  console.log('🧹 Cleaning up redundant API routes...\n')
+  // Log removed
   
   let deletedCount = 0
   let notFoundCount = 0
@@ -114,7 +114,7 @@ async function main() {
   }
   
   // Clean up empty directories
-  console.log('\n🗂️  Cleaning up empty directories...')
+  // Log removed
   const directoriesToCheck = [
     'app/api/intelligence',
     'app/api/tools',
@@ -128,16 +128,16 @@ async function main() {
   }
   
   // Summary
-  console.log('\n📊 Cleanup Summary:')
-  console.log(`✅ Deleted: ${deletedCount} files`)
-  console.log(`⚠️  Not found: ${notFoundCount} files`)
-  console.log(`📁 Kept: ${ROUTES_TO_KEEP.length} essential routes`)
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
   
-  console.log('\n🎯 Next steps:')
-  console.log('1. Test the application to ensure no broken imports')
-  console.log('2. Update any frontend code that might reference deleted routes')
-  console.log('3. Update middleware.ts if it references deleted routes')
-  console.log('4. Consider consolidating admin routes if needed')
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
 }
 
 if (require.main === module) {

@@ -1,6 +1,6 @@
 // Debug script to test chat functionality
 const testChatAPI = async () => {
-  console.log('Testing chat API...');
+  // Log removed
 
   try {
     const response = await fetch('http://localhost:3000/api/chat', {
@@ -19,8 +19,8 @@ const testChatAPI = async () => {
       })
     });
 
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+    // Log removed
+    // Log removed));
 
     if (response.body) {
       const reader = response.body.getReader();
@@ -31,11 +31,11 @@ const testChatAPI = async () => {
         if (done) break;
 
         const chunk = decoder.decode(value, { stream: true });
-        console.log('Received chunk:', chunk);
+        // Log removed
       }
     }
   } catch (error) {
-    console.error('Error:', error);
+    // Error: Error
   }
 };
 

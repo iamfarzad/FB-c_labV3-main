@@ -51,7 +51,7 @@ wss.on('connection', (ws) => {
   })
 })
 
-async function handleStartSession(ws: any, message: any, connectionId: string) {
+async function handleStartSession(ws: unknown, message: unknown, connectionId: string) {
   try {
     console.log(`🎯 Starting session:`, { languageCode: message.languageCode })
     
@@ -73,7 +73,7 @@ async function handleStartSession(ws: any, message: any, connectionId: string) {
   }
 }
 
-async function handleAudioData(ws: any, message: any, connectionId: string) {
+async function handleAudioData(ws: unknown, message: unknown, connectionId: string) {
   try {
     // For now, just echo back that we received audio
     // In a full implementation, you'd process the audio with Gemini Live API
@@ -86,7 +86,7 @@ async function handleAudioData(ws: any, message: any, connectionId: string) {
   }
 }
 
-function handleStopSession(ws: any, connectionId: string) {
+function handleStopSession(ws: unknown, connectionId: string) {
   console.log(`🛑 Stopping session: ${connectionId}`)
   ws.send(JSON.stringify({
     type: 'session_stopped'

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useChatContext } from '../context/ChatProvider';
+import { useChatContext } from '../../app/(chat)/chat/context/ChatProvider';
 
 export const useFileUpload = () => {
   const { addActivity } = useChatContext();
@@ -56,7 +56,7 @@ export const useFileUpload = () => {
 
       return data.url; // Return the uploaded file URL
     } catch (error) {
-      console.error('Error uploading file:', error);
+    console.error('Error uploading file', error)
       
       // Add error activity
       addActivity({

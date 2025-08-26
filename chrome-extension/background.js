@@ -13,9 +13,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle explicit request to update the server with the URL
   if (message.type === "UPDATE_SERVER_URL" && message.tabId && message.url) {
-    console.log(
-      `Background: Received request to update server with URL for tab ${message.tabId}: ${message.url}`
-    );
+    // Log removed
     updateServerWithUrl(
       message.tabId,
       message.url,
@@ -25,7 +23,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (sendResponse) sendResponse({ success: true });
       })
       .catch((error) => {
-        console.error("Background: Error updating server with URL:", error);
+        // Error: Background: Error updating server with URL
         if (sendResponse)
           sendResponse({ success: false, error: error.message });
       });
@@ -59,7 +57,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           captureAndSendScreenshot(message, settings, sendResponse);
         })
         .catch((error) => {
-          console.error("Error validating server:", error);
+          // Error: Error validating server
           sendResponse({
             success: false,
             error: "Failed to validate server identity: " + error.message,
@@ -92,7 +90,7 @@ async function validateServerIdentity(host, port) {
 
     return true;
   } catch (error) {
-    console.error("Error validating server identity:", error);
+    // Error: Error validating server identity
     return false;
   }
 }
@@ -117,12 +115,12 @@ const tabUrls = new Map();
 // Function to get the current URL for a tab
 async function getCurrentTabUrl(tabId) {
   try {
-    console.log("Background: Getting URL for tab", tabId);
+    // Log removed
 
     // First check if we have it cached
     if (tabUrls.has(tabId)) {
       const cachedUrl = tabUrls.get(tabId);
-      console.log("Background: Found cached URL:", cachedUrl);
+      // Log removed
       return cachedUrl;
     }
 
@@ -132,13 +130,13 @@ async function getCurrentTabUrl(tabId) {
       if (tab && tab.url) {
         // Cache the URL
         tabUrls.set(tabId, tab.url);
-        console.log("Background: Got URL from tab:", tab.url);
+        // Log removed
         return tab.url;
       } else {
-        console.log("Background: Tab exists but no URL found");
+        // Log removed
       }
     } catch (tabError) {
-      console.error("Background: Error getting tab:", tabError);
+      // Error: Background: Error getting tab
     }
 
     // If we can't get the tab directly, try querying for active tabs
@@ -149,19 +147,19 @@ async function getCurrentTabUrl(tabId) {
       });
       if (tabs && tabs.length > 0 && tabs[0].url) {
         const activeUrl = tabs[0].url;
-        console.log("Background: Got URL from active tab:", activeUrl);
+        // Log removed
         // Cache this URL as well
         tabUrls.set(tabId, activeUrl);
         return activeUrl;
       }
     } catch (queryError) {
-      console.error("Background: Error querying tabs:", queryError);
+      // Error: Background: Error querying tabs
     }
 
-    console.log("Background: Could not find URL for tab", tabId);
+    // Log removed
     return null;
   } catch (error) {
-    console.error("Background: Error getting tab URL:", error);
+    // Error: Background: Error getting tab URL
     return null;
   }
 }
@@ -170,7 +168,7 @@ async function getCurrentTabUrl(tabId) {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // Track URL changes
   if (changeInfo.url) {
-    console.log(`URL changed in tab ${tabId} to ${changeInfo.url}`);
+    // Log removed
     tabUrls.set(tabId, changeInfo.url);
 
     // Send URL update to server if possible
@@ -193,17 +191,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Listen for tab activation (switching between tabs)
 chrome.tabs.onActivated.addListener((activeInfo) => {
   const tabId = activeInfo.tabId;
-  console.log(`Tab activated: ${tabId}`);
+  // Log removed
 
   // Get the URL of the newly activated tab
   chrome.tabs.get(tabId, (tab) => {
     if (chrome.runtime.lastError) {
-      console.error("Error getting tab info:", chrome.runtime.lastError);
+      // Error: Error getting tab info
       return;
     }
 
     if (tab && tab.url) {
-      console.log(`Active tab changed to ${tab.url}`);
+      // Log removed
 
       // Update our cache
       tabUrls.set(tabId, tab.url);
@@ -221,7 +219,7 @@ async function updateServerWithUrl(tabId, url, source = "background_update") {
     return;
   }
 
-  console.log(`Updating server with URL for tab ${tabId}: ${url}`);
+  // Log removed
 
   // Get the saved settings
   chrome.storage.local.get(["browserConnectorSettings"], async (result) => {
@@ -239,11 +237,7 @@ async function updateServerWithUrl(tabId, url, source = "background_update") {
       try {
         // Send the URL to the server
         const serverUrl = `http://${settings.serverHost}:${settings.serverPort}/current-url`;
-        console.log(
-          `Attempt ${
-            retryCount + 1
-          }/${maxRetries} to update server with URL: ${url}`
-        );
+        // Log removed
 
         const response = await fetch(serverUrl, {
           method: "POST",
@@ -262,10 +256,7 @@ async function updateServerWithUrl(tabId, url, source = "background_update") {
 
         if (response.ok) {
           const responseData = await response.json();
-          console.log(
-            `Successfully updated server with URL: ${url}`,
-            responseData
-          );
+          // Log removed
           success = true;
         } else {
           console.error(
@@ -298,7 +289,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 // Function to retest connection when a page is refreshed
 async function retestConnectionOnRefresh(tabId) {
-  console.log(`Page refreshed in tab ${tabId}, retesting connection...`);
+  // Log removed
 
   // Get the saved settings
   chrome.storage.local.get(["browserConnectorSettings"], async (result) => {
@@ -330,11 +321,9 @@ async function retestConnectionOnRefresh(tabId) {
     });
 
     if (!isConnected) {
-      console.log(
-        "Connection test failed after page refresh, initiating auto-discovery..."
-      );
+      // Log removed
     } else {
-      console.log("Connection test successful after page refresh");
+      // Log removed
     }
   });
 }
@@ -344,7 +333,7 @@ function captureAndSendScreenshot(message, settings, sendResponse) {
   // Get the inspected window's tab
   chrome.tabs.get(message.tabId, (tab) => {
     if (chrome.runtime.lastError) {
-      console.error("Error getting tab:", chrome.runtime.lastError);
+      // Error: Error getting tab
       sendResponse({
         success: false,
         error: chrome.runtime.lastError.message,
@@ -390,7 +379,7 @@ function captureAndSendScreenshot(message, settings, sendResponse) {
 
           // Send screenshot data to browser connector using configured settings
           const serverUrl = `http://${settings.serverHost}:${settings.serverPort}/screenshot`;
-          console.log(`Sending screenshot to ${serverUrl}`);
+          // Log removed
 
           fetch(serverUrl, {
             method: "POST",
@@ -405,10 +394,10 @@ function captureAndSendScreenshot(message, settings, sendResponse) {
             .then((response) => response.json())
             .then((result) => {
               if (result.error) {
-                console.error("Error from server:", result.error);
+                // Error: Error from server
                 sendResponse({ success: false, error: result.error });
               } else {
-                console.log("Screenshot saved successfully:", result.path);
+                // Log removed
                 // Send success response even if DevTools capture failed
                 sendResponse({
                   success: true,
@@ -418,7 +407,7 @@ function captureAndSendScreenshot(message, settings, sendResponse) {
               }
             })
             .catch((error) => {
-              console.error("Error sending screenshot data:", error);
+              // Error: Error sending screenshot data
               sendResponse({
                 success: false,
                 error: error.message || "Failed to save screenshot",

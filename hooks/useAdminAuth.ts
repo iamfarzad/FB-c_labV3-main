@@ -40,7 +40,7 @@ export function useAdminAuth() {
 
       setUser(decoded)
     } catch (error) {
-      console.error('Auth check failed:', error)
+    console.error('Auth check failed', error)
       localStorage.removeItem('adminToken')
       setUser(null)
     } finally {

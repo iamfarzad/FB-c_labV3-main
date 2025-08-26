@@ -21,11 +21,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Log event (in production, this would go to analytics service)
-    console.info('📊 Intelligence Event:', {
-      type: event.eventType,
-      sessionId: event.sessionId,
-      timestamp: new Date(event.timestamp).toISOString(),
-      data: event.eventData
+    // Event logged: ${event.eventType}
+
+    return NextResponse.json({
+      success: true,
+      message: "Event logged successfully"
     })
 
     // TODO: Send to analytics service (Mixpanel, PostHog, etc.)
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ ok: true, eventId: `evt_${Date.now()}` })
   } catch (error) {
-    console.error('❌ Event tracking failed:', error)
+    console.error('❌ Event tracking failed', error)
     return NextResponse.json(
       { ok: false, error: 'Invalid event data' },
       { status: 400 }

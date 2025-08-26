@@ -35,7 +35,7 @@ class E2ETestRunner {
       ...details
     };
     this.results.push(result);
-    console.log(`[${status.toUpperCase()}] ${step}: ${message}`);
+    // Log removed}] ${step}: ${message}`);
     if (details.error) {
       console.error(`  Error: ${details.error}`);
     }
@@ -493,7 +493,7 @@ class E2ETestRunner {
 
   // Run all tests
   async runAllTests() {
-    console.log('🚀 Starting F.B/c Comprehensive E2E Test Suite\n');
+    // Log removed
 
     const tests = [
       { name: 'Backend Health', fn: this.testBackendHealth.bind(this) },
@@ -509,12 +509,12 @@ class E2ETestRunner {
     ];
 
     for (const test of tests) {
-      console.log(`\n📋 Running: ${test.name}`);
+      // Log removed
       await test.fn();
     }
 
     // Generate reports
-    console.log('\n📊 Generating Reports...');
+    // Log removed
 
     const junitReport = this.generateJUnitReport();
     const jsonReport = this.generateJSONReport();
@@ -528,11 +528,11 @@ class E2ETestRunner {
     const failed = this.results.filter(r => r.status === 'fail').length;
     const skipped = this.results.filter(r => r.status === 'skip').length;
 
-    console.log('\n🎯 Test Summary:');
-    console.log(`   ✅ Passed: ${passed}`);
-    console.log(`   ❌ Failed: ${failed}`);
-    console.log(`   ⏭️  Skipped: ${skipped}`);
-    console.log(`   📄 Reports saved: test-results.junit.xml, test-results.json`);
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
 
     return failed === 0;
   }
@@ -546,7 +546,7 @@ if (require.main === module) {
       process.exit(success ? 0 : 1);
     })
     .catch(error => {
-      console.error('Test runner error:', error);
+      // Error: Test runner error
       process.exit(1);
     });
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import { PageHeader, PageShell } from "@/components/page-shell"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -13,20 +15,6 @@ import { FadeIn } from "@/components/ui/fade-in"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
 import { CitationsDemo } from "@/components/experience/citations-demo"
 import { DotScreenShader } from "@/components/ui/dot-shader-background"
-
-export const metadata: Metadata = {
-  title: "Farzad Bayat - AI Consultant & Automation Expert | Build AI That Actually Works",
-  description: "Expert AI consultant with 10,000+ hours experience. I build practical AI automation solutions that deliver real business results. From chatbots to workflow automation - AI that works.",
-  keywords: ["AI consultant", "AI automation", "artificial intelligence", "business automation", "AI implementation", "Farzad Bayat"],
-  openGraph: {
-    title: "Farzad Bayat - AI Consultant & Automation Expert | Build AI That Actually Works",
-    description: "Expert AI consultant with 10,000+ hours experience. I build practical AI automation solutions that deliver real business results.",
-    url: "https://farzadbayat.com",
-  },
-  alternates: {
-    canonical: "https://farzadbayat.com",
-  },
-}
 
 const features = [
   {
@@ -80,29 +68,29 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <div className="h-svh w-screen flex flex-col gap-8 items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen w-full flex flex-col gap-6 sm:gap-8 items-center justify-center relative overflow-hidden px-4 py-8">
         <div className="absolute inset-0">
           <DotScreenShader />
         </div>
-        <h1 className="text-6xl md:text-7xl font-light tracking-tight mix-blend-exclusion text-white whitespace-nowrap pointer-events-none relative z-10">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground dark:text-white text-center px-4 pointer-events-none relative z-10">
           Build AI That Actually <span className="text-accent">Works</span>
         </h1>
-        <p className="text-lg md:text-xl font-light text-center text-white mix-blend-exclusion max-w-2xl leading-relaxed pointer-events-none relative z-10">
+        <p className="text-base sm:text-lg md:text-xl font-light text-center text-foreground dark:text-white max-w-2xl leading-relaxed pointer-events-none relative z-10 px-4">
           I'm Farzad Bayat, an AI consultant with 10,000+ hours of hands-on experience. 
           I build practical AI automation solutions that deliver real business results—not just hype.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4 relative z-10">
-          <BookCallButton size="lg" className="bg-accent hover:bg-accent/90 shadow-lg" title="Book Your Free AI Consultation">
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 relative z-10 px-4">
+          <BookCallButton size="lg" className="bg-accent hover:bg-accent/90 shadow-lg text-white" title="Book Your Free AI Consultation">
             Start Your AI Project
             <ArrowRight className="ml-2 h-4 w-4" />
           </BookCallButton>
-          <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10 backdrop-blur-sm">
+          <Button asChild variant="outline" size="lg" className="border-foreground dark:border-white text-foreground dark:text-white hover:bg-foreground/10 dark:hover:bg-white/10 backdrop-blur-sm">
             <Link href="/chat" className="flex items-center">
               <FbcIcon className="mr-2 h-4 w-4" />
               Talk with F.B/c AI
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="lg" className="text-white hover:text-white/80">
+          <Button asChild variant="ghost" size="lg" className="text-foreground dark:text-white hover:text-foreground/80 dark:hover:text-white/80">
             <Link href="/about">Learn My Story</Link>
           </Button>
         </div>

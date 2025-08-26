@@ -106,7 +106,7 @@ export function useChatState(options: UseChatStateOptions = {}) {
       options?: {
         imageUrl?: string
         fileData?: string
-        context?: Record<string, any>
+        context?: Record<string, unknown>
       },
     ) => {
       if (!content.trim()) return
@@ -157,12 +157,12 @@ export function useChatState(options: UseChatStateOptions = {}) {
           content: data.content || data.message || "I apologize, but I couldn't generate a response.",
           sources: data.sources,
         })
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (error.name === "AbortError") {
           return // Request was cancelled
         }
 
-        console.error("Chat error:", error)
+        // Error: Chat error
         setError(new Error(error.message || "Failed to send message"))
 
         // Remove the user message on error

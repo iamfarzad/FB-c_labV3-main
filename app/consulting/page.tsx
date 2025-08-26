@@ -1,3 +1,5 @@
+'use client'
+
 import { PageHeader, PageShell } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -10,16 +12,6 @@ import { FadeIn } from "@/components/ui/fade-in"
 import { ROICalculator } from "@/components/chat/tools/ROICalculator/ROICalculator"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
 import { CitationsDemo } from "@/components/experience/citations-demo"
-
-export const metadata = {
-  title: "AI Consulting Services & Automation Solutions | Farzad Bayat",
-  description: "Professional AI consulting services including chatbot development, workflow automation, and AI copilot implementation. 10,000+ hours of real-world AI experience.",
-  keywords: ["AI consulting services", "AI automation", "chatbot development", "AI copilot", "workflow automation", "AI implementation"],
-  openGraph: {
-    title: "AI Consulting Services & Automation Solutions | Farzad Bayat",
-    description: "Professional AI consulting services including chatbot development, workflow automation, and AI copilot implementation.",
-  }
-}
 
 const consultingServices = [
   "Build intelligent AI chatbots connected to company data and systems",

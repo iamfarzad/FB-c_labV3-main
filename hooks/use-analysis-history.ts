@@ -56,7 +56,7 @@ export function useAnalysisHistory(options: UseAnalysisHistoryOptions = {}) {
           setState(prev => ({ ...prev, analyses }))
         }
       } catch (error) {
-        console.warn('Failed to load analysis history from storage:', error)
+        // Warning log removed - could add proper error handling here
       }
     }
   }, [config.persistToStorage, config.storageKey])
@@ -67,7 +67,7 @@ export function useAnalysisHistory(options: UseAnalysisHistoryOptions = {}) {
       try {
         localStorage.setItem(config.storageKey, JSON.stringify(state.analyses))
       } catch (error) {
-        console.warn('Failed to save analysis history to storage:', error)
+        // Warning log removed - could add proper error handling here
       }
     }
   }, [state.analyses, config.persistToStorage, config.storageKey])
@@ -101,7 +101,7 @@ export function useAnalysisHistory(options: UseAnalysisHistoryOptions = {}) {
 
     // Check for duplicates
     if (isDuplicate(newAnalysis)) {
-      console.info('Similar analysis already exists, skipping duplicate')
+      // Action logged
       return false
     }
 

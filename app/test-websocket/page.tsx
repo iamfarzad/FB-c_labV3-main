@@ -19,7 +19,7 @@ export default function WebSocketTestPage() {
     const wsUrl =
       process.env.NEXT_PUBLIC_LIVE_SERVER_URL ||
       'wss://fb-consulting-websocket.fly.dev'
-    console.info('Connecting to:', wsUrl)
+    // Action logged
 
     setError(null)
     setMessages(prev => [...prev, `Connecting to ${wsUrl}...`])
@@ -39,24 +39,24 @@ export default function WebSocketTestPage() {
 
       ws.onopen = () => {
         clearTimeout(connectionTimeout)
-        console.info('WebSocket connected')
+        // Action logged
         setIsConnected(true)
         setMessages(prev => [...prev, '✅ Connected successfully!'])
       }
 
       ws.onmessage = (event) => {
-        console.info('Received message:', event.data)
+        // Action logged
         setMessages(prev => [...prev, `📨 Received: ${event.data}`])
       }
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error)
+        // Error: WebSocket error
         setError('WebSocket connection error')
         setMessages(prev => [...prev, '❌ Connection error'])
       }
 
       ws.onclose = (event) => {
-        console.info('WebSocket closed:', event.code, event.reason)
+        // Action logged
         setIsConnected(false)
         setMessages(prev => [
           ...prev,
@@ -66,7 +66,7 @@ export default function WebSocketTestPage() {
         ])
       }
     } catch (error) {
-      console.error('Failed to create WebSocket:', error)
+    console.error('Failed to create WebSocket', error)
       setError(`Failed to create WebSocket: ${error}`)
       setMessages(prev => [...prev, `❌ Failed to create WebSocket: ${error}`])
     }

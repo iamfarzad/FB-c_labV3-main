@@ -12,16 +12,16 @@ export async function exampleMultimodalSession() {
 
   try {
     // 1. TEXT MODALITY - Send initial text message
-    console.log('📝 Sending text message...')
+    // Action logged
     const textResult = await multimodalClient.sendText({
       sessionId,
       userId,
       content: 'Hello, I need help analyzing some images and documents.'
     })
-    console.log('Text result:', textResult)
+    // Action logged
 
     // 2. FILE UPLOAD MODALITY - Upload and auto-analyze image
-    console.log('📤 Uploading image file...')
+    // Action logged
     const imageFile = new File(['fake image data'], 'screenshot.png', { type: 'image/png' })
 
     // Convert file to base64 for multimodal processing
@@ -33,10 +33,10 @@ export async function exampleMultimodalSession() {
       file: imageFile,
       autoAnalyze: true
     })
-    console.log('Upload result:', uploadResult)
+    // Action logged
 
     // 3. VISION MODALITY - Send visual analysis
-    console.log('👁️ Analyzing uploaded image...')
+    // Action logged
     const visionResult = await multimodalClient.sendVision({
       sessionId,
       userId,
@@ -45,22 +45,22 @@ export async function exampleMultimodalSession() {
       imageType: 'image/png',
       imageSize: imageFile.size
     })
-    console.log('Vision result:', visionResult)
+    // Action logged
 
     // 4. VOICE MODALITY - Add voice transcription
-    console.log('🎤 Adding voice transcription...')
+    // Action logged
     const voiceResult = await multimodalClient.sendVoice({
       sessionId,
       userId,
       transcription: 'Can you help me understand what this interface is showing?',
       duration: 3.2
     })
-    console.log('Voice result:', voiceResult)
+    // Action logged
 
     // 5. GET CONTEXT SUMMARY - See all modalities together
-    console.log('📊 Getting multimodal context summary...')
+    // Action logged
     const contextResult = await multimodalClient.getContext(sessionId)
-    console.log('Context summary:', contextResult)
+    // Action logged
 
     return {
       sessionId,
@@ -74,7 +74,7 @@ export async function exampleMultimodalSession() {
     }
 
   } catch (error) {
-    console.error('Multimodal session error:', error)
+    console.error('Multimodal session error', error)
     throw error
   }
 }
@@ -93,7 +93,7 @@ export async function exampleImageAnalysis() {
       userId: 'user_123'
     })
 
-    console.log('Image analysis:', analysisResult)
+    // Action logged
 
     // Send analysis to multimodal context
     if (analysisResult.ok && analysisResult.output?.analysis) {
@@ -105,13 +105,13 @@ export async function exampleImageAnalysis() {
         imageSize: imageData.length
       })
 
-      console.log('Vision context added:', visionResult)
+      // Action logged
     }
 
     return { analysis: analysisResult }
 
   } catch (error) {
-    console.error('Image analysis error:', error)
+    console.error('Image analysis error', error)
     throw error
   }
 }
@@ -126,7 +126,7 @@ export async function exampleSmartFileUpload() {
 
     // Check if file is analyzable
     if (MultimodalClient.isAnalyzableFile(file.type)) {
-      console.log('📷 File is image/video - will auto-analyze')
+      // Action logged
 
       // Upload and auto-analyze
       const uploadResult = await multimodalClient.uploadFile({
@@ -136,11 +136,11 @@ export async function exampleSmartFileUpload() {
         autoAnalyze: true
       })
 
-      console.log('Smart upload result:', uploadResult)
+      // Action logged
       return uploadResult
 
     } else {
-      console.log('📄 File is document/text - standard upload')
+      // Action logged
 
       // Standard upload without analysis
       const uploadResult = await multimodalClient.uploadFile({
@@ -150,12 +150,12 @@ export async function exampleSmartFileUpload() {
         autoAnalyze: false
       })
 
-      console.log('Standard upload result:', uploadResult)
+      // Action logged
       return uploadResult
     }
 
   } catch (error) {
-    console.error('Smart upload error:', error)
+    console.error('Smart upload error', error)
     throw error
   }
 }
@@ -220,12 +220,12 @@ export async function exampleConversationFlow() {
 
     // Get complete context
     const summary = await conversation.getConversationSummary()
-    console.log('Conversation summary:', summary)
+    // Action logged
 
     return summary
 
   } catch (error) {
-    console.error('Conversation flow error:', error)
+    console.error('Conversation flow error', error)
     throw error
   }
 }
@@ -249,7 +249,7 @@ export function useMultimodalUpload() {
           autoAnalyze: true
         })
 
-        console.log(`File ${file.name} uploaded:`, uploadResult)
+        // Action logged
 
         // If it's an image/video, the analysis was already triggered
         // If it's a document, you might want to trigger document analysis separately
@@ -263,10 +263,10 @@ export function useMultimodalUpload() {
   return { handleFileUpload }
 }
 
-console.log('🎯 Multimodal integration examples loaded!')
-console.log('Available functions:')
-console.log('- exampleMultimodalSession()')
-console.log('- exampleImageAnalysis()')
-console.log('- exampleSmartFileUpload()')
-console.log('- exampleConversationFlow()')
-console.log('- useMultimodalUpload()')
+// Action logged
+// Action logged
+// Action logged')
+// Action logged')
+// Action logged')
+// Action logged')
+// Action logged')

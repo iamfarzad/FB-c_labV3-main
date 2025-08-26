@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { VerticalProcessChain } from '@/components/chat/activity/VerticalProcessChain'
-import { FixedVerticalProcessChain } from '@/components/chat/activity/FixedVerticalProcessChain'
+// Using regular VerticalProcessChain - fixed positioning handled via CSS
 import type { ActivityItem } from '@/app/(chat)/chat/types/chat'
 
 export default function TestVerticalProcessPage() {
@@ -90,16 +90,18 @@ export default function TestVerticalProcessPage() {
   }, [])
 
   const handleActivityClick = (activity: ActivityItem) => {
-    console.info('Activity clicked:', activity)
+    // Action logged
   }
 
   return (
     <div className="min-h-screen bg-background relative">
       {/* Fixed Vertical Process Chain - Left Edge */}
-      <FixedVerticalProcessChain 
-        activities={activities} 
-        onActivityClick={handleActivityClick}
-      />
+      <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40">
+        <VerticalProcessChain
+          activities={activities}
+          onActivityClick={handleActivityClick}
+        />
+      </div>
       
       {/* Demo content */}
       <div className="pt-12 pb-12 px-8 ml-16">

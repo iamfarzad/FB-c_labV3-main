@@ -39,24 +39,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       (message.settings.serverHost !== settings.serverHost ||
         message.settings.serverPort !== settings.serverPort)
     ) {
-      console.log("Server settings changed, reconnecting WebSocket...");
+      // Log removed
       setupWebSocket();
     }
   }
 
   // Handle connection status updates from page refreshes
   if (message.type === "CONNECTION_STATUS_UPDATE") {
-    console.log(
-      `DevTools received connection status update: ${
-        message.isConnected ? "Connected" : "Disconnected"
-      }`
-    );
+    // Log removed
 
     // If connection is lost, try to reestablish WebSocket only if we had a previous connection
     if (!message.isConnected && ws) {
-      console.log(
-        "Connection lost after page refresh, will attempt to reconnect WebSocket"
-      );
+      // Log removed
 
       // Only reconnect if we actually have a WebSocket that might be stale
       if (
@@ -64,7 +58,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         (ws.readyState === WebSocket.CLOSED ||
           ws.readyState === WebSocket.CLOSING)
       ) {
-        console.log("WebSocket is already closed or closing, will reconnect");
+        // Log removed
         setupWebSocket();
       }
     }
@@ -72,8 +66,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle auto-discovery requests after page refreshes
   if (message.type === "INITIATE_AUTO_DISCOVERY") {
-    console.log(
-      `DevTools initiating WebSocket reconnect after page refresh (reason: ${message.reason})`
+    // Log removed`
     );
 
     // For page refreshes with forceRestart, we should always reconnect if our current connection is not working
@@ -81,18 +74,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       (message.reason === "page_refresh" || message.forceRestart === true) &&
       (!ws || ws.readyState !== WebSocket.OPEN)
     ) {
-      console.log(
-        "Page refreshed and WebSocket not open - forcing reconnection"
-      );
+      // Log removed
 
       // Close existing WebSocket if any
       if (ws) {
-        console.log("Closing existing WebSocket due to page refresh");
+        // Log removed
         intentionalClosure = true; // Mark as intentional to prevent auto-reconnect
         try {
           ws.close();
         } catch (e) {
-          console.error("Error closing WebSocket:", e);
+          // Error: Error closing WebSocket
         }
         ws = null;
         intentionalClosure = false; // Reset flag
@@ -114,33 +105,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function truncateStringsInData(data, maxLength, depth = 0, path = "") {
   // Add depth limit to prevent circular references
   if (depth > 100) {
-    console.warn("Max depth exceeded at path:", path);
+    // Warning log removed - could add proper error handling here
     return "[MAX_DEPTH_EXCEEDED]";
   }
 
-  console.log(`Processing at path: ${path}, type:`, typeof data);
+  // Log removed
 
   if (typeof data === "string") {
     if (data.length > maxLength) {
-      console.log(
-        `Truncating string at path ${path} from ${data.length} to ${maxLength}`
-      );
+      // Log removed
       return data.substring(0, maxLength) + "... (truncated)";
     }
     return data;
   }
 
   if (Array.isArray(data)) {
-    console.log(`Processing array at path ${path} with length:`, data.length);
+    // Log removed
     return data.map((item, index) =>
       truncateStringsInData(item, maxLength, depth + 1, `${path}[${index}]`)
     );
   }
 
   if (typeof data === "object" && data !== null) {
-    console.log(
-      `Processing object at path ${path} with keys:`,
-      Object.keys(data)
+    // Log removed
     );
     const result = {};
     for (const [key, value] of Object.entries(data)) {
@@ -179,8 +166,7 @@ function processArrayWithSizeLimit(array, maxTotalSize, processFunc) {
 
     // Check if adding this item would exceed the limit
     if (currentSize + itemSize > maxTotalSize) {
-      console.log(
-        `Reached size limit (${currentSize}/${maxTotalSize}), truncating array`
+      // Log removed, truncating array`
       );
       break;
     }
@@ -188,9 +174,7 @@ function processArrayWithSizeLimit(array, maxTotalSize, processFunc) {
     // Add item and update size
     result.push(processedItem);
     currentSize += itemSize;
-    console.log(
-      `Added item of size ${itemSize}, total size now: ${currentSize}`
-    );
+    // Log removed
   }
 
   return result;
@@ -198,42 +182,38 @@ function processArrayWithSizeLimit(array, maxTotalSize, processFunc) {
 
 // Modified processJsonString to handle arrays with size limit
 function processJsonString(jsonString, maxLength) {
-  console.log("Processing string of length:", jsonString?.length);
+  // Log removed
   try {
     let parsed;
     try {
       parsed = JSON.parse(jsonString);
-      console.log(
-        "Successfully parsed as JSON, structure:",
-        JSON.stringify(Object.keys(parsed))
+      // Log removed)
       );
     } catch (e) {
-      console.log("Not valid JSON, treating as string");
+      // Log removed
       return truncateStringsInData(jsonString, maxLength, 0, "root");
     }
 
     // If it's an array, process with size limit
     if (Array.isArray(parsed)) {
-      console.log("Processing array of objects with size limit");
+      // Log removed
       const processed = processArrayWithSizeLimit(
         parsed,
         settings.maxLogSize,
         (item) => truncateStringsInData(item, maxLength, 0, "root")
       );
       const result = JSON.stringify(processed);
-      console.log(
-        `Processed array: ${parsed.length} -> ${processed.length} items`
-      );
+      // Log removed
       return result;
     }
 
     // Otherwise process as before
     const processed = truncateStringsInData(parsed, maxLength, 0, "root");
     const result = JSON.stringify(processed);
-    console.log("Processed JSON string length:", result.length);
+    // Log removed
     return result;
   } catch (e) {
-    console.error("Error in processJsonString:", e);
+    // Error: Error in processJsonString
     return jsonString.substring(0, maxLength) + "... (truncated)";
   }
 }
@@ -253,53 +233,41 @@ async function sendToBrowserConnector(logData) {
     return;
   }
 
-  console.log("Sending log data to browser connector:", {
-    type: logData.type,
-    timestamp: logData.timestamp,
-  });
+  // Log removed
 
   // Process any string fields that might contain JSON
   const processedData = { ...logData };
 
   if (logData.type === "network-request") {
-    console.log("Processing network request");
+    // Log removed
     if (processedData.requestBody) {
-      console.log(
-        "Request body size before:",
-        processedData.requestBody.length
-      );
+      // Log removed
       processedData.requestBody = processJsonString(
         processedData.requestBody,
         settings.stringSizeLimit
       );
-      console.log("Request body size after:", processedData.requestBody.length);
+      // Log removed
     }
     if (processedData.responseBody) {
-      console.log(
-        "Response body size before:",
-        processedData.responseBody.length
-      );
+      // Log removed
       processedData.responseBody = processJsonString(
         processedData.responseBody,
         settings.stringSizeLimit
       );
-      console.log(
-        "Response body size after:",
-        processedData.responseBody.length
-      );
+      // Log removed
     }
   } else if (
     logData.type === "console-log" ||
     logData.type === "console-error"
   ) {
-    console.log("Processing console message");
+    // Log removed
     if (processedData.message) {
-      console.log("Message size before:", processedData.message.length);
+      // Log removed
       processedData.message = processJsonString(
         processedData.message,
         settings.stringSizeLimit
       );
-      console.log("Message size after:", processedData.message.length);
+      // Log removed
     }
   }
 
@@ -318,18 +286,16 @@ async function sendToBrowserConnector(logData) {
   };
 
   const finalPayloadSize = JSON.stringify(payload).length;
-  console.log("Final payload size:", finalPayloadSize);
+  // Log removed
 
   if (finalPayloadSize > 1000000) {
-    console.warn("Warning: Large payload detected:", finalPayloadSize);
-    console.warn(
-      "Payload preview:",
-      JSON.stringify(payload).substring(0, 1000) + "..."
+    // Warning log removed - could add proper error handling here
+    // Warning log removed - could add proper error handling here.substring(0, 1000) + "..."
     );
   }
 
   const serverUrl = `http://${settings.serverHost}:${settings.serverPort}/extension-log`;
-  console.log(`Sending log to ${serverUrl}`);
+  // Log removed
 
   fetch(serverUrl, {
     method: "POST",
@@ -343,19 +309,17 @@ async function sendToBrowserConnector(logData) {
       return response.json();
     })
     .then((data) => {
-      console.log("Log sent successfully:", data);
+      // Log removed
     })
     .catch((error) => {
-      console.error("Error sending log:", error);
+      // Error: Error sending log
     });
 }
 
 // Validate server identity
 async function validateServerIdentity() {
   try {
-    console.log(
-      `Validating server identity at ${settings.serverHost}:${settings.serverPort}...`
-    );
+    // Log removed
 
     // Use fetch with a timeout to prevent long-hanging requests
     const response = await fetch(
@@ -399,9 +363,7 @@ async function validateServerIdentity() {
       return false;
     }
 
-    console.log(
-      `Server identity confirmed: ${identity.name} v${identity.version}`
-    );
+    // Log removed
 
     // Notify about successful validation
     chrome.runtime.sendMessage({
@@ -413,7 +375,7 @@ async function validateServerIdentity() {
 
     return true;
   } catch (error) {
-    console.error("Server identity validation failed:", error);
+    // Error: Server identity validation failed
 
     // Notify about the connection error
     chrome.runtime.sendMessage({
@@ -430,10 +392,10 @@ async function validateServerIdentity() {
 
 // Function to clear logs on the server
 function wipeLogs() {
-  console.log("Wiping all logs...");
+  // Log removed
 
   const serverUrl = `http://${settings.serverHost}:${settings.serverPort}/wipelogs`;
-  console.log(`Sending wipe request to ${serverUrl}`);
+  // Log removed
 
   fetch(serverUrl, {
     method: "POST",
@@ -446,24 +408,21 @@ function wipeLogs() {
       return response.json();
     })
     .then((data) => {
-      console.log("Logs wiped successfully:", data);
+      // Log removed
     })
     .catch((error) => {
-      console.error("Error wiping logs:", error);
+      // Error: Error wiping logs
     });
 }
 
 // Listen for page refreshes
 chrome.devtools.network.onNavigated.addListener((url) => {
-  console.log("Page navigated/refreshed - wiping logs");
+  // Log removed
   wipeLogs();
 
   // Send the new URL to the server
   if (ws && ws.readyState === WebSocket.OPEN && url) {
-    console.log(
-      "Chrome Extension: Sending page-navigated event with URL:",
-      url
-    );
+    // Log removed
     ws.send(
       JSON.stringify({
         type: "page-navigated",
@@ -503,12 +462,12 @@ async function attachDebugger() {
     );
 
     if (isAlreadyAttached) {
-      console.log("Found existing debugger attachment, detaching first...");
+      // Log removed
       // Force detach first to ensure clean state
       chrome.debugger.detach({ tabId: currentTabId }, () => {
         // Ignore any errors during detach
         if (chrome.runtime.lastError) {
-          console.log("Error during forced detach:", chrome.runtime.lastError);
+          // Log removed
         }
         // Now proceed with fresh attachment
         performAttach();
@@ -521,16 +480,16 @@ async function attachDebugger() {
 }
 
 function performAttach() {
-  console.log("Performing debugger attachment to tab:", currentTabId);
+  // Log removed
   chrome.debugger.attach({ tabId: currentTabId }, "1.3", () => {
     if (chrome.runtime.lastError) {
-      console.error("Failed to attach debugger:", chrome.runtime.lastError);
+      // Error: Failed to attach debugger
       isDebuggerAttached = false;
       return;
     }
 
     isDebuggerAttached = true;
-    console.log("Debugger successfully attached");
+    // Log removed
 
     // Add the event listener when attaching
     chrome.debugger.onEvent.addListener(consoleMessageListener);
@@ -541,10 +500,10 @@ function performAttach() {
       {},
       () => {
         if (chrome.runtime.lastError) {
-          console.error("Failed to enable runtime:", chrome.runtime.lastError);
+          // Error: Failed to enable runtime
           return;
         }
-        console.log("Runtime API successfully enabled");
+        // Log removed
       }
     );
   });
@@ -562,20 +521,17 @@ function detachDebugger() {
     );
 
     if (!isStillAttached) {
-      console.log("Debugger already detached");
+      // Log removed
       isDebuggerAttached = false;
       return;
     }
 
     chrome.debugger.detach({ tabId: currentTabId }, () => {
       if (chrome.runtime.lastError) {
-        console.warn(
-          "Warning during debugger detach:",
-          chrome.runtime.lastError
-        );
+        // Warning log removed - could add proper error handling here
       }
       isDebuggerAttached = false;
-      console.log("Debugger detached");
+      // Log removed
     });
   });
 }
@@ -596,7 +552,7 @@ const consoleMessageListener = (source, method, params) => {
       level: "error",
       timestamp: Date.now(),
     };
-    console.log("Sending runtime exception:", entry);
+    // Log removed
     sendToBrowserConnector(entry);
   }
 
@@ -628,7 +584,7 @@ const consoleMessageListener = (source, method, params) => {
           .join(" ");
       } catch (e) {
         // Fallback if processing fails
-        console.error("Failed to process console arguments:", e);
+        // Error: Failed to process console arguments
         formattedMessage =
           args[0]?.value || "Unable to process console arguments";
       }
@@ -640,7 +596,7 @@ const consoleMessageListener = (source, method, params) => {
       message: formattedMessage,
       timestamp: Date.now(),
     };
-    console.log("Sending console entry:", entry);
+    // Log removed
     sendToBrowserConnector(entry);
   }
 };
@@ -670,7 +626,7 @@ window.addEventListener("unload", () => {
     try {
       ws.close();
     } catch (e) {
-      console.error("Error closing WebSocket during unload:", e);
+      // Error: Error closing WebSocket during unload
     }
     ws = null;
   }
@@ -716,7 +672,7 @@ function captureAndSendElement() {
     (result, isException) => {
       if (isException || !result) return;
 
-      console.log("Element selected:", result);
+      // Log removed
 
       // Send to browser connector
       sendToBrowserConnector({
@@ -747,7 +703,7 @@ let intentionalClosure = false;
 // Function to send a heartbeat to keep the WebSocket connection alive
 function sendHeartbeat() {
   if (ws && ws.readyState === WebSocket.OPEN) {
-    console.log("Chrome Extension: Sending WebSocket heartbeat");
+    // Log removed
     ws.send(JSON.stringify({ type: "heartbeat" }));
   }
 }
@@ -771,14 +727,14 @@ async function setupWebSocket() {
     try {
       ws.close();
     } catch (e) {
-      console.error("Error closing existing WebSocket:", e);
+      // Error: Error closing existing WebSocket
     }
     ws = null;
     intentionalClosure = false; // Reset flag
   }
 
   // Validate server identity before connecting
-  console.log("Validating server identity before WebSocket connection...");
+  // Log removed
   const isValid = await validateServerIdentity();
 
   if (!isValid) {
@@ -790,7 +746,7 @@ async function setupWebSocket() {
 
     // Try again after delay
     wsReconnectTimeout = setTimeout(() => {
-      console.log("Attempting to reconnect WebSocket after validation failure");
+      // Log removed
       setupWebSocket();
     }, WS_RECONNECT_DELAY);
     return;
@@ -800,13 +756,13 @@ async function setupWebSocket() {
   reconnectAfterValidation = false;
 
   const wsUrl = `ws://${settings.serverHost}:${settings.serverPort}/extension-ws`;
-  console.log(`Connecting to WebSocket at ${wsUrl}`);
+  // Log removed
 
   try {
     ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-      console.log(`Chrome Extension: WebSocket connected to ${wsUrl}`);
+      // Log removed
 
       // Start heartbeat to keep connection alive
       heartbeatInterval = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
@@ -838,10 +794,7 @@ async function setupWebSocket() {
           }
 
           if (response && response.url) {
-            console.log(
-              "Chrome Extension: Sending initial URL to server:",
-              response.url
-            );
+            // Log removed
 
             // Send the URL to the server via the background script
             chrome.runtime.sendMessage({
@@ -859,7 +812,7 @@ async function setupWebSocket() {
 
       // Fallback method to get URL directly
       function tryFallbackGetUrl() {
-        console.log("Chrome Extension: Trying fallback method to get URL");
+        // Log removed
 
         // Try to get the URL directly using the tabs API
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -872,10 +825,7 @@ async function setupWebSocket() {
           }
 
           if (tabs && tabs.length > 0 && tabs[0].url) {
-            console.log(
-              "Chrome Extension: Got URL via fallback method:",
-              tabs[0].url
-            );
+            // Log removed
 
             // Send the URL to the server
             chrome.runtime.sendMessage({
@@ -885,9 +835,7 @@ async function setupWebSocket() {
               source: "fallback_method",
             });
           } else {
-            console.warn(
-              "Chrome Extension: Could not retrieve URL through fallback method"
-            );
+            // Warning log removed - could add proper error handling here
           }
         });
       }
@@ -898,7 +846,7 @@ async function setupWebSocket() {
     };
 
     ws.onclose = (event) => {
-      console.log(`Chrome Extension: WebSocket closed for ${wsUrl}:`, event);
+      // Log removed
 
       // Stop heartbeat
       if (heartbeatInterval) {
@@ -908,9 +856,7 @@ async function setupWebSocket() {
 
       // Don't reconnect if this was an intentional closure
       if (intentionalClosure) {
-        console.log(
-          "Chrome Extension: Intentional WebSocket closure, not reconnecting"
-        );
+        // Log removed
         return;
       }
 
@@ -921,21 +867,16 @@ async function setupWebSocket() {
 
       // Check if this was an abnormal closure or if we need to reconnect after validation
       if (isAbnormalClosure || reconnectAfterValidation) {
-        console.log(
-          `Chrome Extension: Will attempt to reconnect WebSocket (closure code: ${event.code})`
+        // Log removed`
         );
 
         // Try to reconnect after delay
         wsReconnectTimeout = setTimeout(() => {
-          console.log(
-            `Chrome Extension: Attempting to reconnect WebSocket to ${wsUrl}`
-          );
+          // Log removed
           setupWebSocket();
         }, WS_RECONNECT_DELAY);
       } else {
-        console.log(
-          `Chrome Extension: Normal WebSocket closure, not reconnecting automatically`
-        );
+        // Log removed
       }
     };
 
@@ -945,10 +886,10 @@ async function setupWebSocket() {
 
         // Don't log heartbeat responses to reduce noise
         if (message.type !== "heartbeat-response") {
-          console.log("Chrome Extension: Received WebSocket message:", message);
+          // Log removed
 
           if (message.type === "server-shutdown") {
-            console.log("Chrome Extension: Received server shutdown signal");
+            // Log removed
             // Clear any reconnection attempts
             if (wsReconnectTimeout) {
               clearTimeout(wsReconnectTimeout);
@@ -963,9 +904,9 @@ async function setupWebSocket() {
         if (message.type === "heartbeat-response") {
           // Just a heartbeat response, no action needed
           // Uncomment the next line for debug purposes only
-          // console.log("Chrome Extension: Received heartbeat response");
+          // // Log removed
         } else if (message.type === "take-screenshot") {
-          console.log("Chrome Extension: Taking screenshot...");
+          // Log removed
           // Capture screenshot of the current tab
           chrome.tabs.captureVisibleTab(null, { format: "png" }, (dataUrl) => {
             if (chrome.runtime.lastError) {
@@ -983,7 +924,7 @@ async function setupWebSocket() {
               return;
             }
 
-            console.log("Chrome Extension: Screenshot captured successfully");
+            // Log removed
             // Just send the screenshot data, let the server handle paths
             const response = {
               type: "screenshot-data",
@@ -995,15 +936,12 @@ async function setupWebSocket() {
               autoPaste: settings.allowAutoPaste,
             };
 
-            console.log("Chrome Extension: Sending screenshot data response", {
-              ...response,
-              data: "[base64 data]",
-            });
+            // Log removed
 
             ws.send(JSON.stringify(response));
           });
         } else if (message.type === "get-current-url") {
-          console.log("Chrome Extension: Received request for current URL");
+          // Log removed
 
           // Get the current URL from the background script instead of inspectedWindow.eval
           let retryCount = 0;
@@ -1025,8 +963,7 @@ async function setupWebSocket() {
                   // Retry logic
                   if (retryCount < maxRetries) {
                     retryCount++;
-                    console.log(
-                      `Retrying URL request (${retryCount}/${maxRetries})...`
+                    // Log removed...`
                     );
                     setTimeout(requestCurrentUrl, 500); // Wait 500ms before retrying
                     return;
@@ -1047,10 +984,7 @@ async function setupWebSocket() {
                 }
 
                 if (response && response.success && response.url) {
-                  console.log(
-                    "Chrome Extension: Got URL from background:",
-                    response.url
-                  );
+                  // Log removed
                   ws.send(
                     JSON.stringify({
                       type: "current-url-response",
@@ -1070,10 +1004,7 @@ async function setupWebSocket() {
                     { active: true, currentWindow: true },
                     (tabs) => {
                       const url = tabs && tabs[0] && tabs[0].url;
-                      console.log(
-                        "Chrome Extension: Got URL directly from tab:",
-                        url
-                      );
+                      // Log removed
 
                       ws.send(
                         JSON.stringify({
@@ -1103,7 +1034,7 @@ async function setupWebSocket() {
       }
     };
   } catch (error) {
-    console.error("Error creating WebSocket:", error);
+    // Error: Error creating WebSocket
     // Try again after delay
     wsReconnectTimeout = setTimeout(setupWebSocket, WS_RECONNECT_DELAY);
   }

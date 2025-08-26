@@ -50,7 +50,7 @@ async function migrateComponent(filePath) {
     let updatedContent = content
     let hasChanges = false
 
-    console.log(`\n📁 Migrating: ${filePath}`)
+    // Log removed
 
     // Update import statements
     for (const [oldPath, newPath] of Object.entries(IMPORT_MAPPINGS)) {
@@ -59,7 +59,7 @@ async function migrateComponent(filePath) {
       if (importRegex.test(updatedContent)) {
         updatedContent = updatedContent.replace(importRegex, `from '${newPath}'`)
         hasChanges = true
-        console.log(`  ✅ Import: ${oldPath} → ${newPath}`)
+        // Log removed
       }
     }
 
@@ -68,7 +68,7 @@ async function migrateComponent(filePath) {
       if (updatedContent.includes(oldImport)) {
         updatedContent = updatedContent.replace(new RegExp(oldImport.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), newImport)
         hasChanges = true
-        console.log(`  ✅ Component: Updated to new design system import`)
+        // Log removed
       }
     }
 
@@ -76,22 +76,22 @@ async function migrateComponent(filePath) {
     if (updatedContent.includes('getSupabase(')) {
       updatedContent = updatedContent.replace(/getSupabase\(\)/g, 'getSupabaseStorage()')
       hasChanges = true
-      console.log(`  ✅ Function: getSupabase() → getSupabaseStorage()`)
+      // Log removed → getSupabaseStorage()`)
     }
 
     if (updatedContent.includes('supabaseService')) {
       updatedContent = updatedContent.replace(/supabaseService/g, 'getSupabaseStorage().getServiceClient()')
       hasChanges = true
-      console.log(`  ✅ Function: supabaseService → getSupabaseStorage().getServiceClient()`)
+      // Log removed.getServiceClient()`)
     }
 
     // Write back if changes were made
     if (hasChanges) {
       fs.writeFileSync(filePath, updatedContent, 'utf8')
-      console.log(`  ✨ Component migrated successfully`)
+      // Log removed
       return true
     } else {
-      console.log(`  ⏭️  No migration needed`)
+      // Log removed
       return false
     }
     
@@ -102,7 +102,7 @@ async function migrateComponent(filePath) {
 }
 
 async function main() {
-  console.log('🔄 Migrating components to new design system...\n')
+  // Log removed
 
   // Find all component files
   const componentFiles = await glob('components/**/*.{ts,tsx}', {
@@ -132,16 +132,16 @@ async function main() {
     }
   }
 
-  console.log(`\n🎉 Component migration complete!`)
-  console.log(`📊 Files checked: ${totalFiles}`)
-  console.log(`✨ Files migrated: ${migratedFiles}`)
-  console.log(`🎯 Already clean: ${totalFiles - migratedFiles}`)
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
   
   if (migratedFiles > 0) {
-    console.log(`\n💡 Next steps:`)
-    console.log(`1. Test the migrated components`)
-    console.log(`2. Run TypeScript check: pnpm tsc --noEmit`)
-    console.log(`3. Update components to use new design system variants`)
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
   }
 }
 

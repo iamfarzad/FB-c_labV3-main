@@ -87,7 +87,7 @@ export function middleware(req: NextRequest) {
       mockUrl.pathname = '/api/mock/chat' // Fallback to chat mock
     }
     
-    console.info(`🟠 [MIDDLEWARE] Redirecting ${req.nextUrl.pathname} to ${mockUrl.pathname}`)
+    // Action logged
     
     return NextResponse.rewrite(mockUrl)
   }

@@ -7,16 +7,13 @@ import { ChatMessages } from '@/components/chat/layouts/ChatMessages'
 import { ChatComposer } from '@/components/chat/layouts/ChatComposer'
 import { VoiceOverlay } from '@/components/chat/VoiceOverlay'
 import { SuggestedActions } from '@/components/intelligence/SuggestedActions'
-import { ConsentOverlay } from '@/components/collab/ConsentOverlay'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { useChat } from '@/ui/hooks/useChat'
+import { useChat } from '@/hooks/useChat-ui'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
 import { Message } from '@/src/core/types/chat'
-import { useCanvas } from '@/components/providers/canvas-provider'
 
-// Import existing components for activity tracking
-import { ProgressTracker } from '@/components/experience/progress-tracker'
-import { ChatSidebar } from '@/components/chat/layouts/ChatSidebar'
+// Import VerticalProcessChain from the correct location
+import { VerticalProcessChain } from '@/components/chat/activity/VerticalProcessChain'
 
 export default function ChatPage() {
   const [input, setInput] = useState('')
@@ -25,18 +22,6 @@ export default function ChatPage() {
   const [stage, setStage] = useState('GREETING')
   const [activityLog, setActivityLog] = useState<any[]>([])
   const [stageProgress, setStageProgress] = useState(0)
-  const [consentState, setConsentState] = useState<{
-    checked: boolean
-    hasConsent: boolean
-    email: string
-    company: string
-  }>({
-    checked: false,
-    hasConsent: false,
-    email: '',
-    company: ''
-  })
-  const { openCanvas } = useCanvas()
 
   // Stage progression configuration - using new standardized stages
   const stages = [
@@ -63,61 +48,32 @@ export default function ChatPage() {
     fetchContextFromLocalSession 
   } = useConversationalIntelligence()
 
-  // Check consent status on mount
+  // Initialize session and add demo messages
   useEffect(() => {
-    const checkConsent = async () => {
+    const initSession = async () => {
       try {
-        const response = await fetch('/api/consent', {
-          method: 'GET',
-          credentials: 'include'
+        const response = await fetch('/api/intelligence/session-init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: 'demo@example.com',
+            name: 'Demo User',
+            companyUrl: ''
+          })
         })
-
+        
         if (response.ok) {
           const data = await response.json()
-          setConsentState(prev => ({
-            ...prev,
-            checked: true,
-            hasConsent: data.allow || false
-          }))
-
-          // If consent exists, initialize session normally
-          if (data.allow) {
-            initSession()
-          }
-        } else {
-          setConsentState(prev => ({ ...prev, checked: true, hasConsent: false }))
+          setSessionId(data.sessionId)
+          localStorage.setItem('intelligence-session-id', data.sessionId)
         }
       } catch (error) {
-        console.warn('Consent check failed:', error)
-        setConsentState(prev => ({ ...prev, checked: true, hasConsent: false }))
+        // Failed to initialize session
       }
     }
 
-    checkConsent()
+    initSession()
   }, [])
-
-  // Initialize session (only after consent)
-  const initSession = async () => {
-    try {
-      const response = await fetch('/api/intelligence/session-init', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: consentState.email || 'demo@example.com',
-          name: 'Demo User',
-          companyUrl: consentState.company || ''
-        })
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setSessionId(data.sessionId)
-        localStorage.setItem('intelligence-session-id', data.sessionId)
-      }
-    } catch (error) {
-      // Failed to initialize session
-    }
-  }
 
   const handleSendMessage = async (message: string) => {
     setInput('')
@@ -154,42 +110,8 @@ export default function ChatPage() {
   }
 
   const handleToolAction = (tool: string, data?: any) => {
-    console.log('Tool action:', tool, data)
-    
-    switch (tool) {
-      case 'webcam':
-        // Open webcam canvas
-        openCanvas('webcam')
-        break
-        
-      case 'screen':
-        // Open screen share canvas
-        openCanvas('screen')
-        break
-        
-      case 'document':
-        // Handle document upload
-        console.log('Document upload requested')
-        break
-        
-      case 'image':
-        // Handle image upload
-        console.log('Image upload requested')
-        break
-        
-      case 'roi':
-        // Handle ROI calculator
-        console.log('ROI calculator requested')
-        break
-        
-      case 'video':
-        // Handle video to app (still coming soon)
-        console.log('Video to app requested (coming soon)')
-        break
-        
-      default:
-        console.log('Unknown tool:', tool)
-    }
+            // Tool action executed
+    // Handle tool actions here
   }
 
   const handleSuggestionRun = (suggestion: any) => {
@@ -203,38 +125,6 @@ export default function ChatPage() {
       setInput(transcript)
       handleSendMessage(transcript)
     }
-  }
-
-  // Consent overlay handlers
-  const handleConsentAllow = async () => {
-    try {
-      const response = await fetch('/api/consent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: consentState.email,
-          companyUrl: consentState.company,
-          allow: true
-        })
-      })
-
-      if (response.ok) {
-        setConsentState(prev => ({ ...prev, hasConsent: true }))
-        // Now initialize session with user data
-        initSession()
-        // Progress to next stage
-        setStage('NAME_COLLECTION')
-      }
-    } catch (error) {
-      console.error('Consent submission failed:', error)
-    }
-  }
-
-  const handleConsentDeny = () => {
-    setConsentState(prev => ({ ...prev, hasConsent: true }))
-    // Continue without personalization
-    initSession()
   }
 
   // Convert useChat messages to Message format + add demo messages
@@ -300,8 +190,8 @@ export default function ChatPage() {
           createdAt: new Date(),
         }
 
-        if (Array.isArray(msg.meta?.sources)) {
-          message.sources = msg.meta.sources.map((source: any) => ({
+        if (Array.isArray(msg.metadata?.sources)) {
+          message.sources = msg.metadata.sources.map((source: any) => ({
             title: source.title || source.url,
             url: source.url
           }))
@@ -320,19 +210,9 @@ export default function ChatPage() {
           sessionId={sessionId}
           onClearMessages={clear}
           showVoiceButton={false}
-          rightSlot={<ProgressTracker />}
         />
       }
-      sidebar={
-        <ChatSidebar
-          sessionId={sessionId}
-          activityLog={activityLog}
-          stages={stages}
-          currentStage={stage}
-          stageProgress={stageProgress}
-        />
-      }
-      composer={
+            composer={
         <ChatComposer
           value={input}
           onChange={setInput}
@@ -359,17 +239,37 @@ export default function ChatPage() {
             onCancel={() => setOpenVoice(false)}
             onAccept={handleVoiceInput}
           />
-          {/* Consent Overlay */}
-          <ConsentOverlay
-            open={consentState.checked && !consentState.hasConsent}
-            email={consentState.email}
-            company={consentState.company}
-            onEmailChange={(email) => setConsentState(prev => ({ ...prev, email }))}
-            onCompanyChange={(company) => setConsentState(prev => ({ ...prev, company }))}
-            onAllow={handleConsentAllow}
-            onDeny={handleConsentDeny}
-          />
-
+          {/* Floating Vertical Process Chain - Integrated Design */}
+          {(stages && stages.length > 0) || (activityLog && activityLog.length > 0) ? (
+            <div className="fixed top-1/2 right-6 -translate-y-1/2 w-16 z-50 pointer-events-none max-lg:right-4 max-md:right-3">
+              <VerticalProcessChain
+                activities={
+                  activityLog && activityLog.length > 0
+                    ? activityLog.slice(-8).map((activity, index) => ({
+                        id: activity.id,
+                        type: activity.type,
+                        title: activity.title,
+                        description: activity.description,
+                        status: activity.status
+                      }))
+                    : stages!.slice(-8).map((stage, index) => ({
+                        id: stage.id,
+                        type: index === 0 ? 'user_action' :
+                              index === 1 ? 'ai_thinking' :
+                              index === 2 ? 'search' :
+                              index === 3 ? 'doc_analysis' :
+                              index === 4 ? 'tool_used' :
+                              index === 5 ? 'ai_stream' :
+                              index === 6 ? 'database' : 'complete',
+                        title: stage.label,
+                        description: `Stage ${index + 1} of ${stages!.length}`,
+                        status: stage.done ? 'completed' :
+                                stage.current ? 'in_progress' : 'pending'
+                      }))
+                }
+              />
+            </div>
+          ) : null}
         </>
       }
     >

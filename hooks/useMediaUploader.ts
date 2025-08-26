@@ -8,7 +8,7 @@ export interface UploadOptions {
   maxFileSize?: number;
   allowedTypes?: string[];
   onProgress?: (progress: number, uploadedBytes: number, totalBytes: number) => void;
-  onComplete?: (response: any) => void;
+  onComplete?: (response: unknown) => void;
   onError?: (error: Error) => void;
 }
 
@@ -17,7 +17,7 @@ export interface UploadResult {
   fileName: string;
   fileSize: number;
   fileType: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function useMediaUploader() {

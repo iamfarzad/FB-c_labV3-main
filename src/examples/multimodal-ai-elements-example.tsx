@@ -15,8 +15,8 @@ export const MultimodalAIElementsExample = () => {
     id: string;
     role: 'user' | 'assistant';
     content: string;
-    tools?: any[];
-    sources?: any[];
+    tools?: unknown[];
+    sources?: unknown[];
   }>>([
     {
       id: '1',
@@ -145,10 +145,10 @@ export const MultimodalAIElementsExample = () => {
           onClick={async () => {
             try {
               const context = await multimodalClient.getContext(sessionId);
-              console.log('Multimodal Context:', context);
+              // Action logged
               alert('Context retrieved! Check console for details.');
             } catch (error) {
-              console.error('Failed to get context:', error);
+    console.error('Failed to get context', error)
               alert('Failed to get context. Check console for details.');
             }
           }}

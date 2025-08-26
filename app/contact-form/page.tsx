@@ -115,13 +115,13 @@ export default function ContactFormPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company">Company (Optional)</Label>
+              <Label htmlFor="compunknown">Company (Optional)</Label>
               <Input
-                id="company"
-                name="company"
-                value={formData.company}
+                id="compunknown"
+                name="compunknown"
+                value={formData.compunknown}
                 onChange={handleChange}
-                placeholder="Your company name"
+                placeholder="Your compunknown name"
               />
             </div>
 

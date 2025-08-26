@@ -17,7 +17,7 @@ interface TokenAnalytics {
     byModel: Record<string, { cost: number; usage: number; requests: number }>
     byDay: Record<string, number>
   }
-  logs: any[]
+  logs: unknown[]
 }
 
 export function useTokenAnalytics() {
@@ -42,9 +42,9 @@ export function useTokenAnalytics() {
 
       const data = await response.json()
       setAnalytics(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message)
-      console.error("Token analytics fetch error:", err)
+      // Error: Token analytics fetch error
     } finally {
       setLoading(false)
     }
@@ -65,7 +65,7 @@ export function useTokenAnalytics() {
       // Create CSV content
       const csvContent = [
         "Date,Provider,Model,Input Tokens,Output Tokens,Total Tokens,Input Cost,Output Cost,Total Cost,Session ID",
-        ...logs.map((log: any) =>
+        ...logs.map((log: unknown) =>
           [
             new Date(log.created_at).toISOString(),
             log.provider,
@@ -91,8 +91,8 @@ export function useTokenAnalytics() {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-    } catch (err: any) {
-      console.error("Export error:", err)
+    } catch (err: unknown) {
+    console.error('Export error', error)
       setError(err.message)
     }
   }, [])
@@ -107,7 +107,7 @@ export function useTokenAnalytics() {
 }
 
 export function useTokenTracking(timeframe = "24h", provider?: string) {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -128,9 +128,9 @@ export function useTokenTracking(timeframe = "24h", provider?: string) {
 
       const result = await response.json()
       setData(result)
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message)
-      console.error("Token tracking error:", err)
+      // Error: Token tracking error
     } finally {
       setLoading(false)
     }

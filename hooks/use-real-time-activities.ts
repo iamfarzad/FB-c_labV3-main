@@ -102,12 +102,12 @@ export function useRealTimeActivities() {
           .limit(15) // Reduced from 50 to 15 for better performance
         
         if (error) {
-          console.error('Failed to load existing activities:', error)
+          // Error: Failed to load existing activities
           return
         }
         
         if (data) {
-          const formattedActivities = data.map((item: any) => ({
+          const formattedActivities = data.map((item: unknown) => ({
             id: item.id,
             type: item.type,
             title: item.title,
@@ -120,7 +120,7 @@ export function useRealTimeActivities() {
           setActivities(formattedActivities)
         }
       } catch (error) {
-        console.error('Error loading existing activities:', error)
+    console.error('Error loading existing activities', error)
       }
     }
     
@@ -133,7 +133,7 @@ export function useRealTimeActivities() {
 
     // Check if supabase is properly initialized
     if (!supabase || typeof supabase.channel !== 'function') {
-      console.warn('Supabase client not properly initialized, skipping real-time subscription')
+      // Warning log removed - could add proper error handling here
       setIsConnected(false)
       return
     }
@@ -141,7 +141,7 @@ export function useRealTimeActivities() {
     // Check if we have valid environment variables
     const hasValidConfig = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     if (!hasValidConfig) {
-      console.warn('Missing Supabase configuration, skipping real-time subscription')
+      // Warning log removed - could add proper error handling here
       setIsConnected(false)
       return
     }
@@ -157,8 +157,8 @@ export function useRealTimeActivities() {
             schema: 'public',
             table: 'activities'
           },
-          (payload: any) => {
-            console.info('Received real-time activity:', payload)
+          (payload: unknown) => {
+            // Action logged
             const activity = {
               id: payload.new.id,
               type: payload.new.type,
@@ -200,8 +200,8 @@ export function useRealTimeActivities() {
             schema: 'public',
             table: 'activities'
           },
-          (payload: any) => {
-            console.info('Activity updated:', payload)
+          (payload: unknown) => {
+            // Action logged
             const activity = {
               id: payload.new.id,
               type: payload.new.type,
@@ -217,8 +217,8 @@ export function useRealTimeActivities() {
             )
           }
         )
-        .subscribe((status: any) => {
-          console.info('Real-time subscription status:', status)
+        .subscribe((status: unknown) => {
+          // Action logged
           setIsConnected(status === "SUBSCRIBED")
         })
 
@@ -228,7 +228,7 @@ export function useRealTimeActivities() {
         }
       }
     } catch (error) {
-      console.error('Error setting up Supabase real-time subscription:', error)
+    console.error('Error setting up Supabase real-time subscription', error)
       setIsConnected(false)
     }
   }, [mounted])

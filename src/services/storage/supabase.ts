@@ -6,14 +6,14 @@ export interface StorageConfig {
   serviceRoleKey?: string
 }
 
-export interface StorageResult<T = any> {
+export interface StorageResult<T = unknown> {
   data: T | null
   error: Error | null
 }
 
 export class SupabaseStorage {
-  private client: any
-  private serviceClient: any
+  private client: unknown
+  private serviceClient: unknown
 
   constructor(config: StorageConfig) {
     // Create regular client
@@ -58,7 +58,7 @@ export class SupabaseStorage {
   // Basic CRUD operations
   async select(table: string, options?: { 
     columns?: string
-    filter?: Record<string, any>
+    filter?: Record<string, unknown>
     limit?: number
     orderBy?: { column: string; ascending?: boolean }
   }): Promise<StorageResult> {
@@ -86,7 +86,7 @@ export class SupabaseStorage {
     }
   }
 
-  async insert(table: string, data: any): Promise<StorageResult> {
+  async insert(table: string, data: unknown): Promise<StorageResult> {
     try {
       const result = await this.client.from(table).insert(data).select()
       return { data: result.data, error: result.error }
@@ -95,7 +95,7 @@ export class SupabaseStorage {
     }
   }
 
-  async update(table: string, data: any, filter: Record<string, any>): Promise<StorageResult> {
+  async update(table: string, data: unknown, filter: Record<string, unknown>): Promise<StorageResult> {
     try {
       let query = this.client.from(table).update(data)
       
@@ -110,7 +110,7 @@ export class SupabaseStorage {
     }
   }
 
-  async delete(table: string, filter: Record<string, any>): Promise<StorageResult> {
+  async delete(table: string, filter: Record<string, unknown>): Promise<StorageResult> {
     try {
       let query = this.client.from(table).delete()
       

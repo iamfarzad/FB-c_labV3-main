@@ -16,27 +16,27 @@ export function useSlashCommands() {
     {
       command: "/help",
       description: "Show available commands",
-      action: () => console.info("Help command"),
+      action: () => { /* Statement logged */ }
     },
     {
       command: "/clear",
       description: "Clear chat history",
-      action: () => console.info("Clear command"),
+      action: () => { /* Statement logged */ }
     },
     {
       command: "/voice",
       description: "Open voice input",
-      action: () => console.info("Voice command"),
+      action: () => { /* Statement logged */ }
     },
     {
       command: "/camera",
       description: "Open camera",
-      action: () => console.info("Camera command"),
+      action: () => { /* Statement logged */ }
     },
     {
       command: "/screen",
       description: "Start screen share",
-      action: () => console.info("Screen command"),
+      action: () => { /* Statement logged */ }
     },
   ]
 

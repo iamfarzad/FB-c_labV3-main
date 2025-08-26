@@ -47,7 +47,7 @@ class UI_AuditRunner {
     } else {
       fs.writeFileSync(filePath, content);
     }
-    console.log(`📁 Saved: ${filename}`);
+    // Log removed
   }
 
   // HTTP request helper
@@ -99,7 +99,7 @@ class UI_AuditRunner {
 
   // Test 1: Baseline collection
   async collectBaseline() {
-    console.log('\n📊 Task 1: Collecting Baseline Data...');
+    // Log removed
 
     try {
       // Test page accessibility
@@ -124,19 +124,19 @@ class UI_AuditRunner {
 
       this.saveArtifact('baseline.json', baseline);
 
-      console.log(`✅ Page accessible: ${response.status}`);
-      console.log(`📄 Title: ${baseline.title}`);
+      // Log removed
+      // Log removed
 
       return baseline;
     } catch (error) {
-      console.error('❌ Baseline collection failed:', error.message);
+      // Error: ❌ Baseline collection failed
       return null;
     }
   }
 
   // Test 2: Functional API tests (mapping to backend E2E)
   async testFunctionality() {
-    console.log('\n🔧 Task 2: Testing Functional Wiring...');
+    // Log removed
 
     const tests = [
       {
@@ -355,7 +355,7 @@ class UI_AuditRunner {
 
     for (const test of tests) {
       try {
-        console.log(`🔍 Testing ${test.name}...`);
+        // Log removed
         const result = await test.test();
 
         if (result) {
@@ -364,13 +364,13 @@ class UI_AuditRunner {
           } else {
             this.results.parityWithBackend.passed.push(test.name);
           }
-          console.log(`✅ ${test.name}: PASSED`);
+          // Log removed
         } else {
           if (['upload', 'geminiLive'].includes(test.name)) {
             this.results.parityWithBackend.expectedFailures.push(test.name);
-            console.log(`⚠️  ${test.name}: EXPECTED FAILURE`);
+            // Log removed
           } else {
-            console.log(`❌ ${test.name}: FAILED`);
+            // Log removed
           }
         }
 
@@ -384,7 +384,7 @@ class UI_AuditRunner {
 
   // Test 3: Comprehensive Accessibility Testing
   async testAccessibility() {
-    console.log('\n♿ Task 3: Running Comprehensive Accessibility Checks...');
+    // Log removed
 
     const a11yReport = {
       timestamp: new Date().toISOString(),
@@ -397,7 +397,7 @@ class UI_AuditRunner {
 
     try {
       // Test page structure and basic accessibility
-      console.log('🔍 Testing page structure...');
+      // Log removed
 
       // Test basic HTML structure
       const pageResponse = await this.makeRequest('GET', this.chatUrl);
@@ -434,7 +434,7 @@ class UI_AuditRunner {
       }
 
       // Test API endpoints accessibility
-      console.log('🔍 Testing API endpoints...');
+      // Log removed
 
       const endpoints = [
         { url: '/api/health', method: 'GET', description: 'Health check endpoint' },
@@ -471,7 +471,7 @@ class UI_AuditRunner {
       }
 
       // Test consent flow accessibility
-      console.log('🔍 Testing consent flow...');
+      // Log removed
 
       const consentResponse = await this.makeRequest('GET', `${this.baseUrl}/api/consent`);
       const consentAccessible = consentResponse.status === 200;
@@ -492,7 +492,7 @@ class UI_AuditRunner {
       }
 
       // Test form accessibility (upload endpoint)
-      console.log('🔍 Testing form accessibility...');
+      // Log removed
 
       const uploadInfoResponse = await this.makeRequest('GET', `${this.baseUrl}/api/upload`);
       if (uploadInfoResponse.status === 200) {
@@ -529,12 +529,12 @@ class UI_AuditRunner {
         'Verify screen reader compatibility'
       ];
 
-      console.log(`✅ Accessibility checks completed`);
-      console.log(`📊 Violations found: ${a11yReport.violations.length}`);
-      console.log(`⚠️  Warnings: ${a11yReport.warnings.length}`);
+      // Log removed
+      // Log removed
+      // Log removed
 
     } catch (error) {
-      console.error('❌ Accessibility testing failed:', error.message);
+      // Error: ❌ Accessibility testing failed
       a11yReport.error = error.message;
     }
 
@@ -550,7 +550,7 @@ class UI_AuditRunner {
 
   // Test 4: Layout analysis
   async testLayout() {
-    console.log('\n📐 Task 4: Analyzing Layout & Spacing...');
+    // Log removed
 
     // Simulate layout analysis
     const layoutAnalysis = {
@@ -581,12 +581,12 @@ class UI_AuditRunner {
     };
 
     this.saveArtifact('layout-analysis.json', layoutAnalysis);
-    console.log('✅ Layout analysis completed');
+    // Log removed
   }
 
   // Test 5: Visual hierarchy
   async testHierarchy() {
-    console.log('\n👁️ Task 5: Analyzing Visual Hierarchy...');
+    // Log removed
 
     const hierarchyAnalysis = {
       headings: {
@@ -610,12 +610,12 @@ class UI_AuditRunner {
     };
 
     this.saveArtifact('hierarchy-report.json', hierarchyAnalysis);
-    console.log('✅ Hierarchy analysis completed');
+    // Log removed
   }
 
   // Generate final summary
   generateSummary() {
-    console.log('\n📋 Generating Final Summary...');
+    // Log removed
 
     // Add action items based on findings
     this.results.actionItems = [
@@ -649,7 +649,7 @@ class UI_AuditRunner {
 
   // Test 5: Button Functionality Verification
   async testButtonFunctionality() {
-    console.log('\n🔘 Task 5: Verifying Button Functionality...');
+    // Log removed
 
     const buttonTests = [
       {
@@ -741,10 +741,10 @@ class UI_AuditRunner {
       ]
     };
 
-    console.log(`✅ Button functionality analysis completed`);
-    console.log(`📊 Total buttons: ${buttonReport.summary.total}`);
-    console.log(`🔧 Real functionality: ${buttonReport.summary.withRealFunctionality}`);
-    console.log(`🎭 Mock only: ${buttonReport.summary.mockOnly}`);
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
 
     this.saveArtifact('button-functionality.json', buttonReport);
 
@@ -760,7 +760,7 @@ class UI_AuditRunner {
 
   // Test 6: Stage Rail Verification
   async testStageRail() {
-    console.log('\n📊 Task 6: Verifying Stage Rail Implementation...');
+    // Log removed
 
     const stageRailReport = {
       timestamp: new Date().toISOString(),
@@ -814,10 +814,10 @@ class UI_AuditRunner {
 
     stageRailReport.stageProgression = stageProgression;
 
-    console.log(`✅ Stage rail analysis completed`);
-    console.log(`📊 Total stages: ${stageRailReport.expectedStages.length}`);
-    console.log(`🎯 Initial stage: ${stageProgression.initialStage}`);
-    console.log(`🔄 Final stage: ${stageProgression.finalStage}`);
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
 
     this.saveArtifact('stage-rail-analysis.json', stageRailReport);
 
@@ -833,10 +833,10 @@ class UI_AuditRunner {
 
   // Run all tests
   async runFullAudit() {
-    console.log('🚀 Starting F.B/c Comprehensive UI Audit');
-    console.log('Target:', this.chatUrl);
-    console.log('Results directory:', this.auditDir);
-    console.log('Live Streaming Enabled:', this.liveEnabled ? '✅ YES' : '❌ NO');
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
 
     this.ensureAuditDir();
 
@@ -853,15 +853,15 @@ class UI_AuditRunner {
     this.generateSummary();
 
     // Print results
-    console.log('\n🎯 AUDIT SUMMARY');
-    console.log('='.repeat(50));
-    console.log(`✅ Backend Parity - Passed: ${this.results.parityWithBackend.passed.length}`);
-    console.log(`⚠️  Expected Failures: ${this.results.parityWithBackend.expectedFailures.length}`);
-    console.log(`⏭️  Skipped: ${this.results.parityWithBackend.skipped.length}`);
-    console.log(`❌ A11y Violations: ${this.results.accessibility.violations.length}`);
-    console.log(`📋 Action Items: ${this.results.actionItems.length}`);
+    // Log removed
+    // Log removed);
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
 
-    console.log('\n📁 All artifacts saved to:', this.auditDir);
+    // Log removed
 
     return this.results;
   }
@@ -872,11 +872,11 @@ if (require.main === module) {
   const auditor = new UI_AuditRunner();
   auditor.runFullAudit()
     .then(results => {
-      console.log('\n🎉 UI Audit completed successfully!');
+      // Log removed
       process.exit(0);
     })
     .catch(error => {
-      console.error('\n❌ UI Audit failed:', error);
+      // Error: \n❌ UI Audit failed
       process.exit(1);
     });
 }

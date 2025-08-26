@@ -2,11 +2,11 @@
 import { getProvider } from './src/core/ai/index.js';
 
 const testProvider = async () => {
-  console.log('Testing provider...');
+  // Log removed
 
   try {
     const provider = getProvider();
-    console.log('Provider type:', provider.constructor.name);
+    // Log removed
 
     const messages = [
       {
@@ -15,17 +15,17 @@ const testProvider = async () => {
       }
     ];
 
-    console.log('Starting generation...');
+    // Log removed
     let chunkCount = 0;
 
     for await (const chunk of provider.generate({ messages })) {
       chunkCount++;
-      console.log(`Chunk ${chunkCount}:`, chunk);
+      // Log removed
     }
 
-    console.log(`Total chunks: ${chunkCount}`);
+    // Log removed
   } catch (error) {
-    console.error('Provider error:', error);
+    // Error: Provider error
   }
 };
 

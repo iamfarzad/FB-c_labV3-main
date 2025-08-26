@@ -54,7 +54,7 @@ async function migrateApiRoute(filePath) {
     let updatedContent = content
     let hasChanges = false
 
-    console.log(`\n📁 Migrating: ${filePath}`)
+    // Log removed
 
     // Update import statements
     for (const [oldPath, newPath] of Object.entries(IMPORT_MAPPINGS)) {
@@ -63,7 +63,7 @@ async function migrateApiRoute(filePath) {
       if (importRegex.test(updatedContent)) {
         updatedContent = updatedContent.replace(importRegex, `from '${newPath}'`)
         hasChanges = true
-        console.log(`  ✅ Import: ${oldPath} → ${newPath}`)
+        // Log removed
       }
     }
 
@@ -75,7 +75,7 @@ async function migrateApiRoute(filePath) {
         if (funcCallRegex.test(updatedContent)) {
           updatedContent = updatedContent.replace(funcCallRegex, `${newFunc}(`)
           hasChanges = true
-          console.log(`  ✅ Function: ${oldFunc}() → ${newFunc}()`)
+          // Log removed → ${newFunc}()`)
         }
       }
     }
@@ -83,10 +83,10 @@ async function migrateApiRoute(filePath) {
     // Write back if changes were made
     if (hasChanges) {
       fs.writeFileSync(filePath, updatedContent, 'utf8')
-      console.log(`  ✨ File migrated successfully`)
+      // Log removed
       return true
     } else {
-      console.log(`  ⏭️  No migration needed`)
+      // Log removed
       return false
     }
     
@@ -97,7 +97,7 @@ async function migrateApiRoute(filePath) {
 }
 
 async function main() {
-  console.log('🔄 Migrating API routes to src/ architecture...\n')
+  // Log removed
 
   // Find all API route files
   const apiFiles = await glob('app/api/**/*.ts', {
@@ -115,16 +115,16 @@ async function main() {
     }
   }
 
-  console.log(`\n🎉 API route migration complete!`)
-  console.log(`📊 Files checked: ${totalFiles}`)
-  console.log(`✨ Files migrated: ${migratedFiles}`)
-  console.log(`🎯 Already clean: ${totalFiles - migratedFiles}`)
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
   
   if (migratedFiles > 0) {
-    console.log(`\n💡 Next steps:`)
-    console.log(`1. Test the migrated routes`)
-    console.log(`2. Run TypeScript check: pnpm tsc --noEmit`)
-    console.log(`3. Commit changes: git add . && git commit -m "Migrate API routes to src/ architecture"`)
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed
   }
 }
 

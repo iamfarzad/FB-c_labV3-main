@@ -12,10 +12,10 @@ export interface AdminLogEntry {
   duration: number
   ipAddress: string
   userAgent: string
-  requestBody?: any
-  responseBody?: any
+  requestBody?: unknown
+  responseBody?: unknown
   error?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export interface AdminMetrics {
@@ -39,8 +39,8 @@ class AdminMonitoringService {
     duration: number,
     userId: string,
     userEmail: string,
-    requestBody?: any,
-    responseBody?: any,
+    requestBody?: unknown,
+    responseBody?: unknown,
     error?: string
   ) {
     const logEntry: AdminLogEntry = {
@@ -198,7 +198,7 @@ class AdminMonitoringService {
            'unknown'
   }
 
-  private sanitizeRequestBody(body: any): any {
+  private sanitizeRequestBody(body: unknown): unknown {
     if (!body) return undefined
     
     // Remove sensitive fields
@@ -214,7 +214,7 @@ class AdminMonitoringService {
     return sanitized
   }
 
-  private sanitizeResponseBody(body: any): any {
+  private sanitizeResponseBody(body: unknown): unknown {
     if (!body) return undefined
     
     // For responses, we might want to log only metadata, not full content

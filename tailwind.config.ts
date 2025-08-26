@@ -25,59 +25,30 @@ const config = {
         mono: ["var(--font-mono)", "monospace"],
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        chart: {
-          primary: "hsl(var(--chart-primary))",
-          secondary: "hsl(var(--chart-secondary))",
-          success: "hsl(var(--chart-success))",
-          warning: "hsl(var(--chart-warning))",
-          error: "hsl(var(--chart-error))",
-        },
-        // Sidebar colors aligned with CSS tokens
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar))",
-          background: "hsl(var(--sidebar))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        // Backwards-compat brand aliases; prefer semantic `accent`
+        // Minimal Design System - One Source of Truth
+        background: 'hsl(var(--bg))',
+        surface: 'hsl(var(--surface))',
+        border: 'hsl(var(--border))',
+        muted: 'hsl(var(--muted))',
+        foreground: 'hsl(var(--fg))',
+        accent: 'hsl(var(--accent))',
+        'accent-foreground': 'hsl(var(--accent-fg))',
+
+        // Legacy semantic colors for backward compatibility
+        primary: 'hsl(var(--accent))',
+        'primary-foreground': 'hsl(var(--accent-fg))',
+        secondary: 'hsl(var(--surface))',
+        'secondary-foreground': 'hsl(var(--fg))',
+        destructive: 'hsl(0 84% 60%)',
+        'destructive-foreground': 'hsl(var(--fg))',
+        input: 'hsl(var(--surface))',
+        ring: 'hsl(var(--accent))',
+        popover: 'hsl(var(--surface))',
+        'popover-foreground': 'hsl(var(--fg))',
+        card: 'hsl(var(--surface))',
+        'card-foreground': 'hsl(var(--fg))',
+
+        // Backwards-compat brand aliases
         "orange-accent": "hsl(var(--accent))",
         "orange-accent-hover": "var(--color-orange-accent-hover)",
         "gunmetal": "var(--color-gunmetal)",
@@ -86,20 +57,30 @@ const config = {
         "light-silver-darker": "var(--color-light-silver-darker)",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        sm: 'var(--r-sm)',
+        md: 'var(--r-md)',
+        lg: 'var(--r-lg)',
+        xl: 'var(--r-xl)',
+        full: 'var(--r-pill)'
       },
-      // Use Tailwind's built-in shadows; remove broken CSS-var shadows
-      // Custom durations/easings: keep essentials only
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)'
+      },
       transitionDuration: {
+        fast: 'var(--dur-fast)',
+        base: 'var(--dur)',
+        slow: 'var(--dur-slow)',
+        // Legacy durations for backward compatibility
         150: "150ms",
         200: "200ms",
         300: "300ms",
         500: "500ms",
       },
       transitionTimingFunction: {
-        smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
+        smooth: 'var(--ease)',
+        // Legacy timing functions
         bounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
       },
       // Responsive spacing aliases aligned with spacing.ts

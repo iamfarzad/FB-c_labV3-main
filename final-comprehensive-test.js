@@ -9,7 +9,7 @@ const BASE_URL = 'http://localhost:3000';
 
 async function makeRequest(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  console.log(`🔧 ${options.method || 'GET'} ${url}`);
+  // Log removed
 
   try {
     const response = await fetch(url, {
@@ -34,8 +34,8 @@ async function makeRequest(endpoint, options = {}) {
       data = await response.text();
     }
 
-    console.log(`📊 Status: ${response.status} (${contentType})`);
-    console.log(`📦 Response:`, JSON.stringify(data, null, 2).slice(0, 500) + (JSON.stringify(data).length > 500 ? '...' : ''));
+    // Log removed`);
+    // Log removed.slice(0, 500) + (JSON.stringify(data).length > 500 ? '...' : ''));
 
     if (!response.ok && !options.ignoreError) {
       throw new Error(`HTTP ${response.status}: ${data.error || 'Unknown error'}`);
@@ -52,23 +52,23 @@ async function makeRequest(endpoint, options = {}) {
 }
 
 async function testAllFeatures() {
-  console.log('🎯 F.B/c v4 FINAL COMPREHENSIVE TEST');
-  console.log('=' .repeat(50));
+  // Log removed
+  // Log removed);
 
   let passed = 0;
   let total = 0;
 
   // Test 1: Health Check
-  console.log('\n📋 PHASE 1: System Health');
+  // Log removed
   total++;
   const health = await makeRequest('/api/health');
   if (health.ok) {
-    console.log('✅ Health check completed\n');
+    // Log removed
     passed++;
   }
 
   // Test 2: Live API Session Creation
-  console.log('📋 PHASE 2: Live API Sessions');
+  // Log removed
   total++;
   const liveSession = await makeRequest('/api/gemini-live', {
     method: 'POST',
@@ -79,12 +79,12 @@ async function testAllFeatures() {
     }
   });
   if (liveSession.sessionId) {
-    console.log('✅ Live API session created\n');
+    // Log removed
     passed++;
   }
 
   // Test 3: Multimodal Context Management
-  console.log('📋 PHASE 3: Multimodal Context');
+  // Log removed
   total++;
   const context = await makeRequest('/api/intelligence/session-init', {
     method: 'POST',
@@ -96,12 +96,12 @@ async function testAllFeatures() {
     }
   });
   if (context.contextReady) {
-    console.log('✅ Multimodal context initialized\n');
+    // Log removed
     passed++;
   }
 
   // Test 4: Intelligence Pipeline
-  console.log('📋 PHASE 4: Intelligence Pipeline');
+  // Log removed
   total++;
   const intelligence = await makeRequest('/api/intelligence-v2', {
     method: 'POST',
@@ -112,12 +112,12 @@ async function testAllFeatures() {
     }
   });
   if (intelligence.success !== false) {
-    console.log('✅ Intelligence pipeline working\n');
+    // Log removed
     passed++;
   }
 
   // Test 5: Chat Conversation
-  console.log('📋 PHASE 5: Chat Integration');
+  // Log removed
   total++;
   const chat = await makeRequest('/api/chat', {
     method: 'POST',
@@ -130,12 +130,12 @@ async function testAllFeatures() {
     }
   });
   if (chat.success !== false) {
-    console.log('✅ Chat integration working\n');
+    // Log removed
     passed++;
   }
 
   // Test 6: PDF Export Summary
-  console.log('📋 PHASE 6: PDF Summary Generation');
+  // Log removed
   total++;
   try {
     const pdfExport = await makeRequest('/api/export-summary', {
@@ -146,15 +146,15 @@ async function testAllFeatures() {
       }
     });
     if (pdfExport.contentType === 'application/pdf') {
-      console.log('✅ PDF summary generation working\n');
+      // Log removed
       passed++;
     }
   } catch (error) {
-    console.log('⚠️ PDF generation requires environment setup\n');
+    // Log removed
   }
 
   // Test 7: ROI Calculator
-  console.log('📋 PHASE 7: ROI Calculator');
+  // Log removed
   total++;
   const roi = await makeRequest('/api/tools/roi', {
     method: 'POST',
@@ -166,12 +166,12 @@ async function testAllFeatures() {
     }
   });
   if (roi.output?.roi) {
-    console.log('✅ ROI calculator working\n');
+    // Log removed
     passed++;
   }
 
   // Test 8: File Upload
-  console.log('📋 PHASE 8: File Upload');
+  // Log removed
   total++;
   try {
     const formData = new FormData();
@@ -183,17 +183,17 @@ async function testAllFeatures() {
     });
 
     if (uploadResponse.ok) {
-      console.log('✅ File upload working\n');
+      // Log removed
       passed++;
     } else {
-      console.log('⚠️ File upload requires proper configuration\n');
+      // Log removed
     }
   } catch (error) {
-    console.log('⚠️ File upload not fully configured\n');
+    // Log removed
   }
 
   // Test 9: Email Functionality
-  console.log('📋 PHASE 9: Email System');
+  // Log removed
   total++;
   const emailTest = await makeRequest('/api/send-lead-email', {
     method: 'POST',
@@ -204,28 +204,28 @@ async function testAllFeatures() {
     ignoreError: true
   });
   if (emailTest.success && emailTest.testMode) {
-    console.log('✅ Email system working in test mode\n');
+    // Log removed
     passed++;
   }
 
   // Test 10: Avatar Endpoints
-  console.log('📋 PHASE 10: Avatar System');
+  // Log removed
   total++;
   const userAvatar = await makeRequest('/api/user-avatar');
   const aiAvatar = await makeRequest('/api/placeholder-avatar');
-  console.log('✅ Avatar endpoints working\n');
+  // Log removed
   passed++;
 
   // Final Results
-  console.log('=' .repeat(50));
-  console.log(`🎉 TEST RESULTS: ${passed}/${total} TESTS PASSED`);
-  console.log('=' .repeat(50));
+  // Log removed);
+  // Log removed
+  // Log removed);
 
   if (passed >= total * 0.8) {
-    console.log('🎯 STATUS: EXCELLENT - Core functionality operational!');
-    console.log('📝 Next steps: Configure environment variables for full functionality');
+    // Log removed
+    // Log removed
   } else {
-    console.log('⚠️ STATUS: REQUIRES CONFIGURATION - Set up environment variables');
+    // Log removed
   }
 
   return { passed, total };
@@ -233,9 +233,9 @@ async function testAllFeatures() {
 
 // Run the tests
 testAllFeatures().then(results => {
-  console.log(`\n✅ Test completed: ${results.passed}/${results.total} features working`);
+  // Log removed
   process.exit(results.passed >= results.total * 0.8 ? 0 : 1);
 }).catch(error => {
-  console.error('❌ Test failed:', error);
+  // Error: ❌ Test failed
   process.exit(1);
 });

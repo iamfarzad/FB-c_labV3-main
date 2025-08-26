@@ -38,11 +38,7 @@ chrome.storage.local.get(["browserConnectorSettings"], (result) => {
 // Add listener for connection status updates from background script (page refresh events)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "CONNECTION_STATUS_UPDATE") {
-    console.log(
-      `Received connection status update: ${
-        message.isConnected ? "Connected" : "Disconnected"
-      }`
-    );
+    // Log removed
 
     // Update UI based on connection status
     if (message.isConnected) {
@@ -65,8 +61,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === "INITIATE_AUTO_DISCOVERY") {
-    console.log(
-      `Initiating auto-discovery after page refresh (reason: ${message.reason})`
+    // Log removed`
     );
 
     // For page refreshes or if forceRestart is set to true, always cancel any ongoing discovery and restart
@@ -87,7 +82,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       updateConnectionBanner(false, null);
 
       // Start a new discovery process with quiet mode
-      console.log("Starting fresh discovery after page refresh");
+      // Log removed
       discoverServer(true);
     }
     // For other types of auto-discovery requests, only start if not already in progress
@@ -99,9 +94,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle successful server validation
   if (message.type === "SERVER_VALIDATION_SUCCESS") {
-    console.log(
-      `Server validation successful: ${message.serverHost}:${message.serverPort}`
-    );
+    // Log removed
 
     // Update the connection status banner
     serverConnected = true;
@@ -115,9 +108,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle failed server validation
   if (message.type === "SERVER_VALIDATION_FAILED") {
-    console.log(
-      `Server validation failed: ${message.reason} - ${message.serverHost}:${message.serverPort}`
-    );
+    // Log removed
 
     // Update the connection status
     serverConnected = false;
@@ -130,7 +121,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     ) {
       // If we're not already trying to discover the server, start the process
       if (!isDiscoveryInProgress) {
-        console.log("Starting auto-discovery after validation failure");
+        // Log removed
         discoverServer(true);
       }
     }
@@ -138,9 +129,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle successful WebSocket connection
   if (message.type === "WEBSOCKET_CONNECTED") {
-    console.log(
-      `WebSocket connected to ${message.serverHost}:${message.serverPort}`
-    );
+    // Log removed
 
     // Update connection status if it wasn't already connected
     if (!serverConnected) {
@@ -428,14 +417,14 @@ allowAutoPasteCheckbox.addEventListener("change", (e) => {
 // Function to cancel any ongoing discovery operations
 function cancelOngoingDiscovery() {
   if (isDiscoveryInProgress) {
-    console.log("Cancelling ongoing discovery operation");
+    // Log removed
 
     // Abort any fetch requests in progress
     if (discoveryController) {
       try {
         discoveryController.abort();
       } catch (error) {
-        console.error("Error aborting discovery controller:", error);
+        // Error: Error aborting discovery controller
       }
       discoveryController = null;
     }
@@ -456,7 +445,7 @@ function cancelOngoingDiscovery() {
     clearTimeout(reconnectAttemptTimeout);
     reconnectAttemptTimeout = null;
 
-    console.log("Discovery operation cancelled successfully");
+    // Log removed
   }
 }
 
@@ -508,7 +497,7 @@ async function testConnection(host, port) {
 
       // Update settings if different port was discovered
       if (parseInt(identity.port, 10) !== port) {
-        console.log(`Detected different port: ${identity.port}`);
+        // Log removed
         settings.serverPort = parseInt(identity.port, 10);
         serverPortInput.value = settings.serverPort;
         saveSettings();
@@ -552,7 +541,7 @@ function scheduleReconnectAttempt() {
 
   // Schedule a reconnect attempt in 30 seconds
   reconnectAttemptTimeout = setTimeout(() => {
-    console.log("Attempting to reconnect to server...");
+    // Log removed
     // Only show minimal UI during auto-reconnect
     discoverServer(true);
   }, 30000); // 30 seconds
@@ -594,13 +583,11 @@ async function tryServerConnection(host, port) {
 
         // Verify this is actually our server by checking the signature
         if (identity.signature !== "mcp-browser-connector-24x7") {
-          console.log(
-            `Found a server at ${host}:${port} but it's not the Browser Tools server`
-          );
+          // Log removed
           return false;
         }
 
-        console.log(`Successfully found server at ${host}:${port}`);
+        // Log removed
 
         // Update settings with discovered server
         settings.serverHost = host;
@@ -641,13 +628,13 @@ async function tryServerConnection(host, port) {
     if (error.name === "AbortError") {
       // Check if this was due to the global discovery cancellation
       if (discoveryController && discoveryController.signal.aborted) {
-        console.log("Connection attempt aborted by global cancellation");
+        // Log removed
         return "aborted";
       }
       // Otherwise it was just a timeout for this specific connection attempt
       return false;
     }
-    console.log(`Connection error for ${host}:${port}: ${error.message}`);
+    // Log removed
     return false;
   }
 }
@@ -672,11 +659,11 @@ async function discoverServer(quietMode = false) {
   updateConnectionBanner(false, null);
 
   try {
-    console.log("Starting server discovery process");
+    // Log removed
 
     // Add an early cancellation listener that will respond to page navigation/refresh
     discoveryController.signal.addEventListener("abort", () => {
-      console.log("Discovery aborted via AbortController signal");
+      // Log removed
       isDiscoveryInProgress = false;
     });
 
@@ -725,19 +712,19 @@ async function discoverServer(quietMode = false) {
 
     // Remove duplicates
     const uniquePorts = [...new Set(ports)];
-    console.log("Will check ports:", uniquePorts);
+    // Log removed
 
     // Create a progress indicator
     let progress = 0;
     let totalChecked = 0;
 
     // Phase 1: Try the most likely combinations first (current host:port and localhost variants)
-    console.log("Starting Phase 1: Quick check of high-priority hosts/ports");
+    // Log removed
     const priorityHosts = hosts.slice(0, 2); // First two hosts are highest priority
     for (const host of priorityHosts) {
       // Check if discovery was cancelled
       if (!isDiscoveryInProgress) {
-        console.log("Discovery process was cancelled during Phase 1");
+        // Log removed
         return false;
       }
 
@@ -746,15 +733,15 @@ async function discoverServer(quietMode = false) {
       if (!quietMode) {
         statusText.textContent = `Checking ${host}:${uniquePorts[0]}...`;
       }
-      console.log(`Checking ${host}:${uniquePorts[0]}...`);
+      // Log removed
       const result = await tryServerConnection(host, uniquePorts[0]);
 
       // Check for cancellation or success
       if (result === "aborted" || !isDiscoveryInProgress) {
-        console.log("Discovery process was cancelled");
+        // Log removed
         return false;
       } else if (result === true) {
-        console.log("Server found in priority check");
+        // Log removed
         if (quietMode) {
           // In quiet mode, only show the connection banner but hide the status box
           connectionStatusDiv.style.display = "none";
@@ -766,7 +753,7 @@ async function discoverServer(quietMode = false) {
       if (uniquePorts.length > 1) {
         // Check if discovery was cancelled
         if (!isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled");
+          // Log removed
           return false;
         }
 
@@ -774,15 +761,15 @@ async function discoverServer(quietMode = false) {
         if (!quietMode) {
           statusText.textContent = `Checking ${host}:${uniquePorts[1]}...`;
         }
-        console.log(`Checking ${host}:${uniquePorts[1]}...`);
+        // Log removed
         const result = await tryServerConnection(host, uniquePorts[1]);
 
         // Check for cancellation or success
         if (result === "aborted" || !isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled");
+          // Log removed
           return false;
         } else if (result === true) {
-          console.log("Server found in priority check");
+          // Log removed
           if (quietMode) {
             // In quiet mode, only show the connection banner but hide the status box
             connectionStatusDiv.style.display = "none";
@@ -802,8 +789,7 @@ async function discoverServer(quietMode = false) {
 
     // Phase 2: Systematic scan of all combinations
     const totalAttempts = hosts.length * uniquePorts.length;
-    console.log(
-      `Starting Phase 2: Full scan (${totalAttempts} total combinations)`
+    // Log removed`
     );
     statusText.textContent = `Quick check failed. Starting full scan (${totalChecked}/${totalAttempts})...`;
 
@@ -818,7 +804,7 @@ async function discoverServer(quietMode = false) {
       for (const port of portsToCheck) {
         // Check if discovery was cancelled
         if (!isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled during local port scan");
+          // Log removed
           return false;
         }
 
@@ -826,16 +812,16 @@ async function discoverServer(quietMode = false) {
         progress++;
         totalChecked++;
         statusText.textContent = `Scanning local ports... (${totalChecked}/${totalAttempts}) - Trying ${host}:${port}`;
-        console.log(`Checking ${host}:${port}...`);
+        // Log removed
 
         const result = await tryServerConnection(host, port);
 
         // Check for cancellation or success
         if (result === "aborted" || !isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled");
+          // Log removed
           return false;
         } else if (result === true) {
-          console.log(`Server found at ${host}:${port}`);
+          // Log removed
           return true; // Successfully found server
         }
       }
@@ -851,7 +837,7 @@ async function discoverServer(quietMode = false) {
       for (const port of uniquePorts) {
         // Check if discovery was cancelled
         if (!isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled during remote scan");
+          // Log removed
           return false;
         }
 
@@ -859,24 +845,22 @@ async function discoverServer(quietMode = false) {
         progress++;
         totalChecked++;
         statusText.textContent = `Scanning remote hosts... (${totalChecked}/${totalAttempts}) - Trying ${host}:${port}`;
-        console.log(`Checking ${host}:${port}...`);
+        // Log removed
 
         const result = await tryServerConnection(host, port);
 
         // Check for cancellation or success
         if (result === "aborted" || !isDiscoveryInProgress) {
-          console.log("Discovery process was cancelled");
+          // Log removed
           return false;
         } else if (result === true) {
-          console.log(`Server found at ${host}:${port}`);
+          // Log removed
           return true; // Successfully found server
         }
       }
     }
 
-    console.log(
-      `Discovery process completed, checked ${totalChecked} combinations, no server found`
-    );
+    // Log removed
     // If we get here, no server was found
     statusIcon.className = "status-indicator status-disconnected";
     statusText.textContent =
@@ -895,7 +879,7 @@ async function discoverServer(quietMode = false) {
 
     return false;
   } catch (error) {
-    console.error("Error during server discovery:", error);
+    // Error: Error during server discovery
     statusIcon.className = "status-indicator status-disconnected";
     statusText.textContent = `Error discovering server: ${error.message}`;
 
@@ -912,7 +896,7 @@ async function discoverServer(quietMode = false) {
 
     return false;
   } finally {
-    console.log("Discovery process finished");
+    // Log removed
     // Always clean up, even if there was an error
     if (discoveryController) {
       discoveryController = null;
@@ -935,16 +919,16 @@ captureScreenshotButton.addEventListener("click", () => {
       screenshotPath: settings.screenshotPath,
     },
     (response) => {
-      console.log("Screenshot capture response:", response);
+      // Log removed
       if (!response) {
         captureScreenshotButton.textContent = "Failed to capture!";
         console.error("Screenshot capture failed: No response received");
       } else if (!response.success) {
         captureScreenshotButton.textContent = "Failed to capture!";
-        console.error("Screenshot capture failed:", response.error);
+        // Error: Screenshot capture failed
       } else {
         captureScreenshotButton.textContent = `Captured: ${response.title}`;
-        console.log("Screenshot captured successfully:", response.path);
+        // Log removed
       }
       setTimeout(() => {
         captureScreenshotButton.textContent = "Capture Screenshot";
@@ -957,7 +941,7 @@ captureScreenshotButton.addEventListener("click", () => {
 const wipeLogsButton = document.getElementById("wipe-logs");
 wipeLogsButton.addEventListener("click", () => {
   const serverUrl = `http://${settings.serverHost}:${settings.serverPort}/wipelogs`;
-  console.log(`Sending wipe request to ${serverUrl}`);
+  // Log removed
 
   fetch(serverUrl, {
     method: "POST",
@@ -965,14 +949,14 @@ wipeLogsButton.addEventListener("click", () => {
   })
     .then((response) => response.json())
     .then((result) => {
-      console.log("Logs wiped successfully:", result.message);
+      // Log removed
       wipeLogsButton.textContent = "Logs Wiped!";
       setTimeout(() => {
         wipeLogsButton.textContent = "Wipe All Logs";
       }, 2000);
     })
     .catch((error) => {
-      console.error("Failed to wipe logs:", error);
+      // Error: Failed to wipe logs
       wipeLogsButton.textContent = "Failed to Wipe Logs";
       setTimeout(() => {
         wipeLogsButton.textContent = "Wipe All Logs";

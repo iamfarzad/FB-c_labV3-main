@@ -69,7 +69,7 @@ export function useWebcam({
       
       return []
     } catch (err) {
-      console.error('Error getting devices:', err)
+    console.error('Error getting devices', error)
       setError('Failed to access camera devices')
       setState('error')
       return []
@@ -104,7 +104,7 @@ export function useWebcam({
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream
         videoRef.current.play().catch(err => {
-          console.error('Error playing video:', err)
+          // Error: Error playing video
           setError('Failed to start camera preview')
           setState('error')
         })
@@ -115,8 +115,8 @@ export function useWebcam({
       
       setState('active')
       return mediaStream
-    } catch (err: any) {
-      console.error('Webcam error:', err)
+    } catch (err: unknown) {
+    console.error('Webcam error', error)
       
       const errorState = err.name === 'NotAllowedError' ? 'permission-denied' : 'error'
       const errorMessage = errorState === 'permission-denied'

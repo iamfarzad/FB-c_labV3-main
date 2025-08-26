@@ -37,7 +37,7 @@ export interface MediaMetadata {
   width?: number;
   height?: number;
   bitrate?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MediaCaptureOptions {
@@ -98,7 +98,7 @@ export class MediaService extends EventEmitter {
       }
       return true;
     } catch (error) {
-      console.error('Permission request failed:', error);
+    console.error('Permission request failed', error)
       return false;
     }
   }

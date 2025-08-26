@@ -13,7 +13,7 @@ export function withApiGuard<TSchema extends z.ZodTypeAny>(opts: {
   schema?: TSchema
   requireSession?: boolean
   rateLimit?: { windowMs: number; max: number; key?: (req: NextRequest) => string }
-  handler: (args: HandlerArgs<TSchema extends z.ZodTypeAny ? z.infer<TSchema> : any>) => Promise<Response | NextResponse>
+  handler: (args: HandlerArgs<TSchema extends z.ZodTypeAny ? z.infer<TSchema> : unknown>) => Promise<Response | NextResponse>
 }) {
   // naive in-memory limiter keyed by provided key; replace with Redis in prod
   const store = new Map<string, { count: number; reset: number }>()
@@ -46,12 +46,12 @@ export function withApiGuard<TSchema extends z.ZodTypeAny>(opts: {
     const limited = checkLimit(req)
     if (limited) return limited
 
-    let body: any = undefined
+    let body: unknown = undefined
     if (req.method !== 'GET') {
       try {
         const raw = await req.json()
         body = opts.schema ? opts.schema.parse(raw) : raw
-      } catch (e: any) {
+      } catch (e: unknown) {
         const msg = e?.name === 'ZodError' ? 'Invalid input' : 'Bad request'
         return NextResponse.json({ ok: false, error: msg }, { status: 400, headers: { 'x-request-id': requestId } })
       }

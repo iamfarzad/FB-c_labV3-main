@@ -7,7 +7,7 @@ export interface IntelligenceRequest {
   data: Record<string, unknown>
 }
 
-export async function handleIntelligence(body: IntelligenceRequest): Promise<any> {
+export async function handleIntelligence(body: IntelligenceRequest): Promise<unknown> {
   const { action, data } = body
 
   switch (action) {
@@ -26,12 +26,7 @@ export async function handleIntelligence(body: IntelligenceRequest): Promise<any
     case 'research-lead': {
       const { email, name, companyUrl, sessionId } = data as { email: string; name?: string; companyUrl?: string; sessionId?: string }
 
-      console.info('🔍 Lead research started:', {
-        sessionId,
-        email,
-        name,
-        companyUrl
-      })
+      // Action logged
 
       const result = await intelligenceService.researchLead(email, name, companyUrl)
 
@@ -60,13 +55,7 @@ export async function handleIntelligence(body: IntelligenceRequest): Promise<any
         }
       }
 
-      console.info('✅ Lead research completed:', {
-        company: result.company,
-        person: result.person,
-        role: result.role,
-        scores: { confidence: result.confidence },
-        citations: result.citations?.length || 0
-      })
+      // Action logged
 
       return { success: true, research: {
         company: result.company,

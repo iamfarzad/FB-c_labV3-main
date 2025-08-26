@@ -48,7 +48,7 @@ async function updateImportsInFile(filePath) {
       if (oldImportRegex.test(updatedContent)) {
         updatedContent = updatedContent.replace(oldImportRegex, newImport)
         hasChanges = true
-        console.log(`  ✅ Updated: ${oldPath} → ${newPath}`)
+        // Log removed
       }
     }
 
@@ -66,7 +66,7 @@ async function updateImportsInFile(filePath) {
 }
 
 async function main() {
-  console.log('🔄 Updating imports from lib/ to src/...\n')
+  // Log removed
 
   // Find all TypeScript and TSX files
   const files = await glob('**/*.{ts,tsx}', {
@@ -78,21 +78,21 @@ async function main() {
 
   for (const file of files) {
     totalFiles++
-    console.log(`📁 Checking: ${file}`)
+    // Log removed
     
     const wasUpdated = await updateImportsInFile(file)
     if (wasUpdated) {
       updatedFiles++
-      console.log(`  ✨ File updated\n`)
+      // Log removed
     } else {
-      console.log(`  ⏭️  No changes needed\n`)
+      // Log removed
     }
   }
 
-  console.log(`\n🎉 Import update complete!`)
-  console.log(`📊 Files checked: ${totalFiles}`)
-  console.log(`✨ Files updated: ${updatedFiles}`)
-  console.log(`🎯 Remaining: ${totalFiles - updatedFiles}`)
+  // Log removed
+  // Log removed
+  // Log removed
+  // Log removed
 }
 
 if (require.main === module) {

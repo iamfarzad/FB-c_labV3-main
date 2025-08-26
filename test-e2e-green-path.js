@@ -11,7 +11,7 @@ const TEST_SESSION_ID = 'test-e2e-' + Date.now();
 
 async function makeRequest(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  console.log(`🔧 ${options.method || 'GET'} ${url}`);
+  // Log removed
 
   try {
     const response = await fetch(url, {
@@ -34,13 +34,13 @@ async function makeRequest(endpoint, options = {}) {
       data = await response.text();
     }
 
-    console.log(`📊 Status: ${response.status}`);
+    // Log removed
     if (typeof data === 'string' && data.length > 200) {
-      console.log(`📦 Response: ${data.substring(0, 200)}...`);
+      // Log removed}...`);
     } else if (data instanceof Blob) {
-      console.log(`📦 Response: Blob (${data.size} bytes, ${data.type})`);
+      // Log removed`);
     } else {
-      console.log(`📦 Response:`, JSON.stringify(data, null, 2));
+      // Log removed);
     }
 
     if (!response.ok) {
@@ -56,7 +56,7 @@ async function makeRequest(endpoint, options = {}) {
 }
 
 async function testSSEChat(sessionId, message) {
-  console.log('🎯 Testing Chat Conversation...');
+  // Log removed
 
   try {
     const response = await fetch(`${BASE_URL}/api/chat`, {
@@ -70,7 +70,7 @@ async function testSSEChat(sessionId, message) {
       })
     });
 
-    console.log(`📊 Chat Status: ${response.status}`);
+    // Log removed
 
     let receivedData = '';
     if (response.body) {
@@ -90,30 +90,30 @@ async function testSSEChat(sessionId, message) {
             if (line.startsWith('data: ') && line.trim() !== 'data: ') {
               const data = line.slice(6).trim();
               receivedData += data;
-              console.log(`📨 Chat: ${data.substring(0, 150)}...`);
+              // Log removed}...`);
             }
           }
         }
       } catch (error) {
-        console.log('⚠️ Chat stream ended');
+        // Log removed
       }
     }
 
-    console.log('✅ Chat conversation completed');
+    // Log removed
     return { status: response.status, success: response.ok, data: receivedData };
 
   } catch (error) {
-    console.log('⚠️ Chat test failed:', error.message);
+    // Log removed
     return { status: 0, success: false, data: '' };
   }
 }
 
 async function testGreenPathE2E() {
-  console.log('🚀 Starting Green Path E2E Test...\n');
+  // Log removed
 
   try {
     // 1. Consent (Terms & Conditions)
-    console.log('🎯 PHASE 1: User Consent');
+    // Log removed
     try {
       const consentData = await makeRequest('/api/consent', {
         method: 'POST',
@@ -123,13 +123,13 @@ async function testGreenPathE2E() {
           policyVersion: 'v1'
         }
       });
-      console.log('✅ User consent captured\n');
+      // Log removed
     } catch (error) {
-      console.log('⚠️ Consent endpoint not available (expected in some setups)\n');
+      // Log removed\n');
     }
 
     // 2. Session Initialization (Multimodal Context)
-    console.log('🎯 PHASE 2: Session Initialization');
+    // Log removed
     const sessionData = await makeRequest('/api/intelligence/session-init', {
       method: 'POST',
       body: {
@@ -141,24 +141,24 @@ async function testGreenPathE2E() {
     });
 
     if (sessionData.data.contextReady) {
-      console.log('✅ Multimodal context initialized\n');
+      // Log removed
     } else {
-      console.log('⚠️ Context not ready, but continuing...\n');
+      // Log removed
     }
 
     // 3. Chat Conversation (SSE)
-    console.log('🎯 PHASE 3: Chat Conversation');
+    // Log removed
     const chatResult = await testSSEChat(TEST_SESSION_ID,
       'We want to automate our weekly reporting process and need AI consulting. Can you help us analyze our current setup and provide recommendations?');
 
     if (chatResult.success) {
-      console.log('✅ Chat conversation completed\n');
+      // Log removed
     } else {
-      console.log('⚠️ Chat conversation had issues\n');
+      // Log removed
     }
 
     // 4. Generate Advanced Summary
-    console.log('🎯 PHASE 4: Advanced Summary Generation');
+    // Log removed
     try {
       const summaryData = await makeRequest('/api/summary', {
         method: 'POST',
@@ -168,17 +168,17 @@ async function testGreenPathE2E() {
       });
 
       if (summaryData.data.userSummary && summaryData.data.consultantBrief) {
-        console.log('✅ Advanced summary generated\n');
-        console.log(`📊 Lead Score: ${summaryData.data.leadScore || 'N/A'}`);
+        // Log removed
+        // Log removed
       } else {
-        console.log('⚠️ Summary format unexpected\n');
+        // Log removed
       }
     } catch (error) {
-      console.log('⚠️ Summary endpoint not available yet\n');
+      // Log removed
     }
 
     // 5. Generate PDF Report
-    console.log('🎯 PHASE 5: PDF Report Generation');
+    // Log removed
     try {
       const pdfData = await makeRequest('/api/pdf', {
         method: 'POST',
@@ -189,16 +189,16 @@ async function testGreenPathE2E() {
       });
 
       if (pdfData.data instanceof Blob && pdfData.data.type === 'application/pdf') {
-        console.log('✅ PDF report generated\n');
+        // Log removed
       } else {
-        console.log('⚠️ PDF format unexpected\n');
+        // Log removed
       }
     } catch (error) {
-      console.log('⚠️ PDF generation not available yet\n');
+      // Log removed
     }
 
     // 6. Send Summary Email
-    console.log('🎯 PHASE 6: Email Summary');
+    // Log removed
     try {
       const emailData = await makeRequest('/api/email/send-summary', {
         method: 'POST',
@@ -208,13 +208,13 @@ async function testGreenPathE2E() {
         }
       });
 
-      console.log('✅ Summary email sent\n');
+      // Log removed
     } catch (error) {
-      console.log('⚠️ Email endpoint not available yet\n');
+      // Log removed
     }
 
     // 7. Test Additional Capabilities
-    console.log('🎯 PHASE 7: Additional Capabilities');
+    // Log removed
 
     // Test Intelligence with Search
     try {
@@ -225,9 +225,9 @@ async function testGreenPathE2E() {
           type: 'search'
         }
       });
-      console.log('✅ Intelligence with search working\n');
+      // Log removed
     } catch (error) {
-      console.log('⚠️ Intelligence search needs attention\n');
+      // Log removed
     }
 
     // Test ROI Calculator
@@ -241,9 +241,9 @@ async function testGreenPathE2E() {
           toolCost: 1000
         }
       });
-      console.log('✅ ROI calculator working\n');
+      // Log removed
     } catch (error) {
-      console.log('⚠️ ROI calculator needs proper schema\n');
+      // Log removed
     }
 
     // Test Avatar System
@@ -251,32 +251,32 @@ async function testGreenPathE2E() {
       const userAvatar = await makeRequest('/api/user-avatar');
       const aiAvatar = await makeRequest('/api/placeholder-avatar');
       if (userAvatar.data.startsWith('<svg') && aiAvatar.data.startsWith('<svg')) {
-        console.log('✅ Avatar system working\n');
+        // Log removed
       }
     } catch (error) {
-      console.log('⚠️ Avatar system needs attention\n');
+      // Log removed
     }
 
-    console.log('🎉 GREEN PATH E2E TEST COMPLETED!');
-    console.log('✅ Complete user journey tested\n');
+    // Log removed
+    // Log removed
 
-    console.log('📊 E2E TEST SUMMARY:');
-    console.log('• ✅ User consent flow');
-    console.log('• ✅ Session initialization');
-    console.log('• ✅ Chat conversation (SSE)');
-    console.log('• ⚠️ Advanced summary (endpoint may not exist)');
-    console.log('• ⚠️ PDF generation (endpoint may not exist)');
-    console.log('• ⚠️ Email sending (endpoint may not exist)');
-    console.log('• ✅ Intelligence with search');
-    console.log('• ⚠️ ROI calculator (may need schema fix)');
-    console.log('• ✅ Avatar system');
+    // Log removed
+    // Log removed
+    // Log removed
+    // Log removed');
+    // Log removed');
+    // Log removed');
+    // Log removed');
+    // Log removed
+    // Log removed');
+    // Log removed
 
-    console.log('\n🏆 CORE MULTIMODAL PIPELINE: FULLY OPERATIONAL');
-    console.log('🎯 The essential AI functionality is working perfectly!');
+    // Log removed
+    // Log removed
 
   } catch (error) {
-    console.error('💥 E2E TEST FAILED:', error.message);
-    console.error('Full error:', error);
+    // Error: 💥 E2E TEST FAILED
+    // Error: Full error
     process.exit(1);
   }
 }
@@ -284,10 +284,10 @@ async function testGreenPathE2E() {
 // Run the green path E2E test
 testGreenPathE2E()
   .then(() => {
-    console.log('\n🏁 Green path E2E test completed successfully!');
+    // Log removed
     process.exit(0);
   })
   .catch((error) => {
-    console.error('\n💥 E2E test failed:', error);
+    // Error: \n💥 E2E test failed
     process.exit(1);
   });

@@ -1,2 +1,2 @@
-export interface ActionResponse<T = any> { ok: boolean; output?: T; error?: string; citations?: { uri: string; title?: string }[] }
+export interface ActionResponse<T = unknown> { ok: boolean; output?: T; error?: string; citations?: { uri: string; title?: string }[] }
 

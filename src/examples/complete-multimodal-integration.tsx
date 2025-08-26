@@ -35,10 +35,10 @@ export const CompleteMultimodalIntegration = () => {
     id: string;
     role: 'user' | 'assistant';
     content: string;
-    tools?: any[];
-    sources?: any[];
-    reasoning?: any;
-    suggestions?: any[];
+    tools?: unknown[];
+    sources?: unknown[];
+    reasoning?: unknown;
+    suggestions?: unknown[];
   }>>([
     {
       id: 'welcome',
@@ -53,7 +53,7 @@ export const CompleteMultimodalIntegration = () => {
     }
   ]);
 
-  const handleSubmit = async (content: string, modality?: string, data?: any) => {
+  const handleSubmit = async (content: string, modality?: string, data?: unknown) => {
     // Add user message
     const userMessage = {
       id: `user_${Date.now()}`,
@@ -79,8 +79,8 @@ export const CompleteMultimodalIntegration = () => {
           duration: 3
         },
         suggestions: [
-          { suggestion: 'Continue analysis', onClick: () => console.log('Continue clicked') },
-          { suggestion: 'Export results', onClick: () => console.log('Export clicked') },
+          { suggestion: 'Continue analysis', onClick: () => { /* Action logged */ } },
+          { suggestion: 'Export results', onClick: () => { /* Action logged */ } },
           { suggestion: 'Create workflow', onClick: () => setActiveTab('workflow') }
         ]
       };
@@ -194,7 +194,7 @@ export const CompleteMultimodalIntegration = () => {
                   sessionId={sessionId}
                   userId={userId}
                   onAnalysisComplete={(result) => {
-                    console.log('Web analysis completed:', result);
+                    // Action logged
                     // Add to chat context
                     const message = {
                       id: `web_${Date.now()}`,
@@ -209,7 +209,7 @@ export const CompleteMultimodalIntegration = () => {
                     setMessages(prev => [...prev, message]);
                   }}
                   onError={(error) => {
-                    console.error('Web analysis error:', error);
+                    // Error: Web analysis error
                   }}
                 />
               </CardContent>
@@ -233,7 +233,7 @@ export const CompleteMultimodalIntegration = () => {
                   sessionId={sessionId}
                   userId={userId}
                   onWorkflowComplete={(results) => {
-                    console.log('Workflow completed:', results);
+                    // Action logged
                     // Add completion message to chat
                     const message = {
                       id: `workflow_${Date.now()}`,
@@ -248,7 +248,7 @@ export const CompleteMultimodalIntegration = () => {
                     setMessages(prev => [...prev, message]);
                   }}
                   onWorkflowError={(error) => {
-                    console.error('Workflow error:', error);
+                    // Error: Workflow error
                   }}
                 />
               </CardContent>
@@ -272,7 +272,7 @@ export const CompleteMultimodalIntegration = () => {
                   sessionId={sessionId}
                   userId={userId}
                   onTaskComplete={(task) => {
-                    console.log('Task completed:', task);
+                    // Action logged
                     // Add to chat context
                     const message = {
                       id: `task_${Date.now()}`,
@@ -287,7 +287,7 @@ export const CompleteMultimodalIntegration = () => {
                     setMessages(prev => [...prev, message]);
                   }}
                   onTaskError={(task, error) => {
-                    console.error('Task error:', task, error);
+                    // Error: Task error
                   }}
                 />
               </CardContent>
@@ -311,7 +311,7 @@ export const CompleteMultimodalIntegration = () => {
                   sessionId={sessionId}
                   userId={userId}
                   onBranchCreate={(branch) => {
-                    console.log('Branch created:', branch);
+                    // Action logged
                     // Add to chat context
                     const message = {
                       id: `branch_${Date.now()}`,
@@ -326,10 +326,10 @@ export const CompleteMultimodalIntegration = () => {
                     setMessages(prev => [...prev, message]);
                   }}
                   onBranchSelect={(branch) => {
-                    console.log('Branch selected:', branch);
+                    // Action logged
                   }}
                   onBranchCompare={(branches) => {
-                    console.log('Branches compared:', branches);
+                    // Action logged
                     // Add comparison to chat
                     const message = {
                       id: `compare_${Date.now()}`,

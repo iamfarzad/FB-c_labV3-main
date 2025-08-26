@@ -82,7 +82,7 @@ export class MeetingScheduler {
         return []
       }
 
-      const bookedTimes = new Set(bookedSlots.map((slot: any) => slot.meeting_time))
+      const bookedTimes = new Set(bookedSlots.map((slot: unknown) => slot.meeting_time))
 
       return this.TIME_SLOTS.map((time) => ({
         date,
@@ -110,7 +110,7 @@ export class MeetingScheduler {
       }
 
       return { success: true, meeting: result.meeting }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Failed to book meeting
       return { success: false, error: error.message }
     }

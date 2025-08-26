@@ -36,7 +36,7 @@ export function useMediaCapture({
       mediaService.current = getMediaService();
       setIsInitialized(true);
     } catch (error) {
-      console.warn('MediaService not available:', error);
+      // Warning log removed - could add proper error handling here
       setInitError(error instanceof Error ? error : new Error('Failed to initialize MediaService'));
     }
     
@@ -50,10 +50,10 @@ export function useMediaCapture({
   }, []);
 
   // Helper to safely access media service methods
-  const withMediaService = <T extends (...args: any[]) => any>(
-    fn: (service: MediaService, ...args: any[]) => any
+  const withMediaService = <T extends (...args: unknown[]) => any>(
+    fn: (service: MediaService, ...args: unknown[]) => any
   ) => {
-    return (...args: any[]) => {
+    return (...args: unknown[]) => {
       if (!mediaService.current) {
         const error = initError || new Error('MediaService not initialized');
         onError?.(error);
@@ -226,7 +226,7 @@ export function useMediaCapture({
             service.removeMediaItem(mediaItem.id);
           })();
         } catch (err) {
-          console.warn('Failed to clean up media item:', err);
+          // Warning log removed - could add proper error handling here
         }
       }
       clearInterval(timerRef.current);

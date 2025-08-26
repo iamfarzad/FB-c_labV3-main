@@ -24,7 +24,7 @@ export interface BusinessContentData {
     industry?: string
     companySize?: string
     stage?: string
-    customData?: Record<string, any>
+    customData?: Record<string, unknown>
   }
 }
 

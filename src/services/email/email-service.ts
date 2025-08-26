@@ -34,7 +34,7 @@ export class EmailService {
       }
 
       return { success: true, emailId: data?.id }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Email service error occurred
       throw error
     }

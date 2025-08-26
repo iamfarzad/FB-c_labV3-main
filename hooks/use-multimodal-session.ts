@@ -35,7 +35,7 @@ export function useMultimodalSession() {
   const [error, setError] = useState<string | null>(null)
   
   // Direct Gemini Live session
-  const liveSessionRef = useRef<any>(null)
+  const liveSessionRef = useRef<unknown>(null)
   
   // Web Audio API context for playing raw audio data
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -46,7 +46,7 @@ export function useMultimodalSession() {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({
         sampleRate: 24000 // Gemini TTS sample rate
       })
-      console.info('🎵 Web Audio API context initialized')
+      // Action logged
     }
     
     return () => {
@@ -92,7 +92,7 @@ export function useMultimodalSession() {
   // Play audio from base64 data using Web Audio API
   const playAudio = useCallback(async (audioData: string) => {
     try {
-      console.info('🎵 Playing audio data with Web Audio API...')
+      // Action logged
       
       if (!audioContextRef.current) {
         throw new Error('AudioContext not initialized')
@@ -115,9 +115,9 @@ export function useMultimodalSession() {
       source.connect(audioContextRef.current.destination)
       source.start(0)
       
-      console.info('🎵 Audio playback started')
+      // Action logged
     } catch (error) {
-      console.error('❌ Audio playback error:', error)
+    console.error('❌ Audio playback error', error)
     }
   }, [decodeBase64, decodeAudioData])
 
@@ -135,7 +135,7 @@ export function useMultimodalSession() {
   // Stop session
   const stopSession = useCallback(async () => {
     try {
-      console.info('🛑 Stopping multimodal session...')
+      // Action logged
       
       if (liveSessionRef.current) {
         await liveSessionRef.current.close()
@@ -144,10 +144,10 @@ export function useMultimodalSession() {
 
       setSession(prev => prev ? { ...prev, isActive: false } : null)
       setIsConnected(false)
-      console.info('✅ Session stopped successfully')
+      // Action logged
 
     } catch (error) {
-      console.error('❌ Error stopping session:', error)
+    console.error('❌ Error stopping session', error)
       setError((error as Error).message)
     }
   }, [])

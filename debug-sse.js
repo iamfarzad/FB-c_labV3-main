@@ -2,35 +2,35 @@
 import { sseFromAsyncIterable } from './src/core/stream/sse.js';
 
 async function testSSE() {
-  console.log('Testing SSE helper...');
+  // Log removed
 
   // Create a simple async generator that yields some text
   async function* simpleGenerator() {
-    console.log('Generator started');
+    // Log removed
     yield 'Hello';
     yield ' ';
     yield 'world';
-    console.log('Generator finished');
+    // Log removed
   }
 
-  console.log('Creating SSE response...');
+  // Log removed
   const response = sseFromAsyncIterable(simpleGenerator());
-  console.log('SSE response created');
+  // Log removed
 
   // Read the response
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
 
-  console.log('Reading SSE response...');
+  // Log removed
   while (true) {
     const { value, done } = await reader.read();
     if (done) break;
 
     const chunk = decoder.decode(value, { stream: true });
-    console.log('SSE chunk:', chunk);
+    // Log removed
   }
 
-  console.log('SSE test completed');
+  // Log removed
 }
 
 testSSE().catch(console.error);

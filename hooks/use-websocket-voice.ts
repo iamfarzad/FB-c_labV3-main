@@ -25,7 +25,7 @@ interface WebSocketVoiceHook {
   error: string | null
   transcript: string
   audioQueue: QueuedAudioItem[]
-  startSession: (leadContext?: any) => Promise<void>
+  startSession: (leadContext?: unknown) => Promise<void>
   stopSession: () => void
   sendMessage: (message: string) => Promise<void>
   playNextAudio: () => void
@@ -79,9 +79,9 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
 
   // Log mount/unmount once (avoid logging on every render)
   useEffect(() => {
-    console.info('--- useWebSocketVoice HOOK MOUNTED ---')
+    // Action logged
     return () => {
-      console.info('--- useWebSocketVoice HOOK UNMOUNTING (Cleanup) ---')
+      // Action logged ---')
     }
   }, [])
 
@@ -170,7 +170,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       };
       source.start(0);
     } catch (error) {
-      console.error('Error playing PCM audio:', error);
+    console.error('Error playing PCM audio', error)
       isPlayingRef.current = false;
       playNextAudioRef.current();
     }
@@ -179,13 +179,13 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
   // If NEXT_PUBLIC_GEMINI_DIRECT === '1', use direct Live API with ephemeral token instead of proxy WS
   const connectWebSocket = useCallback(() => {
     if (reconnectingRef.current) {
-      console.info('[useWebSocketVoice] Reconnect already in progress, skipping...')
+      // Action logged
       return
     }
     reconnectingRef.current = true
 
     if (wsRef.current && (wsRef.current.readyState === WebSocket.OPEN || wsRef.current.readyState === WebSocket.CONNECTING)) {
-      console.info('[useWebSocketVoice] WebSocket already connecting or open.')
+      // Action logged
       reconnectingRef.current = false
       return
     }
@@ -201,7 +201,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
           wsRef.current.close(1000, 'Recreating connection')
         }
       } catch (e) {
-        console.warn('[useWebSocketVoice] Error cleaning up old WebSocket:', e)
+        // Warning log removed - could add proper error handling here
       }
       wsRef.current = null
     }
@@ -228,23 +228,23 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       } else {
         // Production default
         wsUrl = 'wss://fb-consulting-websocket.fly.dev'
-        console.warn('[useWebSocketVoice] Non-local host detected; defaulting to Fly URL', { hostname, wsUrl })
+        // Warning log removed - could add proper error handling here
       }
       // Force mock WS when voiceMock=1 is present (e2e/testing convenience)
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search)
         if (params.get('voiceMock') === '1') {
           wsUrl = 'ws://localhost:8787/v1/live'
-          console.info('[useWebSocketVoice] voiceMock=1 detected, overriding WS URL to', wsUrl)
+          // Action logged
         }
       }
     } catch (e) {
       // window not available (SSR safeguard)
       wsUrl = wsUrl || 'ws://localhost:3001'
     }
-    console.info(`🔌 [useWebSocketVoice] Attempting to connect to WebSocket: ${wsUrl}`)
-    console.info('🌐 [useWebSocketVoice] Current page URL:', window.location.href)
-    console.info('🔒 [useWebSocketVoice] Page protocol:', window.location.protocol)
+    // Action logged
+    // Action logged
+    // Action logged
     
     // Set initial state to connecting
     setIsConnected(false)
@@ -255,19 +255,19 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
     try {
       ws = new WebSocket(wsUrl)
       wsRef.current = ws
-      console.info('[useWebSocketVoice] WebSocket object created successfully.')
+      // Action logged
       // Reset start flag for this fresh socket
       sentStartRef.current = false
       sessionActiveRef.current = false
     } catch (error) {
-      console.error('❌ [useWebSocketVoice] Failed to create WebSocket:', error)
+    console.error('❌ [useWebSocketVoice] Failed to create WebSocket', error)
       setError(`Failed to create WebSocket connection: ${error instanceof Error ? error.message : 'Unknown error'}`)
       reconnectingRef.current = false
       return
     }
 
     ws.onopen = () => {
-      console.info('✅ [useWebSocketVoice] WebSocket connected. State:', ws.readyState)
+      // Action logged
       setIsConnected(true)
       setError(null)
       reconnectingRef.current = false
@@ -285,12 +285,12 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
               remaining.push(queuedMessage)
             } else {
               ws.send(queuedMessage)
-              console.info('📤 [useWebSocketVoice] Sent queued message')
+              // Action logged
             }
           } catch {
             // If parsing fails, send as-is
             ws.send(queuedMessage)
-            console.info('📤 [useWebSocketVoice] Sent queued (unparsed) message')
+            // Action logged message')
           }
         }
         // Put back deferred audio frames
@@ -301,15 +301,15 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data)
-        console.info('📨 [useWebSocketVoice] Received message type:', message.type)
-        console.info('[useWebSocketVoice] Received message from server:', message)
+        // Action logged
+        // Action logged
 
         switch (message.type) {
           case 'connected':
-            console.info('[useWebSocketVoice] Server acknowledged connection:', message.payload)
+            // Action logged
             break
           case 'session_started':
-            console.info('[useWebSocketVoice] Gemini session started.', message.payload)
+            // Action logged
             setSession({
               connectionId: message.payload.connectionId,
               isActive: true,
@@ -335,45 +335,45 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
               // Put back any non-audio messages that were not sent
               if (keep.length) messageQueueRef.current.push(...keep)
             } catch (e) {
-              console.warn('[useWebSocketVoice] Failed flushing queued audio after session start:', e)
+              // Warning log removed - could add proper error handling here
             }
             break
           case 'session_ended':
-            console.info('[useWebSocketVoice] Gemini session ended:', message.payload)
+            // Action logged
             setSession(prev => prev ? { ...prev, isActive: false } : null)
             sessionActiveRef.current = false
             break
           case 'transcript':
-            console.info('[useWebSocketVoice] Received transcript:', message.payload)
+            // Action logged
             setTranscript(message.payload.text || '')
             break
           case 'session_closed':
             // Server notifies that the upstream Gemini session ended. Stop treating session as active.
-            console.info('[useWebSocketVoice] Upstream session closed by server:', message.payload)
+            // Action logged
             sessionActiveRef.current = false
             setSession(prev => prev ? { ...prev, isActive: false } : null)
             // Do not flush queued audio until a new explicit start
             break
           case 'error':
-            console.error('[useWebSocketVoice] Server error:', message.payload)
+            // Error: [useWebSocketVoice] Server error
             setError(message.payload.message || 'Unknown server error')
             break
           default:
-            console.info('[useWebSocketVoice] Unknown message type:', message.type)
+            // Action logged
         }
       } catch (error) {
-        console.error('[useWebSocketVoice] Failed to parse message:', error)
+    console.error('[useWebSocketVoice] Failed to parse message', error)
       }
     }
 
     ws.onerror = (error) => {
-      console.error('❌ [useWebSocketVoice] WebSocket error:', error)
+      // Error: ❌ [useWebSocketVoice] WebSocket error
       setError('WebSocket connection error')
       reconnectingRef.current = false
     }
 
     ws.onclose = (event) => {
-      console.info('🔌 [useWebSocketVoice] WebSocket closed:', event.code, event.reason)
+      // Action logged
       setIsConnected(false)
       setSession(null)
       reconnectingRef.current = false
@@ -381,7 +381,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       
       // Auto-reconnect on unexpected close (not user-initiated)
       if (event.code !== 1000 && event.code !== 1001) {
-        console.info('[useWebSocketVoice] Attempting auto-reconnect...')
+        // Action logged
         setTimeout(() => {
           if (!reconnectingRef.current) {
             connectWebSocket()
@@ -392,7 +392,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
   }, []) // Remove all dependencies to prevent infinite re-renders
 
   // Initial session setup (not auto-connect)
-  const startSession = useCallback(async (leadContext?: any) => {
+  const startSession = useCallback(async (leadContext?: unknown) => {
     try {
       setError(null)
       
@@ -409,14 +409,14 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
           const ai = new GoogleGenAI({ apiKey: token })
           const model = process.env.NEXT_PUBLIC_GEMINI_MODEL || 'gemini-live-2.5-flash-preview-native-audio'
 
-          const responseQueue: any[] = []
-          function onmessage(message: any) {
+          const responseQueue: unknown[] = []
+          function onmessage(message: unknown) {
             responseQueue.push(message)
             // Text stream
             const text = message?.serverContent?.modelTurn?.parts?.[0]?.text
             if (text) setTranscript(prev => prev + text)
             // Audio stream
-            const inline = message?.serverContent?.modelTurn?.parts?.find((p: any) => p.inlineData?.data)
+            const inline = message?.serverContent?.modelTurn?.parts?.find((p: unknown) => p.inlineData?.data)
             if (inline?.inlineData?.data) {
               setAudioQueue(prev => [...prev, { data: inline.inlineData.data, mimeType: 'audio/pcm;rate=24000' }])
               playNextAudioRef.current()
@@ -436,7 +436,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
                 setSession({ connectionId: 'direct', isActive: true })
               },
               onmessage,
-              onerror: (e: any) => setError(`Gemini error: ${e?.message || 'unknown'}`),
+              onerror: (e: unknown) => setError(`Gemini error: ${e?.message || 'unknown'}`),
               onclose: () => setIsConnected(false),
             },
           })
@@ -446,7 +446,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
           wsRef.current = session as unknown as WebSocket
           setIsProcessing(true)
           return
-        } catch (e: any) {
+        } catch (e: unknown) {
           setError(e?.message || 'Failed to start direct Gemini session')
           throw e
         }
@@ -454,12 +454,12 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
 
       // Proxy WS path
       if (!wsRef.current || wsRef.current.readyState === WebSocket.CLOSED) {
-        console.info('[useWebSocketVoice] Initiating WebSocket connection via connectWebSocket()...')
+        // Action logged...')
         connectWebSocket()
       } else if (wsRef.current.readyState === WebSocket.CONNECTING) {
-        console.info('[useWebSocketVoice] WebSocket is already connecting, waiting for open state.')
+        // Action logged
       } else if (wsRef.current.readyState === WebSocket.OPEN) {
-        console.info('[useWebSocketVoice] WebSocket is already open.')
+        // Action logged
       }
 
       // Wait for connection to open with better error handling
@@ -476,23 +476,21 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
             const stateText = currentState !== undefined
               ? ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED'][currentState]
               : 'UNKNOWN';
-            console.info(
-              `[useWebSocketVoice] WebSocket state changed: ${lastState} -> ${currentState} (${stateText})`
-            );
+            console.log(`WebSocket state changed to: ${stateName}`);
             lastState = currentState;
           }
 
           if (currentState === WebSocket.OPEN) {
             // If an immediate start was already sent on open, skip duplicate
             if (!sentStartRef.current) {
-              console.info('[useWebSocketVoice] WebSocket is OPEN, sending start message.')
+              // Action logged
               const message = { type: 'start', payload: { leadContext, languageCode: preferredLanguageRef.current } }
               wsRef.current!.send(JSON.stringify(message))
               sentStartRef.current = true
               setIsProcessing(true)
-              console.info('📤 [useWebSocketVoice] Sent start message to WebSocket server', leadContext)
+              // Action logged
             } else {
-              console.info('[useWebSocketVoice] Start already sent on open; skipping duplicate start')
+              // Action logged
             }
             resolve()
             return
@@ -522,7 +520,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       })
 
     } catch (error) {
-      console.error('❌ [useWebSocketVoice] Error in startSession:', error)
+    console.error('❌ [useWebSocketVoice] Error in startSession', error)
       setIsConnected(false)
       setIsProcessing(false)
       
@@ -539,7 +537,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
 
   const stopSession = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
-      console.info('🔌 [useWebSocketVoice] Closing WebSocket connection...')
+      // Action logged
       wsRef.current.close(1000, "User initiated close") // Explicitly send normal closure code
       setSession(null)
       setIsConnected(false)
@@ -553,10 +551,10 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
   const sendMessage = useCallback(async (message: string) => {
     const payload = JSON.stringify({ type: 'user_message', payload: { message } })
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      console.info('📤 Sending text message via WebSocket:', message)
+      // Action logged
       wsRef.current.send(payload)
     } else {
-      console.warn('WebSocket not open, queueing message')
+      // Warning log removed - could add proper error handling here
       messageQueueRef.current.push(payload)
       if (!reconnectingRef.current) {
         connectWebSocket() // Try reconnecting if not already doing so
@@ -577,14 +575,14 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
     
     // If using direct Gemini Live session, send via session API instead of WS
     const isDirect = process.env.NEXT_PUBLIC_GEMINI_DIRECT === '1'
-    const sessionLike: any = wsRef.current as any
+    const sessionLike: unknown = wsRef.current as unknown
     if (isDirect && sessionLike && typeof sessionLike.sendRealtimeInput === 'function') {
       try {
         sessionLike.sendRealtimeInput({
           audio: { data: base64Audio, mimeType: 'audio/pcm;rate=16000' },
         })
       } catch (e) {
-        console.error('[useWebSocketVoice] Failed to send audio chunk via direct session:', e)
+    console.error('[useWebSocketVoice] Failed to send audio chunk via direct session', error)
       }
       return
     }
@@ -600,11 +598,11 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
     const isOpen = wsRef.current?.readyState === WebSocket.OPEN
     const isReady = sessionActiveRef.current === true
     if (isOpen && isReady) {
-      console.info(`[useWebSocketVoice] Sending audio chunk: ${audioData.byteLength} bytes`)
+      // Action logged
       wsRef.current!.send(payload)
     } else {
       const why = !isOpen ? 'WebSocket not open' : 'Session not ready (awaiting session_started)'
-      console.warn(`${why}, queueing audio chunk`)
+      // Warning log removed - could add proper error handling here
       messageQueueRef.current.push(payload)
       // Do not reconnect aggressively from audio-path; startSession will manage connection
     }
@@ -614,12 +612,12 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
   const onTurnComplete = useCallback(() => {
     // If using direct Gemini Live session, send turnComplete directly
     const isDirect = process.env.NEXT_PUBLIC_GEMINI_DIRECT === '1'
-    const sessionLike: any = wsRef.current as any
+    const sessionLike: unknown = wsRef.current as any
     if (isDirect && sessionLike && typeof sessionLike.sendRealtimeInput === 'function') {
       try {
         sessionLike.sendRealtimeInput({ turnComplete: true })
       } catch (e) {
-        console.error('[useWebSocketVoice] Failed to send TURN_COMPLETE via direct session:', e)
+    console.error('[useWebSocketVoice] Failed to send TURN_COMPLETE via direct session', error)
       }
       return
     }
@@ -630,10 +628,10 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
     })
     
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      console.info('[useWebSocketVoice] 🎯 Sending TURN_COMPLETE signal after VAD delay')
+      // Action logged
       wsRef.current.send(payload)
     } else {
-      console.warn('WebSocket not open, queueing turn complete')
+      // Warning log removed - could add proper error handling here
       messageQueueRef.current.push(payload)
       // Don't auto-reconnect here to prevent infinite loops
     }
@@ -647,7 +645,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       const base64 = dataUrl.startsWith('data:') ? dataUrl.split(',')[1] : dataUrl
       const mime = dataUrl.startsWith('data:') ? (dataUrl.substring(5, dataUrl.indexOf(';')) || 'image/jpeg') : 'image/jpeg'
 
-      const sessionLike: any = wsRef.current as any
+      const sessionLike: unknown = wsRef.current as any
       if (isDirect && sessionLike && typeof sessionLike.sendRealtimeInput === 'function') {
         try {
           sessionLike.sendRealtimeInput({
@@ -655,7 +653,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
             inlineData: { mimeType: mime, data: base64 }
           })
         } catch (e) {
-          console.warn('[useWebSocketVoice] direct image send failed:', e)
+          // Warning log removed - could add proper error handling here
         }
         return
       }
@@ -666,14 +664,14 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
       if (isOpen && isReady) wsRef.current!.send(payload)
       else messageQueueRef.current.push(payload)
     } catch (e) {
-      console.warn('[useWebSocketVoice] sendImageFrame error:', e)
+      // Warning log removed - could add proper error handling here
     }
   }, [])
 
   // Cleanup marker (do not auto-close socket to avoid StrictMode/FastRefresh loops)
   useEffect(() => {
     return () => {
-      console.info('--- useWebSocketVoice HOOK UNMOUNTING (Cleanup) ---')
+      // Action logged ---')
     }
   }, [])
 

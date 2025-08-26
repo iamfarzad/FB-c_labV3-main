@@ -11,8 +11,8 @@ import { Separator } from '@/components/ui/separator'
 export default function TestBackendConnection() {
   const [taskPrompt, setTaskPrompt] = useState('Create a marketing strategy for Q4')
   const [webPreviewUrl, setWebPreviewUrl] = useState('https://example.com')
-  const [taskResult, setTaskResult] = useState<any>(null)
-  const [webPreviewResult, setWebPreviewResult] = useState<any>(null)
+  const [taskResult, setTaskResult] = useState<unknown>(null)
+  const [webPreviewResult, setWebPreviewResult] = useState<unknown>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const testTaskGeneration = async () => {
@@ -32,7 +32,7 @@ export default function TestBackendConnection() {
       const result = await response.json()
       setTaskResult(result)
     } catch (error) {
-      console.error('Task generation error:', error)
+    console.error('Task generation error', error)
       setTaskResult({ error: (error as Error).message })
     } finally {
       setIsLoading(false)
@@ -53,7 +53,7 @@ export default function TestBackendConnection() {
       const result = await response.json()
       setWebPreviewResult(result)
     } catch (error) {
-      console.error('Web preview error:', error)
+    console.error('Web preview error', error)
       setWebPreviewResult({ error: (error as Error).message })
     } finally {
       setIsLoading(false)

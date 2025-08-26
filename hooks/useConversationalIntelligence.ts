@@ -22,7 +22,7 @@ export interface IntelligenceContext {
   }
   role?: string
   roleConfidence?: number
-  intent?: { type: string; confidence: number; slots: any }
+  intent?: { type: string; confidence: number; slots: unknown }
   capabilities: string[]
 }
 
@@ -91,7 +91,7 @@ export function useConversationalIntelligence() {
           lastSessionIdRef.current = sessionId
         } catch (err) {
           setError('Failed to fetch context')
-          console.error('Context fetch error:', err)
+          // Error: Context fetch error
         } finally {
           setIsLoading(false)
           INFLIGHT.delete(sessionId)

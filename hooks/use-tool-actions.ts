@@ -5,7 +5,7 @@ import { useToast } from '@/components/ui/use-toast'
 
 export interface ToolResult {
   ok: boolean
-  output?: any
+  output?: unknown
   error?: string
 }
 
@@ -21,7 +21,7 @@ export function useToolActions() {
 
   const callTool = useCallback(async (
     endpoint: string,
-    data: any,
+    data: unknown,
     options: ToolOptions = {}
   ): Promise<ToolResult> => {
     const toolId = endpoint.split('/').pop() || endpoint

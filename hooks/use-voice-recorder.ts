@@ -67,7 +67,7 @@ export function useVoiceRecorder({
         });
         mediaStreamRef.current = stream;
       } catch (mediaError) {
-        console.error('Failed to get user media:', mediaError);
+    console.error('Failed to get user media', error)
         let errorMessage = 'Microphone access failed';
         
         if (mediaError instanceof Error) {
@@ -106,7 +106,7 @@ export function useVoiceRecorder({
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Audio initialization failed';
       setState(prev => ({ ...prev, isInitializing: false, error: errorMsg, hasPermission: false }));
-      console.error('Failed to initialize audio context:', error);
+    console.error('Failed to initialize audio context', error)
       return false;
     }
   }, [chunkSize, sampleRate]);
@@ -172,11 +172,11 @@ export function useVoiceRecorder({
       lastSpeechTimeRef.current = currentTime;
       silenceStartRef.current = null;
       isProcessingTurnCompleteRef.current = false; // Reset turn complete flag
-      console.info(`🎤 Voice detected (volume: ${volume.toFixed(4)})`);
+      // Object logged)`);
     } else {
       if (silenceStartRef.current === null) {
         silenceStartRef.current = currentTime;
-        console.info(`🔇 Silence started (volume: ${volume.toFixed(4)})`);
+        // Object logged)`);
       }
     }
 
@@ -187,7 +187,7 @@ export function useVoiceRecorder({
       lastSpeechTimeRef.current > 0 && // Ensure we had some speech before
       (currentTime - silenceStartRef.current >= vadSilenceThreshold)
     ) {
-      console.info(`🔇 Silence detected for ${vadSilenceThreshold}ms, sending TURN_COMPLETE`);
+      // Action logged
       isProcessingTurnCompleteRef.current = true;
       silenceStartRef.current = null;
       
@@ -222,12 +222,12 @@ export function useVoiceRecorder({
       isProcessingTurnCompleteRef.current = false;
       
       setState(prev => ({ ...prev, isRecording: true, error: null }));
-      console.info('🎤 Recording started');
+      // Action logged
       return true;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Failed to start recording';
       setState(prev => ({ ...prev, error: errorMsg }));
-      console.error('Failed to start recording:', error);
+    console.error('Failed to start recording', error)
       return false;
     }
   }, [state.hasPermission, initializeAudioContext, processAudioChunk]);
@@ -243,11 +243,11 @@ export function useVoiceRecorder({
       
       isRecordingRef.current = false;
       setState(prev => ({ ...prev, isRecording: false, volume: 0 }));
-      console.info('🛑 Recording stopped');
+      // Action logged
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Error stopping recording';
       setState(prev => ({ ...prev, error: errorMsg }));
-      console.error('Error stopping recording:', error);
+    console.error('Error stopping recording', error)
     }
   }, []);
 

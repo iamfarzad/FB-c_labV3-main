@@ -22,7 +22,7 @@ interface TestMessage {
   type?: 'default' | 'tool' | 'task' | 'web-preview'
   metadata?: {
     citations?: Array<{ uri: string; title?: string }>
-    tools?: Array<{ type: string; data: any; state?: string }>
+    tools?: Array<{ type: string; data: unknown; state?: string }>
     task?: { title: string; items?: Array<{ label: string; files?: string[] }> }
     webPreview?: { url: string; logs?: Array<{ level: string; message: string; timestamp: Date }> }
   }
@@ -191,7 +191,7 @@ export default function TestChatWithAIElements() {
               <div className="mt-3">
                 {message.metadata.tools.map((t, i) => (
                   <Tool key={`tool-${message.id}-${i}`} defaultOpen={false}>
-                    <ToolHeader type={t.type as any} state={t.state as any} />
+                    <ToolHeader type={t.type as unknown} state={t.state as unknown} />
                     <ToolContent>
                       <ToolOutput output={JSON.stringify(t.data, null, 2)} errorText={undefined} />
                     </ToolContent>

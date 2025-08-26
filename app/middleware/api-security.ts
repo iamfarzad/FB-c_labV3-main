@@ -58,7 +58,7 @@ export function withPayloadLimit(handler: (req: NextRequest) => Promise<Response
       }
       
       return await handler(req)
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err.statusCode === 413 || /request entity too large/i.test(err.message)) {
         return new NextResponse(
           JSON.stringify({ error: 'Payload Too Large' }), 

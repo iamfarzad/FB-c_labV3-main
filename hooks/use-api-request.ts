@@ -14,7 +14,7 @@ interface UseApiRequestOptions {
 interface ApiRequestState {
   isLoading: boolean
   error: Error | null
-  data: any
+  data: unknown
 }
 
 export function useApiRequest(options: UseApiRequestOptions = {}) {
@@ -42,7 +42,7 @@ export function useApiRequest(options: UseApiRequestOptions = {}) {
       customOptions: {
         successMessage?: string
         errorMessage?: string
-        transform?: (data: any) => any
+        transform?: (data: unknown) => any
       } = {},
     ) => {
       // Cancel any ongoing request
@@ -108,7 +108,7 @@ export function useApiRequest(options: UseApiRequestOptions = {}) {
           }
 
           return data
-        } catch (error: any) {
+        } catch (error: unknown) {
           attempt++
 
           if (error.name === "AbortError") {

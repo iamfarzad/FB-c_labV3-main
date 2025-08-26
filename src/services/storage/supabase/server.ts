@@ -21,8 +21,8 @@ const createMockSupabaseClient = () => {
       insert: () => ({ data: null, error: new Error('Mock client - insert not available') }),
       update: () => ({ data: null, error: new Error('Mock client - update not available') }),
       delete: () => ({ data: null, error: new Error('Mock client - delete not available') }),
-      eq: function(column: string, value: any) { return this },
-      order: function(column: string, options?: any) { return this },
+      eq: function(column: string, value: unknown) { return this },
+      order: function(column: string, options?: unknown) { return this },
       limit: function(count: number) { return this },
       single: function() { return Promise.resolve({ data: null, error: new Error('Mock client') }) }
     }),
@@ -60,7 +60,7 @@ export const getSupabase = () => {
 }
 
 // Export default instance for backward compatibility
-let supabaseInstance: any = null
+let supabaseInstance: unknown = null
 
 export const supabase = (() => {
   if (!supabaseInstance) {
