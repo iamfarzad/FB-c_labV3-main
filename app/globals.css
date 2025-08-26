@@ -124,12 +124,12 @@ html, body {
   }
 
   .glass-header {
-    @apply sticky top-0 z-50 w-full border-b border-border/20 glass;
+    @apply sticky top-0 z-50 w-full border-b border-border border-opacity-20 glass;
   }
 
   /* Focus utilities */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-20 focus:ring-offset-2;
   }
 
   /* Text utilities */
@@ -377,12 +377,12 @@ html, body {
 
   .btn-secondary {
     @apply btn bg-surface text-text border border-border border-opacity-30;
-    @apply hover:bg-surface/80 hover:border-accent/30;
+    @apply hover:bg-surface hover:bg-opacity-80 hover:border-accent hover:border-opacity-30;
   }
 
   .btn-minimal {
-    @apply btn bg-surface/50 text-text border border-border border-opacity-30;
-    @apply hover:bg-accent/5 hover:border-accent/30 glass;
+    @apply btn bg-surface bg-opacity-50 text-text border border-border border-opacity-30;
+    @apply hover:bg-accent hover:bg-opacity-5 hover:border-accent hover:border-opacity-30 glass;
   }
 
   /* Unified Card System */
@@ -400,13 +400,13 @@ html, body {
 
   /* Unified Input System */
   .input {
-    @apply w-full px-4 py-3 rounded-xl border border-border border-opacity-30 bg-surface/50;
-    @apply focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:ring-offset-2;
+    @apply w-full px-4 py-3 rounded-xl border border-border border-opacity-30 bg-surface bg-opacity-50;
+    @apply focus:border-accent focus:border-opacity-50 focus:ring-2 focus:ring-accent focus:ring-opacity-20 focus:ring-offset-2;
     @apply transition-smooth placeholder:text-text/40;
   }
 
   .input-enhanced {
-    @apply input shadow-sm hover:border-accent/30 hover:shadow-md;
+    @apply input shadow-sm hover:border-accent hover:border-opacity-30 hover:shadow-md;
   }
 
   /* Chat Components */
@@ -445,7 +445,7 @@ html, body {
 
   /* Business Components (F.B/c specific) */
   .fbc-metric {
-    @apply bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20;
+    @apply bg-gradient-to-br from-accent/10 to-accent/5 border border-accent border-opacity-20;
     @apply rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-smooth;
   }
 
