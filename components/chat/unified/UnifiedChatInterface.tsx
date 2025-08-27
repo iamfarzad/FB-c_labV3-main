@@ -31,7 +31,7 @@ import {
 } from '@/components/ai-elements/prompt-input'
 import { ToolMenu } from '@/components/chat/ToolMenu'
 import { ROICalculator } from '@/components/chat/tools/ROICalculator'
-import type { ChatMessage } from '@/types/chat'
+import type { StructuredChatMessage } from '@/src/core/types/chat'
 import { ToolCardWrapper } from '@/components/chat/ToolCardWrapper'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -273,7 +273,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                   <Suggestion 
                     key={`${message.id}-sug-${i}`} 
                     suggestion={suggestion} 
-                    onClick={() => // Log removed} 
+                    onClick={() => {}} 
                   />
                 ))}
               </Suggestions>

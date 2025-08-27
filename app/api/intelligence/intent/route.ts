@@ -3,7 +3,7 @@ import type { ToolRunResult } from '@/types/intelligence'
 import { z } from 'zod'
 import { detectIntent } from '@/src/core/intelligence/intent-detector'
 import { ContextStorage } from '@/src/core/context/context-storage'
-import { withApiGuard } from '@/app/middleware/withApiGuard'
+import { withApiGuard } from '@/app/api-utils/withApiGuard'
 
 const contextStorage = new ContextStorage()
 

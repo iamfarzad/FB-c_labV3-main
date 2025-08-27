@@ -1,16 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { GoogleGenAI } from "@google/genai"
 import { createHash } from "crypto"
-import { createOptimizedConfig } from "@/src/core/ai/gemini-config-enhanced"
+import { createOptimizedConfig } from "@/src/core/gemini-config-enhanced"
 import { isMockEnabled } from "@/src/core/mock-control"
 import { parseJSON, parseHTML } from "@/src/core/parse-utils"
 import { SPEC_FROM_VIDEO_PROMPT, CODE_REGION_OPENER, CODE_REGION_CLOSER, SPEC_ADDENDUM } from "@/src/core/ai-prompts"
 import { getYouTubeVideoId } from "@/src/core/youtube"
 import { getYouTubeTranscript, summarizeTranscript, extractKeyTopics } from "@/src/core/youtube-transcript"
-import { selectModelForFeature, estimateTokens } from "@/src/core/ai/model-selector"
+import { selectModelForFeature, estimateTokens } from "@/src/core/model-selector"
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { enforceBudgetAndLog } from "@/src/core/monitoring"
-import { withFullSecurity } from "@/app/middleware/security"
+import { withFullSecurity } from "@/app/api-utils/security"
 import { recordCapabilityUsed } from "@/src/core/context/capabilities"
 
 

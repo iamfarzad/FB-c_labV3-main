@@ -115,7 +115,9 @@ export default function ChatPage() {
       }
     }
 
-    initSession()
+    initSession().catch((error) => {
+      console.error('Failed to initialize session:', error)
+    })
   }, [])
 
   const handleSendMessage = async (message: string) => {
@@ -172,7 +174,9 @@ export default function ChatPage() {
     setOpenVoice(false)
     if (transcript.trim()) {
       setInput(transcript)
-      handleSendMessage(transcript)
+      handleSendMessage(transcript).catch((error) => {
+        console.error('Failed to send voice message:', error)
+      })
     }
   }
 
@@ -330,7 +334,7 @@ export default function ChatPage() {
           topSlot={
             <SuggestedActions
               sessionId={sessionId}
-              stage={stage as any}
+              stage={currentStage as any}
               onRun={handleSuggestionRun}
               mode="static"
             />

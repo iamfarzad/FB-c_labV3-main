@@ -48,6 +48,7 @@ export class AdminChatService {
   async getOrCreateSession(sessionId: string, adminId?: string, sessionName?: string): Promise<AdminSession> {
     // Check if session exists
     const { data: existingSession } = await supabaseService
+      .schema('admin')
       .from('admin_sessions')
       .select('*')
       .eq('id', sessionId)
@@ -56,6 +57,7 @@ export class AdminChatService {
     if (existingSession) {
       // Update last activity
       await supabaseService
+        .schema('admin')
         .from('admin_sessions')
         .update({ last_activity: new Date().toISOString() })
         .eq('id', sessionId)
@@ -65,6 +67,7 @@ export class AdminChatService {
 
     // Create new session
     const { data: newSession, error } = await supabaseService
+      .schema('admin')
       .from('admin_sessions')
       .insert({
         id: sessionId,
@@ -87,6 +90,7 @@ export class AdminChatService {
     const embeddings = await this.generateEmbeddings(message.content)
 
     const { data, error } = await supabaseService
+      .schema('admin')
       .from('admin_conversations')
       .insert({
         conversation_id: message.conversationId,
@@ -115,6 +119,7 @@ export class AdminChatService {
   ): Promise<AdminChatContext> {
     // Get recent messages from current session
     const { data: recentMessages } = await supabaseService
+      .schema('admin')
       .from('admin_conversations')
       .select('*')
       .eq('session_id', sessionId)
@@ -124,6 +129,7 @@ export class AdminChatService {
     // Generate embeddings for current message and find semantically similar messages
     const currentEmbeddings = await this.generateEmbeddings(currentMessage)
     const { data: similarMessages } = await supabaseService
+      .schema('admin')
       .rpc('search_admin_conversations', {
         query_embedding: currentEmbeddings,
         session_id_filter: sessionId,
@@ -277,6 +283,7 @@ export class AdminChatService {
     const queryEmbeddings = await this.generateEmbeddings(query)
 
     const { data } = await supabaseService
+      .schema('admin')
       .rpc('search_admin_conversations', {
         query_embedding: queryEmbeddings,
         limit_count: limit,
@@ -298,6 +305,7 @@ export class AdminChatService {
    */
   async getAdminSessions(adminId?: string, limit: number = 20): Promise<AdminSession[]> {
     let query = supabaseService
+      .schema('admin')
       .from('admin_sessions')
       .select('*')
       .order('last_activity', { ascending: false })
@@ -319,6 +327,7 @@ export class AdminChatService {
     cutoffDate.setDate(cutoffDate.getDate() - daysOld)
 
     const { count } = await supabaseService
+      .schema('admin')
       .from('admin_sessions')
       .delete({ count: 'exact' })
       .eq('is_active', false)

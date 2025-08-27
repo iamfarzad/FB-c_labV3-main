@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { withFullSecurity } from '@/app/middleware/security'
+import { withFullSecurity } from '@/app/api-utils/security'
 
 async function webhookHandler(req: NextRequest) {
   try {

@@ -60,7 +60,7 @@ export default function AboutPage() {
             <p className="mt-4 text-muted-foreground">
               In 2020, I launched my first startup, Optix.io, and dove headfirst into the world of <strong>artificial intelligence and automation</strong>. It
               was a hard reset: I had no formal tech background. I broke things, rebuilt them, and learned by
-              doing—starting with GPT-2. Since then, I've discovered what really works in <strong>AI implementation</strong>. My philosophy: you have to build
+              doing—starting with GPT-2. Since then, I&apos;ve discovered what really works in <strong>AI implementation</strong>. My philosophy: you have to build
               and break things yourself to truly understand them.
             </p>
           </div>
@@ -153,9 +153,9 @@ export default function AboutPage() {
 
       <PageShell className="bg-secondary">
         <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">Let's Connect & Discuss Your AI Needs</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">Let&apos;s Connect & Discuss Your AI Needs</h2>
           <p className="mt-4 max-w-xl mx-auto text-lg text-muted-foreground">
-            Ready for a direct path to working <strong>AI automation solutions</strong> in your business? Let's discuss your specific <strong>AI implementation needs</strong>.
+            Ready for a direct path to working <strong>AI automation solutions</strong> in your business? Let&apos;s discuss your specific <strong>AI implementation needs</strong>.
           </p>
           <div className="mt-8 flex items-center justify-center gap-x-6">
             <Button asChild size="lg">

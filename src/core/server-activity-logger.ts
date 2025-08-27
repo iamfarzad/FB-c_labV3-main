@@ -1,5 +1,5 @@
 import { getSupabase } from "@/src/core/supabase/server"
-import type { ActivityItem } from "@/app/chat/types/chat"
+import type { ActivityItem } from "@/src/core/types/chat"
 
 interface ServerActivityData {
   type: ActivityItem["type"]

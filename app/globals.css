@@ -124,7 +124,7 @@ html, body {
   }
 
   .glass-header {
-    @apply sticky top-0 z-50 w-full border-b border-border/20 glass;
+    @apply sticky top-0 z-50 w-full border-b border-border glass;
   }
 
   /* Focus utilities */
@@ -376,18 +376,18 @@ html, body {
   }
 
   .btn-secondary {
-    @apply btn bg-secondary text-secondary-foreground border border-border/30;
+    @apply btn bg-secondary text-secondary-foreground border border-border;
     @apply hover:bg-secondary/80 hover:border-accent/30;
   }
 
   .btn-minimal {
-    @apply btn bg-card/50 text-foreground border border-border/30;
+    @apply btn bg-card/50 text-foreground border border-border;
     @apply hover:bg-accent/5 hover:border-accent/30 glass;
   }
 
   /* Unified Card System */
   .card {
-    @apply bg-card border border-border/30 rounded-2xl p-6 shadow-lg;
+    @apply bg-card border border-border rounded-2xl p-6 shadow-lg;
   }
 
   .card-glass {
@@ -400,7 +400,7 @@ html, body {
 
   /* Unified Input System */
   .input {
-    @apply w-full px-4 py-3 rounded-xl border border-border/30 bg-card/50;
+    @apply w-full px-4 py-3 rounded-xl border border-border bg-card/50;
     @apply focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:ring-offset-2;
     @apply transition-smooth placeholder:text-foreground/40;
   }

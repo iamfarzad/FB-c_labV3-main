@@ -56,6 +56,7 @@ export async function DELETE(request: NextRequest) {
     // Mark session as inactive (soft delete)
     const supabase = (await import('@/src/core/supabase/client')).supabaseService
     await supabase
+      .schema('admin')
       .from('admin_sessions')
       .update({ is_active: false })
       .eq('id', sessionId)

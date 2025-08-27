@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createToken } from '@/src/core/auth'
-import { adminAuthMiddleware } from '@/app/middleware/auth'
+import { adminAuthMiddleware } from '@/app/api-utils/auth'
 
 export async function POST(request: NextRequest) {
   try {

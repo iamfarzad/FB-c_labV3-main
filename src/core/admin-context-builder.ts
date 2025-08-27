@@ -1,5 +1,5 @@
 import { getSupabase } from '@/src/core/supabase/server'
-import { adminAuthMiddleware } from '@/app/middleware/auth'
+import { adminAuthMiddleware } from '@/app/api-utils/auth'
 
 export interface AdminContext {
   overview: {
