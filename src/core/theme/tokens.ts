@@ -320,18 +320,20 @@ export const BRAND_COLORS = {
  * This function can be used in tests or CI/CD to ensure brand integrity
  */
 export function validateBrandColors(): boolean {
-  const currentBrand = tokens.light.brand
-  const currentHover = tokens.light.brandHover
+  const currentBrand = tokens.light.brand as string
+  const currentHover = tokens.light.brandHover as string
 
   const expectedBrand = BRAND_COLORS.primary
   const expectedHover = BRAND_COLORS.hover
 
   if (currentBrand !== expectedBrand) {
+    // eslint-disable-next-line no-console
     console.error(`🚨 BRAND COLOR VIOLATION: Expected ${expectedBrand}, got ${currentBrand}`)
     return false
   }
 
   if (currentHover !== expectedHover) {
+    // eslint-disable-next-line no-console
     console.error(`🚨 BRAND HOVER COLOR VIOLATION: Expected ${expectedHover}, got ${currentHover}`)
     return false
   }

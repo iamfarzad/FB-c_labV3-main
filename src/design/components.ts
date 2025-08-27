@@ -3,7 +3,7 @@
  * Consistent base styles for UI components using design tokens
  */
 
-import { designTokens } from './tokens'
+import { tokens } from '../core/theme/tokens'
 
 // Base component classes for consistent styling
 export const componentBase = {

@@ -13,7 +13,7 @@ export const leadCaptureSchema = z.object({
     .max(100, 'Company name must be less than 100 characters')
     .optional(),
   phone: z.string()
-    .regex(/^[\+]?[1-9][\d]{0,15}$/, 'Invalid phone number format')
+    .regex(/^[+]?[1-9][\d]{0,15}$/, 'Invalid phone number format')
     .optional(),
   message: z.string()
     .max(1000, 'Message must be less than 1000 characters')
@@ -198,7 +198,9 @@ export function sanitizeString(input: string): string {
     .replace(/on\w+=/gi, '') // Remove event handlers
     .replace(/data:/gi, '') // Remove data: protocol
     .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+    // eslint-disable-next-line no-control-regex
     .replace(/\x00/g, '') // Remove null bytes
+    // eslint-disable-next-line no-control-regex
     .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // Remove control characters
     .replace(/script/gi, '') // Remove script tags
     .replace(/iframe/gi, '') // Remove iframe tags

@@ -420,6 +420,9 @@ importers:
       eslint-plugin-regexp:
         specifier: ^2.6.0
         version: 2.10.0(eslint@8.57.1)
+      eslint-plugin-tailwindcss:
+        specifier: ^3.18.2
+        version: 3.18.2(tailwindcss@3.4.17(ts-node@11.0.0-beta.1(@types/node@22.18.0)(typescript@5.9.2)))
       glob:
         specifier: ^11.0.3
         version: 11.0.3
@@ -4820,6 +4823,12 @@ packages:
     engines: {node: ^18 || >=20}
     peerDependencies:
       eslint: '>=8.44.0'
+
+  eslint-plugin-tailwindcss@3.18.2:
+    resolution: {integrity: sha512-QbkMLDC/OkkjFQ1iz/5jkMdHfiMu/uwujUHLAJK5iwNHD8RTxVTlsUezE0toTZ6VhybNBsk+gYGPDq2agfeRNA==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      tailwindcss: ^3.4.0
 
   eslint-scope@7.2.2:
     resolution: {integrity: sha512-dOt21O7lTMhDM+X9mB4GX+DZrZtCUJPL/wlcTqxyrx5IvO0IYtILdtrQGQp+8n5S0gwSVmOf9NQrjMOgfQZlIg==}
@@ -13635,6 +13644,12 @@ snapshots:
       refa: 0.12.1
       regexp-ast-analysis: 0.7.1
       scslre: 0.3.0
+
+  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.17(ts-node@11.0.0-beta.1(@types/node@22.18.0)(typescript@5.9.2))):
+    dependencies:
+      fast-glob: 3.3.3
+      postcss: 8.5.6
+      tailwindcss: 3.4.17(ts-node@11.0.0-beta.1(@types/node@22.18.0)(typescript@5.9.2))
 
   eslint-scope@7.2.2:
     dependencies:

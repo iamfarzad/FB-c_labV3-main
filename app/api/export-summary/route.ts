@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
       .order('created_at', { ascending: true });
 
     const conversationHistory = activities?.map(activity => ({
-      role: (activity.type === 'ai_request' ? 'assistant' : 'user') as 'user' | 'assistant',
+      role: (activity.type === 'ai_request' ? 'assistant' : 'user'),
       content: String(activity.description || activity.title),
       timestamp: String(activity.created_at)
     })) || [];
@@ -205,7 +205,8 @@ export async function POST(req: NextRequest) {
       });
 
     } catch (pdfError) {
-    console.error('PDF generation error', error)
+    // eslint-disable-next-line no-console
+    console.error('PDF generation error', pdfError)
       
       // Fallback to markdown if PDF generation fails
       const markdownContent = generateMarkdownContent(summaryData);
@@ -224,6 +225,7 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Export summary error', error)
     return new Response(JSON.stringify({ error: 'Failed to generate summary' }), {
       status: 500,

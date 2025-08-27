@@ -3,7 +3,7 @@
  * Consistent animation patterns and motion design tokens
  */
 
-import { designTokens } from './tokens'
+import { tokens } from '../core/theme/tokens'
 
 // Animation duration tokens
 export const animationDurations = {

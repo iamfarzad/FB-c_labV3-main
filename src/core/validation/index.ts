@@ -93,7 +93,7 @@ export function sanitizeEmail(email: string): string {
 }
 
 export function sanitizePhone(phone: string): string {
-  return phone.replace(/[^\d+\-\(\)\s]/g, '').trim()
+  return phone.replace(/[^\d+()\-\s]/g, '').trim()
 }
 
 export function validateRequest<T extends z.ZodSchema>(

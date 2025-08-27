@@ -111,8 +111,10 @@ export class MeetingScheduler {
 
       return { success: true, meeting: result.meeting }
     } catch (error: unknown) {
-    console.error('Failed to book meeting', error)
-      return { success: false, error: error.message }
+      // eslint-disable-next-line no-console
+      console.error('Failed to book meeting', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      return { success: false, error: errorMessage }
     }
   }
 

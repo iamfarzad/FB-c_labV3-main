@@ -81,8 +81,7 @@ const Shell = React.forwardRef<HTMLDivElement, ShellProps>(
 Shell.displayName = 'Shell'
 
 // Shell Header
-export interface ShellHeaderProps
-  extends React.HTMLAttributes<HTMLElement> {}
+export type ShellHeaderProps = React.HTMLAttributes<HTMLElement>
 
 const ShellHeader = React.forwardRef<HTMLElement, ShellHeaderProps>(
   ({ className, children, ...props }, ref) => (
@@ -98,8 +97,7 @@ const ShellHeader = React.forwardRef<HTMLElement, ShellHeaderProps>(
 ShellHeader.displayName = 'ShellHeader'
 
 // Shell Sidebar
-export interface ShellSidebarProps
-  extends React.HTMLAttributes<HTMLElement> {}
+export type ShellSidebarProps = React.HTMLAttributes<HTMLElement>
 
 const ShellSidebar = React.forwardRef<HTMLElement, ShellSidebarProps>(
   ({ className, children, ...props }, ref) => (
@@ -133,8 +131,7 @@ const ShellMain = React.forwardRef<HTMLElement, ShellMainProps>(
 ShellMain.displayName = 'ShellMain'
 
 // Shell Footer
-export interface ShellFooterProps
-  extends React.HTMLAttributes<HTMLElement> {}
+export type ShellFooterProps = React.HTMLAttributes<HTMLElement>
 
 const ShellFooter = React.forwardRef<HTMLElement, ShellFooterProps>(
   ({ className, children, ...props }, ref) => (

@@ -3,8 +3,8 @@
  * Main entry point for the design system
  */
 
-// Export all design tokens
-export * from './tokens'
+// Export all design tokens from theme system
+export * from '../core/theme/tokens'
 
 // Export component classes and patterns
 export * from './components'
@@ -12,7 +12,7 @@ export * from './layouts'
 export * from './animations'
 
 // Re-export commonly used items for convenience
-export { designTokens } from './tokens'
+export { tokens } from '../core/theme/tokens'
 export { componentClasses } from './components'
 export { layoutClasses } from './layouts'
 export { animationSystem } from './animations'

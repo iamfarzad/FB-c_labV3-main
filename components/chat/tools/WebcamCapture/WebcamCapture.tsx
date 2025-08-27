@@ -1,29 +1,24 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useCallback, useRef } from "react"
-import { Camera, CameraOff, Mic, MicOff, Video, VideoOff, RotateCcw, Download, Settings, Users, Phone, PhoneOff } from "lucide-react"
+import { useState, useEffect, useRef, useCallback } from "react"
+import { Camera, CameraOff, Mic, MicOff, Video, VideoOff, RotateCcw, Download, Settings, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/components/ui/use-toast"
-import { cn } from '@/src/core/utils'
-import type { WebcamCaptureProps, WebcamState, InputMode } from "./WebcamCapture.types"
 
-interface AnalysisResult {
-  id: string
-  text: string
-  timestamp: number
-  imageData?: string
-}
+import type { WebcamCaptureProps } from "./WebcamCapture.types"
 
-export function WebcamCapture({ 
-  mode = 'card',
-  onCapture, 
-  onClose,
-  onCancel,
-  onAIAnalysis,
-  onLog,
+
+
+export function WebcamCapture({
+  mode: _mode = 'card',
+  onCapture,
+  onClose: _onClose,
+  onCancel: _onCancel,
+  onAIAnalysis: _onAIAnalysis,
+  onLog: _onLog,
 }: WebcamCaptureProps) {
   const { toast } = useToast()
   const [isVideoOn, setIsVideoOn] = useState(true)
@@ -31,10 +26,9 @@ export function WebcamCapture({
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [facingMode, setFacingMode] = useState<"user" | "environment">("user")
-  const [brightness, setBrightness] = useState(100)
-  const [contrast, setContrast] = useState(100)
+
   const [stream, setStream] = useState<MediaStream | null>(null)
-  const [error, setError] = useState<string | null>(null)
+
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -42,7 +36,7 @@ export function WebcamCapture({
   const recordingInterval = useRef<NodeJS.Timeout>()
 
   const participants = [
-    { id: "1", name: "You", isVideoOn: isVideoOn, isAudioOn: isAudioOn },
+    { id: "1", name: "You", isVideoOn, isAudioOn },
     { id: "2", name: "Sarah Chen", isVideoOn: true, isAudioOn: true },
     { id: "3", name: "Mike Johnson", isVideoOn: false, isAudioOn: true },
     { id: "4", name: "Alex Rivera", isVideoOn: true, isAudioOn: false },
@@ -56,7 +50,7 @@ export function WebcamCapture({
     }
   }, [stream])
 
-  const startCamera = async () => {
+  const startCamera = useCallback(async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -73,16 +67,14 @@ export function WebcamCapture({
       }
       setIsVideoOn(true)
       setIsAudioOn(true)
-    } catch (error) {
-    console.error('Error accessing camera', error)
-      setError("Failed to access camera")
+    } catch {
       toast({
         title: "Camera Error",
         description: "Failed to access camera. Please check permissions.",
         variant: "destructive",
       })
     }
-  }
+  }, [facingMode, toast])
 
   const stopCamera = () => {
     if (stream) {
@@ -121,7 +113,7 @@ export function WebcamCapture({
       stopCamera()
       setTimeout(() => {
         setFacingMode(newFacingMode)
-        startCamera()
+        void startCamera()
       }, 100)
     }
   }
@@ -203,9 +195,9 @@ export function WebcamCapture({
 
   useEffect(() => {
     if (!stream) {
-      startCamera()
+      void startCamera()
     }
-  }, [])
+  }, [stream, startCamera])
 
   return (
     <div className="h-full flex">
@@ -220,7 +212,6 @@ export function WebcamCapture({
               muted
               className="w-full h-full object-cover"
               style={{
-                filter: `brightness(${brightness}%) contrast(${contrast}%)`,
                 transform: facingMode === "user" ? "scaleX(-1)" : "none",
               }}
             />
@@ -337,7 +328,7 @@ export function WebcamCapture({
             >
               {isRecording ? "Stop Recording" : "Start Recording"}
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" onClick={switchCamera}>
+            <Button variant="outline" className="w-full bg-transparent" onClick={() => void switchCamera()}>
               <RotateCcw className="w-4 h-4 mr-2" />
               Switch Camera
             </Button>

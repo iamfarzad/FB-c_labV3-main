@@ -24,7 +24,7 @@ export function LocaleSwitcher() {
   const [isChanging, setIsChanging] = useState(false)
 
   const currentLocale = router.locale || 'en'
-  const currentLocaleData = locales.find(locale => locale.code === currentLocale)
+  const _currentLocaleData = locales.find(locale => locale.code === currentLocale)
 
   const handleLocaleChange = async (newLocale: string) => {
     if (newLocale === currentLocale) return
@@ -37,8 +37,9 @@ export function LocaleSwitcher() {
       
       // Navigate to the same page with the new locale
       await router.push(router.asPath, router.asPath, { locale: newLocale })
-    } catch (error) {
-    console.error('Error changing locale', error)
+    } catch (_error) {
+      // eslint-disable-next-line no-console
+      console.error('Error changing locale', _error)
     } finally {
       setIsChanging(false)
     }
@@ -65,7 +66,7 @@ export function LocaleSwitcher() {
         {locales.map((locale) => (
           <DropdownMenuItem
             key={locale.code}
-            onClick={() => handleLocaleChange(locale.code)}
+            onClick={() => { void handleLocaleChange(locale.code); }}
             className={`flex items-center gap-2 ${
               locale.code === currentLocale ? 'bg-accent' : ''
             }`}

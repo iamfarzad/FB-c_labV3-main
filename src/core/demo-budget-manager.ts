@@ -265,6 +265,7 @@ export class DemoBudgetManager {
         })
         .eq('session_id', sessionId)
     } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Failed to update session in database', error)
     }
   }
@@ -274,6 +275,7 @@ export class DemoBudgetManager {
       const session = await this.getOrCreateSession(sessionId)
       return session
     } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Failed to get demo status', error)
       return null
     }

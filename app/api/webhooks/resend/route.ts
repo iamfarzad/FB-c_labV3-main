@@ -2,6 +2,38 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { logServerActivity } from "@/src/core/server-activity-logger"
 
+// Type definitions for Resend webhook payload
+interface ResendWebhookData {
+  email_id: string
+  to: string | string[]
+  subject?: string
+  tags?: {
+    campaign_id?: string
+    [key: string]: any
+  }
+  bounce?: {
+    reason?: string
+  }
+  link?: {
+    url?: string
+  }
+  [key: string]: any
+}
+
+interface ResendWebhookEvent {
+  type: string
+  data: ResendWebhookData
+}
+
+interface SupabaseClient {
+  from: (table: string) => {
+    insert: (data: any) => Promise<{ error: any }>
+    update: (data: any) => any
+    eq: (column: string, value: any) => any
+  }
+  raw: (sql: string) => any
+}
+
 // Webhook signature verification
 async function verifyWebhookSignature(payload: string, signature: string, secret: string): Promise<boolean> {
   if (!secret) {
@@ -15,6 +47,7 @@ async function verifyWebhookSignature(payload: string, signature: string, secret
 
     return signature === `sha256=${expectedSignature}`
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Webhook signature verification error', error)
     return false
   }
@@ -28,14 +61,15 @@ export async function POST(req: NextRequest) {
     // Verify webhook signature
     const webhookSecret = process.env.RESEND_WEBHOOK_SECRET || "test-secret"
     if (!(await verifyWebhookSignature(payload, signature, webhookSecret))) {
+      // eslint-disable-next-line no-console
       console.error("Invalid webhook signature")
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
     }
 
-    const event = JSON.parse(payload)
+    const event: ResendWebhookEvent = JSON.parse(payload)
     // Action logged
 
-    const supabase = getSupabaseStorage()
+    const supabase: SupabaseClient = getSupabaseStorage()
 
     // Process different event types
     switch (event.type) {
@@ -76,17 +110,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
+    // eslint-disable-next-line no-console
     console.error('Webhook processing error', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
 
-async function handleEmailSent(supabase: unknown, data: unknown) {
+async function handleEmailSent(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "sent",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       created_at: new Date().toISOString(),
@@ -103,16 +139,17 @@ async function handleEmailSent(supabase: unknown, data: unknown) {
         .eq("id", data.tags.campaign_id)
     }
   } catch (error) {
-    console.error('Error handling email.sent', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.sent', error)
   }
 }
 
-async function handleEmailDelivered(supabase: unknown, data: unknown) {
+async function handleEmailDelivered(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "delivered",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       created_at: new Date().toISOString(),
@@ -128,16 +165,17 @@ async function handleEmailDelivered(supabase: unknown, data: unknown) {
         .eq("id", data.tags.campaign_id)
     }
   } catch (error) {
-    console.error('Error handling email.delivered', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.delivered', error)
   }
 }
 
-async function handleEmailBounced(supabase: unknown, data: unknown) {
+async function handleEmailBounced(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "bounced",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       bounce_reason: data.bounce?.reason,
@@ -162,19 +200,20 @@ async function handleEmailBounced(supabase: unknown, data: unknown) {
           email_status: "bounced",
           last_email_bounce: new Date().toISOString(),
         })
-        .eq("email", data.to?.[0] || data.to)
+        .eq("email", Array.isArray(data.to) ? data.to[0] : data.to)
     }
   } catch (error) {
-    console.error('Error handling email.bounced', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.bounced', error)
   }
 }
 
-async function handleEmailComplained(supabase: unknown, data: unknown) {
+async function handleEmailComplained(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "complained",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       created_at: new Date().toISOString(),
@@ -199,19 +238,20 @@ async function handleEmailComplained(supabase: unknown, data: unknown) {
           unsubscribed: true,
           unsubscribed_at: new Date().toISOString(),
         })
-        .eq("email", data.to?.[0] || data.to)
+        .eq("email", Array.isArray(data.to) ? data.to[0] : data.to)
     }
   } catch (error) {
-    console.error('Error handling email.complained', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.complained', error)
   }
 }
 
-async function handleEmailOpened(supabase: unknown, data: unknown) {
+async function handleEmailOpened(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "opened",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       created_at: new Date().toISOString(),
@@ -235,19 +275,20 @@ async function handleEmailOpened(supabase: unknown, data: unknown) {
           last_email_opened: new Date().toISOString(),
           email_engagement_score: supabase.raw("COALESCE(email_engagement_score, 0) + 1"),
         })
-        .eq("email", data.to?.[0] || data.to)
+        .eq("email", Array.isArray(data.to) ? data.to[0] : data.to)
     }
   } catch (error) {
-    console.error('Error handling email.opened', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.opened', error)
   }
 }
 
-async function handleEmailClicked(supabase: unknown, data: unknown) {
+async function handleEmailClicked(supabase: SupabaseClient, data: ResendWebhookData) {
   try {
     await supabase.from("email_events").insert({
       email_id: data.email_id,
       event_type: "clicked",
-      recipient: data.to?.[0] || data.to,
+      recipient: Array.isArray(data.to) ? data.to[0] : data.to,
       subject: data.subject,
       event_data: data,
       click_url: data.link?.url,
@@ -272,9 +313,10 @@ async function handleEmailClicked(supabase: unknown, data: unknown) {
           last_email_clicked: new Date().toISOString(),
           email_engagement_score: supabase.raw("COALESCE(email_engagement_score, 0) + 3"),
         })
-        .eq("email", data.to?.[0] || data.to)
+        .eq("email", Array.isArray(data.to) ? data.to[0] : data.to)
     }
   } catch (error) {
-    console.error('Error handling email.clicked', error)
+          // eslint-disable-next-line no-console
+      console.error('Error handling email.clicked', error)
   }
 }

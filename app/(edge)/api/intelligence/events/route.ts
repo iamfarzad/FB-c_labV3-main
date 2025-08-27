@@ -15,29 +15,26 @@ export async function POST(request: NextRequest) {
     const validatedEvent = EventSchema.parse(body)
     
     // Add timestamp if not provided
-    const event = {
+    const _event = {
       ...validatedEvent,
       timestamp: validatedEvent.timestamp || Date.now()
     }
 
-    // Log event (in production, this would go to analytics service)
-    // Event logged: ${event.eventType}
+    // TODO: Send to analytics service (Mixpanel, PostHog, etc.)
+    // await analytics.track(_event.eventType, {
+    //   sessionId: _event.sessionId,
+    //   userId: _event.userId,
+    //   ..._event.eventData
+    // })
 
     return NextResponse.json({
       success: true,
-      message: "Event logged successfully"
+      message: "Event logged successfully",
+      eventId: `evt_${Date.now()}`
     })
-
-    // TODO: Send to analytics service (Mixpanel, PostHog, etc.)
-    // await analytics.track(event.eventType, {
-    //   sessionId: event.sessionId,
-    //   userId: event.userId,
-    //   ...event.eventData
-    // })
-
-    return NextResponse.json({ ok: true, eventId: `evt_${Date.now()}` })
-  } catch (error) {
-    console.error('❌ Event tracking failed', error)
+  } catch (_error) {
+    // eslint-disable-next-line no-console
+    console.error('❌ Event tracking failed', _error)
     return NextResponse.json(
       { ok: false, error: 'Invalid event data' },
       { status: 400 }
@@ -45,10 +42,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  return NextResponse.json({ 
-    ok: true, 
-    message: 'Intelligence Events API - POST events to this endpoint' 
+export function GET() {
+  return NextResponse.json({
+    ok: true,
+    message: 'Intelligence Events API - POST events to this endpoint'
   })
 }
 

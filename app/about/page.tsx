@@ -1,13 +1,12 @@
 'use client'
 
 import { PageHeader, PageShell } from "@/components/page-shell"
-import { Card, CardContent } from "@/components/ui/card"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Award, BookOpen, Heart, MessageSquare, Target } from "lucide-react"
-import type { Metadata } from "next"
 import { MotionCard } from "@/components/ui/motion-card"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ProgressTracker } from "@/components/experience/progress-tracker"

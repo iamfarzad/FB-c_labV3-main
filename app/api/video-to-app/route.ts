@@ -236,7 +236,7 @@ export const POST = withFullSecurity(async function POST(request: NextRequest) {
       const specResponse = await generateText({
         modelName: modelSelection.model,
         prompt: SPEC_FROM_VIDEO_PROMPT + userIntent,
-        videoUrl: videoUrl,
+        videoUrl,
         correlationId,
       })
 

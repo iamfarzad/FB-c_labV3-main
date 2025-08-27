@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
-import { Calculator, ArrowRight, ArrowLeft, Check, X, Maximize2, Minimize2 } from "@/src/core/utils/icon-mapping"
+import { Calculator, ArrowLeft, Check } from "@/src/core/utils/icon-mapping"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
-import { cn } from '@/src/core/utils'
+
 import type { ROICalculatorProps, ROICalculationResult, WizardStep } from "./ROICalculator.types"
 import type { ChatMessage, ROIResultPayload } from '@/src/core/types/chat'
 import { markCapabilityUsed } from "@/components/experience/progress-tracker"
@@ -81,7 +81,9 @@ export function ROICalculator({
         setCurrentStep("results")
         setLastHash(cacheKey)
       }
-    } catch {}
+    } catch {
+      // Cache read failed - continue without cached data
+    }
     const t = window.setTimeout(() => { if (!lastHash) void handleCalculate(true) }, 200)
     return () => window.clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,7 +98,7 @@ export function ROICalculator({
         body: JSON.stringify(formData)
       });
       if (!response.ok) throw new Error("Calculation failed");
-      const data = await response.json();
+      const data: { ok: boolean; output: ROICalculationAPIResponse } = await response.json();
       if (!data?.ok || !data?.output) throw new Error("Invalid ROI API response");
       setResult(data.output);
       setCurrentStep("results");
@@ -105,30 +107,37 @@ export function ROICalculator({
       // mark capability as explored (only in browser)
       if (typeof window !== 'undefined') {
         markCapabilityUsed("roi")
-        try { localStorage.setItem(cacheKey, JSON.stringify({ output: data.output, ts: Date.now() })) } catch {}
+        try { localStorage.setItem(cacheKey, JSON.stringify({ output: data.output, ts: Date.now() })) } catch {
+          // Cache operation failed - continue
+        }
       }
       setLastHash(cacheKey)
 
       // Emit structured chat message for inline rendering
       try {
+        const output = data.output;
         const payload: ROIResultPayload = {
-          roi: data.output.roi,
-          paybackMonths: data.output.paybackPeriod,
-          netProfit: data.output.netProfit,
-          monthlyProfit: data.output.monthlyProfit,
-          totalRevenue: data.output.totalRevenue,
-          totalExpenses: data.output.totalExpenses,
+          roi: output.roi,
+          paybackMonths: output.paybackPeriod,
+          netProfit: output.netProfit,
+          monthlyProfit: output.monthlyProfit,
+          totalRevenue: output.totalRevenue,
+          totalExpenses: output.totalExpenses,
           inputs: { ...formData, ...companyInfo },
-          calculatedAt: data.output.calculatedAt,
+          calculatedAt: output.calculatedAt,
         }
         const msg: ChatMessage = { role: 'tool', type: 'roi.result', payload }
-        props.onEmitMessage?.(msg as any)
-      } catch {}
-    } catch (error) {
-    console.error('ROI calculation error', error)
+        if (typeof props?.onEmitMessage === 'function') {
+          props.onEmitMessage(msg as ChatMessage)
+        }
+      } catch {
+        // Cache operation failed - continue
+      }
+    } catch {
+      console.error('ROI calculation error')
       toast({ 
         title: "Calculation Error", 
-        description: (error as Error).message || "Failed to calculate ROI", 
+        description: "Failed to calculate ROI", 
         variant: "destructive" 
       });
     } finally { setIsRunning(false) }
@@ -159,14 +168,18 @@ export function ROICalculator({
         // Clear any other cached results that might exist
         const keys = Object.keys(localStorage).filter(key => key.startsWith('fbc:roi:'))
         keys.forEach(key => localStorage.removeItem(key))
-      } catch {}
+      } catch {
+        // Cache operation failed - continue
+      }
     }
 
     // Reset progress tracker (exploredCount = 0)
     if (typeof window !== 'undefined') {
       try {
         window.dispatchEvent(new CustomEvent('roi-reset'))
-      } catch {}
+      } catch {
+        // Cache operation failed - continue
+      }
     }
 
     toast({ title: "Form Reset", description: "All fields have been cleared. Start fresh!" })
@@ -244,7 +257,7 @@ export function ROICalculator({
                 />
               </div>
             ))}
-            <Button onClick={handleCalculate} className="w-full" disabled={Object.values(formData).some(v => v <= 0)}>
+            <Button onClick={() => void handleCalculate()} className="w-full" disabled={Object.values(formData).some(v => v <= 0)}>
               Calculate ROI
             </Button>
           </div>
@@ -424,7 +437,7 @@ export function ROICalculator({
                 Back
               </Button>
             )}
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isRunning} onClick={() => handleCalculate(false)}>
+            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isRunning} onClick={() => void handleCalculate(false)}>
               Re-run Analysis
             </Button>
             <Button variant="outline" className="w-full" onClick={resetForm} disabled={isRunning}>

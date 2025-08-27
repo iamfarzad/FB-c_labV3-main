@@ -27,7 +27,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
         return videoId
       }
     }
-  } catch (e) {
+  } catch (_e) {
     // Ignore URL parsing errors, means it's likely not a valid URL format
     // Warning log removed - could add proper error handling here
   }
@@ -42,7 +42,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
 }
 
 // Helper function to validate a YouTube video URL
-export async function validateYoutubeUrl(url: string): Promise<{ isValid: boolean; error?: string }> {
+export function validateYoutubeUrl(url: string): { isValid: boolean; error?: string } {
   if (getYouTubeVideoId(url)) {
     return { isValid: true }
   }

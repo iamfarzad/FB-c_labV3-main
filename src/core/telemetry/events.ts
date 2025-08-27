@@ -4,13 +4,11 @@ export type TelemetryEvent = {
   metadata?: Record<string, unknown>
 }
 
-export async function fireAndForget(event: TelemetryEvent) {
-  try {
-    // Minimal no-op stub; wire to real sink later
-    if (process.env.NODE_ENV !== 'test') {
-      // Debug log removed)
-    }
-  } catch {}
+export function fireAndForget(_event: TelemetryEvent) {
+  // Minimal no-op stub; wire to real sink later
+  if (process.env.NODE_ENV !== 'test') {
+    // Debug log removed
+  }
 }
 
 

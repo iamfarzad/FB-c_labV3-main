@@ -153,7 +153,7 @@ export function VoiceOverlay({ open, onCancel, onAccept }: VoiceOverlayProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button onClick={() => void handleToggle()} className="relative size-44 md:size-56 rounded-full outline-none select-none">
+                    <button onClick={handleToggle} className="relative size-44 md:size-56 rounded-full outline-none select-none">
                       <div className="absolute inset-0 rounded-full bg-[hsl(var(--card))] shadow-[0_0_0_1px_hsl(var(--border))_inset]" />
                       <div className="absolute inset-2 rounded-full" style={{background:'radial-gradient(70% 70% at 50% 40%, hsl(var(--accent)), transparent 70%)', opacity:0.18}} />
                       {!isRecording && (<div className="absolute -inset-[6px] rounded-full border border-[hsl(var(--border))]" />)}

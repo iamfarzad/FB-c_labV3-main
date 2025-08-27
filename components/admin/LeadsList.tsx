@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -38,13 +38,13 @@ export function LeadsList({ searchTerm, period }: LeadsListProps) {
 
   useEffect(() => {
     fetchLeads()
-  }, [searchTerm, period, intentFilter])
+  }, [fetchLeads])
 
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     try {
       const params = new URLSearchParams({
-        search: searchTerm,
-        period: period,
+        searchTerm,
+        period,
       })
       if (intentFilter !== 'all') params.set('intent', intentFilter)
       const response = await fetch(`/api/admin/leads?${params}`)
@@ -55,7 +55,7 @@ export function LeadsList({ searchTerm, period }: LeadsListProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchTerm, period, intentFilter])
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "bg-green-500"

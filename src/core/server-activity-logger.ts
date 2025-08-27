@@ -31,7 +31,8 @@ export async function logServerActivity(activityData: ServerActivityData): Promi
 
     if (error) {
       // Check if it's a missing table error
-      if (error.message && error.message.includes('relation "public.activities" does not exist')) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      if (errorMessage.includes('relation "public.activities" does not exist')) {
         // Database table doesn't exist yet - using fallback ID
         return `console_fallback_${Date.now()}`
       }

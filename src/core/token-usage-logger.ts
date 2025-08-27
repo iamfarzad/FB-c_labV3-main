@@ -4,7 +4,6 @@
  */
 
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
-import { createHash } from 'crypto'
 
 export interface TokenUsageLog {
   id?: string

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -35,13 +35,13 @@ export function ConversationsList({ searchTerm, period }: ConversationsListProps
 
   useEffect(() => {
     fetchConversations()
-  }, [searchTerm, period])
+  }, [fetchConversations])
 
-  const fetchConversations = async () => {
+  const fetchConversations = useCallback(async () => {
     try {
       const params = new URLSearchParams({
-        search: searchTerm,
-        period: period,
+        searchTerm,
+        period,
       })
       const response = await fetch(`/api/admin/conversations?${params}`)
       if (response.ok) {
@@ -53,7 +53,7 @@ export function ConversationsList({ searchTerm, period }: ConversationsListProps
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchTerm, period])
 
   const getEmailStatusIcon = (status: string | null) => {
     switch (status) {

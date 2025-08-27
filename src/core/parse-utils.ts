@@ -19,7 +19,8 @@ export const parseJSON = (str: string) => {
     try {
       return JSON.parse(jsonStr)
     } catch (parseError) {
-      throw new Error(`Failed to parse JSON: ${parseError}`)
+      const errorMessage = parseError instanceof Error ? parseError.message : String(parseError)
+      throw new Error(`Failed to parse JSON: ${errorMessage}`)
     }
   }
 }

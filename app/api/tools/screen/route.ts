@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       if (!budgetCheck.allowed) return NextResponse.json({ ok: false, error: 'Budget limit reached' }, { status: 429 })
     }
 
-    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
     let analysisResult = ''
 
     try {

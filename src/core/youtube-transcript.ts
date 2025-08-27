@@ -48,7 +48,7 @@ export async function getYouTubeTranscript(videoUrl: string): Promise<VideoTrans
     try {
       const { getYouTubeVideoTitle } = await import('./youtube')
       title = await getYouTubeVideoTitle(videoUrl)
-    } catch (e) {
+    } catch (_e) {
       // Warning log removed - could add proper error handling here
     }
 

@@ -6,7 +6,7 @@ import { Message, MessageContent } from "@/components/ai-elements/message"
 import { Response } from "@/components/ai-elements/response"
 import { Sources, SourcesTrigger, SourcesContent, Source } from "@/components/ai-elements/source"
 import { PromptInput, PromptInputToolbar, PromptInputTools, PromptInputTextarea, PromptInputSubmit } from "@/components/ai-elements/prompt-input"
-import useChat from "@/hooks/chat/useChat"
+import { useChatState } from "@/hooks/use-chat-state"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import { Video, Monitor, Camera } from "@/src/core/icon-mapping"
 
@@ -18,7 +18,20 @@ interface PersistentChatDockProps {
 }
 
 export function PersistentChatDock({ currentFeature, onOpenFeature }: PersistentChatDockProps) {
-  const { messages, input, setInput, isLoading, handleSubmit, handleInputChange, clearMessages } = useChat({})
+  const { messages, input, setInput, isLoading, clearMessages, sendMessage, setIsTyping } = useChatState({})
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (input.trim()) {
+      void sendMessage(input)
+      setInput('')
+    }
+  }
+
+  const handleInputChange = (value: string) => {
+    setInput(value)
+    setIsTyping(value.length > 0)
+  }
 
   const uiMessages = useMemo(() => messages.map(m => ({
     id: m.id,

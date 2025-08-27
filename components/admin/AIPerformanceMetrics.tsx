@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -43,23 +43,24 @@ export function AIPerformanceMetrics({ period }: AIPerformanceMetricsProps) {
   })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchPerformanceMetrics()
-  }, [period])
-
-  const fetchPerformanceMetrics = async () => {
+  const fetchPerformanceMetrics = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/ai-performance?period=${period}`)
       const data = await response.json()
       setPerformance(data)
-    } catch (error) {
-    console.error('Failed to fetch AI performance metrics', error)
+    } catch (_error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to fetch AI performance metrics', _error)
     } finally {
       setLoading(false)
     }
-  }
+  }, [period])
 
-  const getScoreColor = (score: number) => {
+  useEffect(() => {
+    void fetchPerformanceMetrics()
+  }, [period, fetchPerformanceMetrics])
+
+  const _getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600"
     if (score >= 70) return "text-yellow-600"
     return "text-red-600"

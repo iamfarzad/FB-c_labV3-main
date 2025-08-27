@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       .order('created_at', { ascending: true })
 
     const conversationHistory = (activities || []).map((a: unknown) => ({
-      role: (a.type === 'ai_request' ? 'assistant' : 'user') as 'user' | 'assistant',
+      role: (a.type === 'ai_request' ? 'assistant' : 'user'),
       content: String(a.description || a.title || ''),
       timestamp: String(a.created_at)
     }))

@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         await multimodalContextManager.addVisualAnalysis(
           sessionId,
           content,
-          visionType as 'webcam' | 'screen',
+          visionType,
           metadata.imageSize,
           metadata.fileData
         )

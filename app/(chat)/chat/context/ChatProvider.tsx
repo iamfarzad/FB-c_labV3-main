@@ -17,7 +17,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     const newItem: ActivityItem = {
       id: item.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       timestamp: item.timestamp || new Date(),
-      type: item.type as ActivityItem['type'],
+      type: item.type,
       content: item.content || item.title || 'Activity',
       title: item.title || item.content || 'Activity',
       description: item.description || item.content || '',

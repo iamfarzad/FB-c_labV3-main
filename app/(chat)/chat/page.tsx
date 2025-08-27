@@ -21,7 +21,7 @@ export default function ChatPage() {
   const [input, setInput] = useState('')
   const [openVoice, setOpenVoice] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const [activityLog, setActivityLog] = useState<any[]>([])
+  const [activityLog, setActivityLog] = useState<Array<{id: string; type: string; title: string; description: string; status: string; timestamp: Date}>>([])
   const [showConsent, setShowConsent] = useState(false)
   const [consentLoading, setConsentLoading] = useState(false)
   const [hasValidConsent, setHasValidConsent] = useState(false)
@@ -30,18 +30,16 @@ export default function ChatPage() {
   const {
     stages,
     currentStage,
-    nextStage,
-    completeStage,
-    getProgressPercentage
+    nextStage
   } = useStage()
 
   // Use the clean chat hook
-  const { messages, isLoading, error, send, clear } = useChat({
+  const { messages, isLoading, send, clear } = useChat({
     mode: 'public',
-    onError: (err) => {
+    onError: (_err) => {
       // Error: Chat error occurred
     },
-    onFinish: (msg) => {
+    onFinish: (_msg) => {
       // Auto-progress stages based on conversation flow
       if (messages.length >= 2 && currentStage?.id === 'GREETING') {
         nextStage() // Move from greeting to name collection
@@ -54,10 +52,8 @@ export default function ChatPage() {
   })
 
   // Intelligence system
-  const { 
-    context, 
-    isLoading: contextLoading, 
-    fetchContextFromLocalSession 
+  const {
+    isLoading: _contextLoading
   } = useConversationalIntelligence()
 
   // Initialize session and add demo messages
@@ -73,7 +69,7 @@ export default function ChatPage() {
 
       let validConsent = false
       try {
-        const consentData = JSON.parse(decodeURIComponent(consentCookie.split('=')[1]))
+        const consentData = JSON.parse(decodeURIComponent(consentCookie.split('=')[1])) as { allow?: boolean; allowedDomains?: string[] }
         if (consentData.allow && consentData.allowedDomains?.length > 0) {
           validConsent = true
           setHasValidConsent(true)
@@ -106,18 +102,16 @@ export default function ChatPage() {
         })
 
         if (response.ok) {
-          const data = await response.json()
+          const data = await response.json() as { sessionId: string }
           setSessionId(data.sessionId)
           localStorage.setItem('intelligence-session-id', data.sessionId)
         }
-      } catch (error) {
+      } catch {
         // Failed to initialize session
       }
     }
 
-    initSession().catch((error) => {
-      console.error('Failed to initialize session:', error)
-    })
+    void initSession()
   }, [])
 
   const handleSendMessage = async (message: string) => {
@@ -160,13 +154,13 @@ export default function ChatPage() {
     }
   }
 
-  const handleToolAction = (tool: string, data?: any) => {
-            // Tool action executed
+  const handleToolAction = (_tool: string, _data?: unknown) => {
+    // Tool action executed
     // Handle tool actions here
   }
 
-  const handleSuggestionRun = (suggestion: any) => {
-            // Suggestion executed
+  const handleSuggestionRun = (_suggestion: unknown) => {
+    // Suggestion executed
     // Handle suggestion actions here
   }
 
@@ -174,9 +168,7 @@ export default function ChatPage() {
     setOpenVoice(false)
     if (transcript.trim()) {
       setInput(transcript)
-      handleSendMessage(transcript).catch((error) => {
-        console.error('Failed to send voice message:', error)
-      })
+      void handleSendMessage(transcript)
     }
   }
 
@@ -198,7 +190,7 @@ export default function ChatPage() {
         throw new Error(`Consent submission failed: ${response.status}`)
       }
 
-      const consentResult = await response.json()
+      const consentResult = await response.json() as { ok: boolean }
 
       if (consentResult.ok) {
         setHasValidConsent(true)
@@ -216,18 +208,15 @@ export default function ChatPage() {
         })
 
         if (sessionResponse.ok) {
-          const sessionData = await sessionResponse.json()
+          const sessionData = await sessionResponse.json() as { sessionId: string }
           setSessionId(sessionData.sessionId)
           localStorage.setItem('intelligence-session-id', sessionData.sessionId)
-        } else {
-          console.error('Failed to initialize session after consent')
         }
       } else {
         throw new Error('Consent was not properly recorded')
       }
-    } catch (error) {
-      console.error('Consent submission failed:', error)
-      // Re-show consent overlay on error
+    } catch {
+      // Consent submission failed - re-show consent overlay
       setShowConsent(true)
       setHasValidConsent(false)
     } finally {
@@ -299,7 +288,7 @@ export default function ChatPage() {
         }
 
         if (Array.isArray(msg.metadata?.sources)) {
-          message.sources = msg.metadata.sources.map((source: any) => ({
+          message.sources = msg.metadata.sources.map((source: { title?: string; url: string }) => ({
             title: source.title || source.url,
             url: source.url
           }))
@@ -325,7 +314,7 @@ export default function ChatPage() {
         <ChatComposer
           value={input}
           onChange={setInput}
-          onSubmit={handleSendMessage}
+          onSubmit={(message) => void handleSendMessage(message)}
           onToolAction={handleToolAction}
           isLoading={isLoading}
           sessionId={sessionId}
@@ -334,8 +323,8 @@ export default function ChatPage() {
           topSlot={
             <SuggestedActions
               sessionId={sessionId}
-              stage={currentStage as any}
-              onRun={handleSuggestionRun}
+              stage={currentStage}
+              onRun={(suggestion) => void handleSuggestionRun(suggestion)}
               mode="static"
             />
           }
@@ -345,7 +334,7 @@ export default function ChatPage() {
         <>
           <ConsentOverlay
             isVisible={showConsent}
-            onSubmit={handleConsentSubmit}
+            onSubmit={(data) => void handleConsentSubmit(data)}
             isLoading={consentLoading}
           />
           <VoiceOverlay
@@ -359,27 +348,22 @@ export default function ChatPage() {
               <VerticalProcessChain
                 activities={
                   activityLog && activityLog.length > 0
-                    ? activityLog.slice(-8).map((activity, index) => ({
+                    ? activityLog.slice(-8).map((activity) => ({
                         id: activity.id,
                         type: activity.type,
                         title: activity.title,
                         description: activity.description,
                         status: activity.status
                       }))
-                    : stages!.slice(-8).map((stage, index) => ({
+                    : stages?.slice(-8).map((stage) => ({
                         id: stage.id,
-                        type: index === 0 ? 'user_action' :
-                              index === 1 ? 'ai_thinking' :
-                              index === 2 ? 'search' :
-                              index === 3 ? 'doc_analysis' :
-                              index === 4 ? 'tool_used' :
-                              index === 5 ? 'ai_stream' :
-                              index === 6 ? 'database' : 'complete',
+                        type: stage.current ? 'in_progress' :
+                              stage.done ? 'completed' : 'pending',
                         title: stage.label,
-                        description: `Stage ${index + 1} of ${stages!.length}`,
+                        description: `Processing ${stage.label}`,
                         status: stage.done ? 'completed' :
                                 stage.current ? 'in_progress' : 'pending'
-                      }))
+                      })) ?? []
                 }
               />
             </div>

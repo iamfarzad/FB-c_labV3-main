@@ -73,7 +73,7 @@ export default function WorkshopWaitlistPage() {
       } else {
         throw new Error('Failed to join waitlist')
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Failed to join waitlist",
         description: "Please try again or contact me directly at hello@farzadbayat.com",
@@ -110,7 +110,7 @@ export default function WorkshopWaitlistPage() {
         </div>
 
         <Card className="neu-card p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Name *</Label>

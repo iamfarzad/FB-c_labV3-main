@@ -185,7 +185,7 @@ export function withAdminAuth(handler: (req: NextRequest) => Promise<Response | 
 }
 
 // API guard middleware
-export function withApiGuard(options: {
+export function withApiGuard(_options: {
   schema?: unknown
   requireSession?: boolean
   rateLimit?: { windowMs: number; max: number }

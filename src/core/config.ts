@@ -130,6 +130,7 @@ export function checkDevelopmentConfig() {
     if (!config.supabase.serviceRoleKey) missingVars.push("SUPABASE_SERVICE_ROLE_KEY")
 
     if (missingVars.length > 0) {
+      // eslint-disable-next-line no-console
       console.warn(`Missing Supabase environment variables: ${missingVars.join(", ")}`)
     }
   }

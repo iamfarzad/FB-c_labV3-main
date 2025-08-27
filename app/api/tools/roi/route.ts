@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       calculatedAt: new Date().toISOString()
     }
 
-    const sessionId = (req.headers.get('x-intelligence-session-id') || undefined) as string | undefined
+    const sessionId = req.headers.get('x-intelligence-session-id') || undefined
     if (sessionId) {
       try { await recordCapabilityUsed(String(sessionId), 'roi', { input: data, output: { roi: output.roi, paybackPeriod: output.paybackPeriod } }) } catch {}
     }

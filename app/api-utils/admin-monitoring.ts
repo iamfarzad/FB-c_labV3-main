@@ -74,6 +74,7 @@ class AdminMonitoringService {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
       console.info('🔍 Admin Action:', {
         timestamp: logEntry.timestamp,
         user: userEmail,
@@ -87,7 +88,7 @@ class AdminMonitoringService {
 
     // TODO: Send to external monitoring service in production
     if (process.env.NODE_ENV === 'production') {
-      this.sendToMonitoringService(logEntry)
+      void this.sendToMonitoringService(logEntry)
     }
   }
 
@@ -194,7 +195,7 @@ class AdminMonitoringService {
   private getClientIP(request: NextRequest): string {
     return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
            request.headers.get('x-real-ip') ||
-           request.ip ||
+           (request.ip as string) ||
            'unknown'
   }
 
@@ -226,7 +227,7 @@ class AdminMonitoringService {
       }
     }
     
-    return typeof body === 'string' ? body.substring(0, 100) + '...' : body
+    return typeof body === 'string' ? `${body.substring(0, 100)}...` : body
   }
 
   private getErrorType(error: string): string {
@@ -248,17 +249,18 @@ class AdminMonitoringService {
     return timeRanges[timeRange] || timeRanges['24h']
   }
 
-  private async sendToMonitoringService(logEntry: AdminLogEntry) {
+  private async sendToMonitoringService(_logEntry: AdminLogEntry) {
     // TODO: Implement external monitoring service integration
     // Examples: Sentry, LogRocket, DataDog, etc.
     try {
       // await fetch('https://your-monitoring-service.com/api/logs', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(logEntry)
+      //   body: JSON.stringify(_logEntry)
       // })
-    } catch (error) {
-      console.error('Failed to send log to monitoring service:', error)
+    } catch (_error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to send log to monitoring service:', _error)
     }
   }
 }

@@ -61,7 +61,7 @@ export function withApiGuard<TSchema extends z.ZodTypeAny>(opts: {
       const res = await opts.handler({ req, body, sessionId, requestId } as any)
       res.headers.set('x-request-id', requestId)
       return res
-    } catch (e) {
+    } catch (_e) {
       return NextResponse.json({ ok: false, error: 'Internal error' }, { status: 500, headers: { 'x-request-id': requestId } })
     }
   }

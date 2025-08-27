@@ -24,19 +24,19 @@ function guessMimeFromName(name?: string): SupportedDocType | undefined {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json().catch(() => ({})) as any
+    const body = await req.json().catch(() => ({}))
     const { filename, dataUrl, type, analysisType } = body || {}
     const sessionId = req.headers.get('x-intelligence-session-id') || undefined
     const userId = req.headers.get('x-user-id') || undefined
 
-    let mimeType: SupportedDocType | undefined = (type as SupportedDocType) || guessMimeFromName(filename)
+    let mimeType: SupportedDocType | undefined = type || guessMimeFromName(filename)
     let base64Data = ''
 
     if (typeof dataUrl === 'string' && dataUrl.startsWith('data:')) {
       // Client provided base64
       const commaIdx = dataUrl.indexOf(',')
       const header = dataUrl.substring(5, commaIdx)
-      mimeType = (header.split(';')[0] as SupportedDocType) || mimeType
+      mimeType = header.split(';')[0] || mimeType
       base64Data = dataUrl.substring(commaIdx + 1)
     } else if (typeof filename === 'string' && filename.length) {
       // Read from uploads directory
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Generate with Gemini
-    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
     const optimizedConfig = createOptimizedConfig('analysis', { maxOutputTokens: 1536, temperature: 0.3, topP: 0.8, topK: 40 })
     let analysisText = ''
     try {

@@ -92,7 +92,7 @@ export function BusinessContentRenderer({
         const formValues: Record<string, string> = {}
         
         formData.forEach((value, key) => {
-          formValues[key] = value.toString()
+          formValues[key] = String(value)
         })
 
         const interactionData: BusinessInteractionData = {
@@ -134,15 +134,8 @@ export function BusinessContentRenderer({
               // Warning log removed - could add proper error handling here
             }
           } catch (e) {
-            console.error(
-              'Error processing/executing script tag in business content.',
-              {
-                scriptContent:
-                  oldScript.innerHTML.substring(0, 500) +
-                  (oldScript.innerHTML.length > 500 ? '...' : ''),
-                error: e
-              }
-            )
+            // Script execution failed - silently continue
+            // Could emit telemetry event here if needed
           }
         })
         processedHtmlContentRef.current = htmlContent

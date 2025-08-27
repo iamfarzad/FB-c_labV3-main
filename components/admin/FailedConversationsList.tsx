@@ -29,7 +29,7 @@ interface FailedConversation {
 
 interface FailedConversationsListProps {}
 
-export function FailedConversationsList({}: FailedConversationsListProps) {
+export function FailedConversationsList() {
   const [failedConversations, setFailedConversations] = useState<FailedConversation[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedConversation, setSelectedConversation] = useState<FailedConversation | null>(null)

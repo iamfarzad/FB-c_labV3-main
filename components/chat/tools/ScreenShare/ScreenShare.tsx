@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Monitor, Brain, Loader2, X } from "@/src/core/utils/icon-mapping"
-import { cn } from '@/src/core/utils'
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,10 +20,10 @@ interface AnalysisResult {
 }
 
 export function ScreenShare({
-  mode = 'card',
+  mode: _mode = 'card',
   onAnalysis,
   onClose,
-  onCancel,
+  onCancel: _onCancel,
   onStream,
   onLog
 }: ScreenShareProps) {
@@ -38,7 +38,7 @@ export function ScreenShare({
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const autoAnalysisIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const sessionIdRef = useRef<string>(`screen-session-${Date.now()}`)
+
   const videoReadyRef = useRef<boolean>(false)
 
   async function waitForScreenReady(video: HTMLVideoElement): Promise<void> {
@@ -75,7 +75,7 @@ export function ScreenShare({
         })
       })
       if (!response.ok) throw new Error('Failed to analyze screen frame')
-      const result = await response.json()
+      const result: { output?: { analysis?: string }; analysis?: string } = await response.json()
       const analysisText = result?.output?.analysis || result?.analysis || 'No analysis'
       onLog?.({ level: 'log', message: `Screen analysis: ${analysisText}`, timestamp: new Date() })
       const analysis: AnalysisResult = {
@@ -91,7 +91,7 @@ export function ScreenShare({
     } finally {
       setIsAnalyzing(false)
     }
-  }, [onAnalysis])
+  }, [onAnalysis, onLog])
 
   // Auto-analysis interval with throttling and cost awareness
   useEffect(() => {
@@ -99,7 +99,7 @@ export function ScreenShare({
       let analysisCount = 0;
       const maxAnalysisPerSession = 20; // Limit to prevent excessive costs
       
-      autoAnalysisIntervalRef.current = setInterval(async () => {
+      autoAnalysisIntervalRef.current = setInterval(() => {
         // Check if we've exceeded the analysis limit
         if (analysisCount >= maxAnalysisPerSession) {
           // Warning log removed - could add proper error handling here
@@ -110,17 +110,17 @@ export function ScreenShare({
         if (videoRef.current && canvasRef.current && !isAnalyzing && videoRef.current.readyState >= 2 && videoRef.current.videoWidth > 0) {
           const canvas = canvasRef.current
           const video = videoRef.current
-          
+
           canvas.width = video.videoWidth
           canvas.height = video.videoHeight
-          
+
           const ctx = canvas.getContext('2d')
           if (ctx) {
             ctx.drawImage(video, 0, 0)
             const imageData = canvas.toDataURL('image/jpeg', 0.8)
             analysisCount++;
             // Action logged
-            await sendScreenFrame(imageData)
+            void sendScreenFrame(imageData)
           }
         }
       }, 15000) // Increased to 15 seconds to reduce API calls
@@ -176,7 +176,7 @@ export function ScreenShare({
         cleanup()
       })
       toast({ title: "Screen Sharing Started" })
-    } catch (error) {
+    } catch {
       setScreenState("error")
       setError('Screen share failed')
       toast({ title: "Screen Share Failed", variant: "destructive" })
@@ -197,7 +197,7 @@ export function ScreenShare({
     if (ctx) {
       ctx.drawImage(video, 0, 0)
       const imageData = canvas.toDataURL('image/jpeg', 0.8)
-      sendScreenFrame(imageData)
+      void sendScreenFrame(imageData)
     }
   }, [sendScreenFrame])
 
@@ -216,7 +216,7 @@ export function ScreenShare({
                 <Button
                   variant="outline"
                   className="w-full h-auto p-6 flex items-start gap-4 hover:bg-emerald-50 hover:border-emerald-200 bg-transparent"
-                  onClick={startScreenShare}
+                  onClick={() => void startScreenShare()}
                   disabled={screenState === "initializing"}
                 >
                   <Monitor className="w-8 h-8 text-emerald-600 mt-1" />
@@ -407,7 +407,7 @@ export function ScreenShare({
             <span>Screen Share</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button size="sm" variant="ghost" onClick={startScreenShare} disabled={screenState === 'sharing'}>Start</Button>
+            <Button size="sm" variant="ghost" onClick={() => void startScreenShare()} disabled={screenState === 'sharing'}>Start</Button>
             <Button size="sm" variant="ghost" onClick={captureScreenshot} disabled={screenState !== 'sharing' || isAnalyzing}>Capture</Button>
             <Button size="sm" variant="ghost" onClick={onClose}>Close</Button>
           </div>

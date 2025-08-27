@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken, JWTPayload } from '@/src/core/auth'
+import { verifyToken } from '@/src/core/auth'
 
 export async function authMiddleware(request: NextRequest): Promise<NextResponse | null> {
   const authHeader = request.headers.get('Authorization');

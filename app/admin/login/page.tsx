@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
         const data = await response.json()
         setError(data.error || "Invalid password")
       }
-    } catch (error) {
+    } catch {
       setError("Login failed. Please try again.")
     } finally {
       setIsLoading(false)
@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
           <CardDescription className="text-muted-foreground">Enter your admin password to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-4">
             <div>
               <Label htmlFor="password" className="text-foreground">Password</Label>
               <Input
