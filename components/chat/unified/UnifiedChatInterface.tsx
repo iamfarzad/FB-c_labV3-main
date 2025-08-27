@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Virtual scrolling removed - can be added with @tanstack/react-virtual package
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 import { Button } from '@/components/ui/button'
 import { FbcIcon } from '@/components/ui/fbc-icon'
 import { Send, RotateCcw, Settings, Maximize2, Copy, Check, Edit, Languages, User } from 'lucide-react'
@@ -301,7 +301,9 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                 aria-label="Edit message"
                 variant="ghost"
                 size="sm"
-                onClick={() => // Log removed}
+                onClick={() => {
+                  // Log removed
+                }}
               >
                 <Edit className="w-3 h-3" />
               </Action>

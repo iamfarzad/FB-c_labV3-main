@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Menu, Languages, Check } from "@/src/core/utils/icon-mapping"
+import { Menu, Languages, Check } from "@/src/core/icon-mapping"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 // Temporarily hide text logo; keep orb icon only
 const FbcLogo = ({ className }: { className?: string }) => null as any

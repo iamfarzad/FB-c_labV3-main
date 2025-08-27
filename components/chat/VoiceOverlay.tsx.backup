@@ -4,7 +4,7 @@ import * as React from "react"
 import { useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { X } from "@/src/core/utils/icon-mapping"
+import { X } from "@/src/core/icon-mapping"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 import { useWebSocketVoice } from '@/hooks/use-websocket-voice'

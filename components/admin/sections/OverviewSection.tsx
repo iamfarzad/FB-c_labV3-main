@@ -63,26 +63,34 @@ const quickActions = [
     title: "Add New Lead",
     description: "Capture a new lead",
     icon: Plus,
-    action: () => // Log removed,
+    action: () => {
+      // Log removed
+    },
   },
   // Button will be swapped at render to open MeetingOverlay
   {
     title: "Send Email",
     description: "Create email campaign",
     icon: Mail,
-    action: () => // Log removed,
+    action: () => {
+      // Log removed
+    },
   },
   {
     title: "View Analytics",
     description: "Check performance",
     icon: TrendingUp,
-    action: () => // Log removed,
+    action: () => {
+      // Log removed
+    },
   },
   {
     title: "View Conversations",
     description: "See all lead conversations",
     icon: MessageSquare,
-    action: () => // Log removed,
+    action: () => {
+      // Log removed
+    },
   },
 ]
 

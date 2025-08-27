@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
-import { Monitor, Brain, Loader2, X } from "@/src/core/utils/icon-mapping"
+import { Monitor, Brain, Loader2, X } from "@/src/core/icon-mapping"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"

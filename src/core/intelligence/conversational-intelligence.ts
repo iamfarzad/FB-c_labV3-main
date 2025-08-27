@@ -1,9 +1,9 @@
 import { GoogleGroundingProvider } from './providers/search/google-grounding'
 import { LeadResearchService } from './lead-research'
 import { detectRole } from './role-detector'
-import type { ContextSnapshot } from '@/src/core/context/context-schema'
-import { getContextSnapshot, updateContext } from '@/src/core/context/context-manager'
-import type { IntentResult, Suggestion } from '@/types/intelligence'
+import type { ContextSnapshot } from '../context/context-schema'
+import { getContextSnapshot, updateContext } from '../context/context-manager'
+import type { IntentResult, Suggestion } from '../types/intelligence'
 import { suggestTools } from './tool-suggestion-engine'
 
 export class ConversationalIntelligence {

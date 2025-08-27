@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 // Shell layout variants
 const shellVariants = cva(

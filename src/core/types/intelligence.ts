@@ -32,15 +32,30 @@ export interface ContextSnapshot {
 export interface IntentResult {
   type: 'consulting' | 'workshop' | 'other'
   confidence: number
-  slots: Record<string, unknown>
+  slots: Record<string, string | number | boolean>
 }
 
 export interface Suggestion {
   id: string
   label: string
   capability: string
+  action?: 'open_form' | 'upload_prompt' | 'schedule_call' | 'run_audit' | 'run_tool'
+  payload?: Record<string, unknown>
   description?: string
   priority?: number
+}
+
+export interface ToolRunInput {
+  sessionId: string
+  tool: 'roi' | 'doc' | 'image' | 'screenshot' | 'voice' | 'screenShare' | 'webcam' | 'translate' | 'search' | 'urlContext' | 'leadResearch' | 'meeting' | 'exportPdf' | 'calc' | 'code' | 'video2app'
+  payload?: Record<string, unknown>
+}
+
+export interface ToolRunResult {
+  ok: boolean
+  output?: Record<string, unknown>
+  error?: string
+  citations?: { uri: string; title?: string }[]
 }
 
 export interface RoleDetectionResult {

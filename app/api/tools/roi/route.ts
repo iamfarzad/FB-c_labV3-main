@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { recordCapabilityUsed } from '@/src/core/context/capabilities'
-import type { ToolRunResult } from '@/types/intelligence'
+import { recordCapabilityUsed } from '@/core/context/capabilities'
+import type { ToolRunResult } from '@/core/types/intelligence'
 
 const Input = z.object({
   initialInvestment: z.number().min(0),

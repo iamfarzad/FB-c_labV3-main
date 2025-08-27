@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
-import { Calculator, ArrowLeft, Check } from "@/src/core/utils/icon-mapping"
+import { Calculator, ArrowLeft, Check } from "@/core/icon-mapping"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
 
 import type { ROICalculatorProps, ROICalculationResult, WizardStep } from "./ROICalculator.types"
-import type { ChatMessage, ROIResultPayload } from '@/src/core/types/chat'
+import type { ChatMessage, ROIResultPayload } from '@/core/types/chat'
 import { markCapabilityUsed } from "@/components/experience/progress-tracker"
 
 // Type for the API response data

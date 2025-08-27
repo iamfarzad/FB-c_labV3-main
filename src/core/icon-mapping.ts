@@ -1,5 +1,6 @@
-// Icon mapping from Lucide React to Phosphor Icons
-// This file maps all icons used in the codebase from lucide-react to @phosphor-icons/react
+// Unified Icon Mapping - Consolidates Lucide and Phosphor icons
+// This file provides a single source for all icons used in the codebase
+// Priority: Phosphor icons for better performance, fallback to Lucide for missing icons
 
 import {
   // Chat Area Icons
@@ -30,7 +31,7 @@ import {
   Clock as PhosphorClock,
   Target as PhosphorTarget,
   PencilSimple as PhosphorEdit,
-  
+
   // Chat Footer Icons
   PaperPlaneTilt as PhosphorSend,
   Camera as PhosphorCamera,
@@ -38,7 +39,7 @@ import {
   Plus as PhosphorPlus,
   X as PhosphorX,
   CaretDown as PhosphorChevronDown,
-  
+
   // Additional Tool Icons
   ArrowRight as PhosphorArrowRight,
   ArrowLeft as PhosphorArrowLeft,
@@ -50,9 +51,32 @@ import {
   VideoCameraSlash as PhosphorVideoOff,
   Link as PhosphorLink,
   Translate as PhosphorLanguages,
-  List as PhosphorMenu
+  List as PhosphorMenu,
+
+  // Additional icons from Lucide approach
+  BarChart3 as PhosphorBarChart,
+  Star as PhosphorStar,
+  CircleNotch as PhosphorLoader, // Alias for Loader
+  Wrench as PhosphorWrench,
+  Activity as PhosphorActivity,
+  House as PhosphorHome,
+  Users as PhosphorUsers,
+  Calendar as PhosphorCalendar,
+  CurrencyDollar as PhosphorDollarSign,
+  CheckCircle as PhosphorCheckCircle,
+  XCircle as PhosphorXCircle,
+  ArrowCircleDown as PhosphorArrowDown,
+  ShareNetwork as PhosphorExternalLink,
+  ChatCircle as PhosphorMessageSquare
 } from '@phosphor-icons/react'
-import { ArrowCircleDown as PhosphorArrowDown } from '@phosphor-icons/react'
+
+// Fallback Lucide icons for icons not available in Phosphor
+import {
+  Search,
+  Mail,
+  Globe,
+  Database
+} from 'lucide-react'
 
 // Export mapped icons with their original Lucide names for easy replacement
 export {
@@ -84,7 +108,7 @@ export {
   PhosphorClock as Clock,
   PhosphorTarget as Target,
   PhosphorEdit as Edit,
-  
+
   // Chat Footer Icons
   PhosphorSend as Send,
   PhosphorCamera as Camera,
@@ -92,7 +116,7 @@ export {
   PhosphorPlus as Plus,
   PhosphorX as X,
   PhosphorChevronDown as ChevronDown,
-  
+
   // Additional Tool Icons
   PhosphorArrowRight as ArrowRight,
   PhosphorArrowLeft as ArrowLeft,
@@ -105,7 +129,28 @@ export {
   PhosphorLink as Link,
   PhosphorLanguages as Languages,
   PhosphorMenu as Menu,
-  PhosphorArrowDown as ArrowDown
+  PhosphorArrowDown as ArrowDown,
+
+  // Additional icons from Lucide approach
+  PhosphorBarChart as BarChart3,
+  PhosphorStar as Star,
+  PhosphorLoader as Loader,
+  PhosphorWrench as Wrench,
+  PhosphorActivity as Activity,
+  PhosphorHome as Home,
+  PhosphorUsers as Users,
+  PhosphorCalendar as Calendar,
+  PhosphorDollarSign as DollarSign,
+  PhosphorCheckCircle as CheckCircle,
+  PhosphorXCircle as XCircle,
+  PhosphorExternalLink as ExternalLink,
+  PhosphorMessageSquare as MessageSquare,
+
+  // Fallback Lucide icons
+  Search,
+  Mail,
+  Globe,
+  Database
 }
 
 // Icon mapping object for programmatic access
@@ -142,5 +187,24 @@ export const iconMapping = {
   Paperclip: 'Paperclip',
   Plus: 'Plus',
   X: 'X',
-  ChevronDown: 'CaretDown'
+  ChevronDown: 'CaretDown',
+
+  // Additional mappings for new icons
+  BarChart3: 'BarChart3',
+  Star: 'Star',
+  Loader: 'CircleNotch',
+  Wrench: 'Wrench',
+  Activity: 'Activity',
+  Home: 'House',
+  Users: 'Users',
+  Calendar: 'Calendar',
+  DollarSign: 'CurrencyDollar',
+  CheckCircle: 'CheckCircle',
+  XCircle: 'XCircle',
+  ExternalLink: 'ShareNetwork',
+  MessageSquare: 'ChatCircle',
+  Search: 'Search', // Fallback Lucide
+  Mail: 'Mail', // Fallback Lucide
+  Globe: 'Globe', // Fallback Lucide
+  Database: 'Database' // Fallback Lucide
 }
