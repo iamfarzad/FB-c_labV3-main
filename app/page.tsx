@@ -69,17 +69,17 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <div className="min-h-screen w-full flex flex-col gap-6 sm:gap-8 items-center justify-center relative overflow-hidden px-4 py-8">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <DotScreenShader />
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground dark:text-white text-center px-4 pointer-events-none relative z-10">
-          Build AI That Actually <span className="text-accent">Works</span>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground dark:text-white text-center px-4 pointer-events-none relative z-20 drop-shadow-lg">
+          Build AI That Actually <span className="text-accent drop-shadow-sm">Works</span>
         </h1>
-        <p className="text-base sm:text-lg md:text-xl font-light text-center text-foreground dark:text-white max-w-2xl leading-relaxed pointer-events-none relative z-10 px-4">
-          I'm Farzad Bayat, an AI consultant with 10,000+ hours of hands-on experience. 
+        <p className="text-base sm:text-lg md:text-xl font-light text-center text-foreground dark:text-white max-w-2xl leading-relaxed pointer-events-none relative z-20 px-4 drop-shadow-md">
+          I'm Farzad Bayat, an AI consultant with 10,000+ hours of hands-on experience.
           I build practical AI automation solutions that deliver real business results—not just hype.
         </p>
-        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 relative z-10 px-4">
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 relative z-20 px-4">
           <BookCallButton size="lg" className="bg-accent hover:bg-accent/90 shadow-lg text-white" title="Book Your Free AI Consultation">
             Start Your AI Project
             <ArrowRight className="ml-2 h-4 w-4" />

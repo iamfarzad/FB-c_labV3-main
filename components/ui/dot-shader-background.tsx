@@ -10,8 +10,8 @@ const DotMaterial = shaderMaterial(
   {
     time: 0,
     resolution: new THREE.Vector2(),
-    dotColor: new THREE.Color('hsl(var(--brand))'), // Will be overridden by theme
-    bgColor: new THREE.Color('hsl(var(--bg))'),   // Using theme background
+    dotColor: new THREE.Color('#ff5b04'), // ✅ BRAND LAW: Use actual brand color as fallback
+    bgColor: new THREE.Color('#f5f5f5'),  // ✅ BRAND LAW: Use actual background as fallback
     mouseTrail: null,
     render: 0,
     rotation: 0,
@@ -108,59 +108,29 @@ function Scene() {
   const { theme } = useTheme()
   
   const rotation = 0
-  const gridSize = 100
+  const gridSize = 80
 
   const getThemeColors = () => {
-    // Default colors for server-side rendering
-    if (typeof window === 'undefined') {
+    // ✅ CORRECT: Use CSS custom properties instead of hardcoded values
+    if (typeof window !== 'undefined') {
+      const root = getComputedStyle(document.documentElement)
+
+      // Always use brand color from theme system
+      const brandColor = root.getPropertyValue('--brand').trim()
+      const bgColor = root.getPropertyValue('--bg').trim()
+
       return {
-        dotColor: 'hsl(var(--brand))',
-        bgColor: 'hsl(var(--bg))',
-        dotOpacity: 0.05
+        dotColor: brandColor || '#ff5b04', // fallback to brand color if CSS var fails
+        bgColor: bgColor || '#f5f5f5',     // fallback to light background
+        dotOpacity: theme === 'dark' ? 0.08 : 0.25
       }
     }
 
-    // Use CSS custom properties in browser environment
-    const root = document.documentElement
-    const computedStyle = getComputedStyle(root)
-
-    const dotColor = computedStyle.getPropertyValue('--brand').trim() || 'hsl(var(--brand))'
-    const bgColor = computedStyle.getPropertyValue('--bg').trim() || 'hsl(var(--bg))'
-
-    // Convert HSL to hex for Three.js
-    const hslToHex = (hsl: string) => {
-      if (hsl.startsWith('#')) return hsl
-      // Simple conversion for common values
-      if (hsl.includes('20 100% 51%')) return 'hsl(var(--brand))' // brand color
-      if (hsl.includes('0 0% 96%')) return 'hsl(var(--bg))' // light background
-      if (hsl.includes('0 0% 10%')) return 'hsl(var(--bg))' // dark background
-      if (hsl.includes('0 0% 100%')) return 'hsl(var(--surface))' // surface
-      if (hsl.startsWith('#')) return hsl // already hex
-      return 'hsl(var(--brand))' // brand fallback
-    }
-
-    const dotColorHex = hslToHex(dotColor)
-    const bgColorHex = hslToHex(bgColor)
-
-    switch (theme) {
-      case 'dark':
-        return {
-          dotColor: dotColorHex,
-          bgColor: bgColorHex,
-          dotOpacity: 0.025
-        }
-      case 'light':
-        return {
-          dotColor: dotColorHex,
-          bgColor: bgColorHex,
-          dotOpacity: 0.15
-        }
-      default:
-        return {
-          dotColor: dotColorHex,
-          bgColor: bgColorHex,
-          dotOpacity: 0.05
-        }
+    // Server-side fallback - use theme tokens
+    return {
+      dotColor: 'var(--brand)',
+      bgColor: 'var(--bg)',
+      dotOpacity: 0.05
     }
   }
 
@@ -188,13 +158,26 @@ function Scene() {
   useEffect(() => {
     const uniforms = dotMaterial.uniforms
     if (uniforms) {
-      uniforms.dotColor?.value.setHex(themeColors.dotColor.replace('#', '0x'))
-      uniforms.bgColor?.value.setHex(themeColors.bgColor.replace('#', '0x'))
-      if (uniforms.dotOpacity) {
-        uniforms.dotOpacity.value = themeColors.dotOpacity
-      }
-      if (uniforms.prefersReducedMotion) {
-        uniforms.prefersReducedMotion.value = prefersReducedMotion ? 1.0 : 0.0
+      try {
+        // Convert HSL to RGB for Three.js
+        const dotColorRGB = themeColors.dotColor.startsWith('hsl')
+          ? new THREE.Color().setStyle(themeColors.dotColor)
+          : new THREE.Color(themeColors.dotColor)
+        const bgColorRGB = themeColors.bgColor.startsWith('hsl')
+          ? new THREE.Color().setStyle(themeColors.bgColor)
+          : new THREE.Color(themeColors.bgColor)
+
+        uniforms.dotColor?.value.copy(dotColorRGB)
+        uniforms.bgColor?.value.copy(bgColorRGB)
+
+        if (uniforms.dotOpacity) {
+          uniforms.dotOpacity.value = themeColors.dotOpacity
+        }
+        if (uniforms.prefersReducedMotion) {
+          uniforms.prefersReducedMotion.value = prefersReducedMotion ? 1.0 : 0.0
+        }
+      } catch (error) {
+        console.warn('Error setting shader colors:', error)
       }
     }
   }, [theme, dotMaterial, themeColors, prefersReducedMotion])

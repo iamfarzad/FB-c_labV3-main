@@ -9,7 +9,7 @@ import { Menu, Languages, Check } from "@/src/core/icon-mapping"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 
 const FbcLogo = ({ className }: { className?: string }) => (
-  <span className={cn("font-bold text-brand", className)}>
+  <span className={cn("font-bold text-brand drop-shadow-sm", className)}>
     F.B/c
   </span>
 )
