@@ -1,3 +1,46 @@
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+
+const ConsentInput = z.object({
+  email: z.string().email(),
+  companyUrl: z.string().url().optional().or(z.literal('')).optional(),
+  policyVersion: z.string().min(1)
+})
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json()
+    const data = ConsentInput.parse(body)
+
+    const payload = {
+      email: data.email,
+      companyUrl: data.companyUrl || null,
+      policyVersion: data.policyVersion,
+      ts: Date.now()
+    }
+
+    const res = NextResponse.json({ ok: true })
+
+    // Set consent cookie (HTTP-only for privacy)
+    res.headers.append(
+      'Set-Cookie',
+      `fbc-consent=${encodeURIComponent(JSON.stringify(payload))}; Path=/; Max-Age=${60 * 60 * 24 * 365}; SameSite=Lax; HttpOnly; ${process.env.NODE_ENV === 'production' ? 'Secure;' : ''}`
+    )
+
+    return res
+  } catch (error: unknown) {
+    const isZod = (error as any)?.name === 'ZodError'
+    return NextResponse.json(
+      { ok: false, error: isZod ? 'Invalid input' : 'Internal server error' },
+      { status: isZod ? 400 : 500 }
+    )
+  }
+}
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const fetchCache = 'force-no-store'
+
 import { NextRequest, NextResponse } from 'next/server'
 
 type ConsentCookie = {

@@ -41,7 +41,8 @@ export function ROICalculator({
   onCancel,
   onClose,
   sessionId,
-  defaults
+  defaults,
+  onEmitMessage
 }: ROICalculatorProps) {
   const { toast } = useToast()
   const [currentStep, setCurrentStep] = useState<WizardStep>("company-info")
@@ -122,7 +123,7 @@ export function ROICalculator({
           calculatedAt: data.output.calculatedAt,
         }
         const msg: ChatMessage = { role: 'tool', type: 'roi.result', payload }
-        props.onEmitMessage?.(msg as any)
+        onEmitMessage?.(msg as any)
       } catch {}
     } catch (error) {
     console.error('ROI calculation error', error)
@@ -141,10 +142,10 @@ export function ROICalculator({
           <div className="space-y-4">
             <h3 className="font-semibold">Company Information</h3>
             <div>
-              <Label htmlFor="compunknownSize">Company Size</Label>
-              <Select value={compunknownInfo.compunknownSize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
+              <Label htmlFor="companySize">Company Size</Label>
+              <Select value={companyInfo.companySize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select compunknown size" />
+                  <SelectValue placeholder="Select company size" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="startup">Startup (1-10 employees)</SelectItem>
@@ -156,7 +157,7 @@ export function ROICalculator({
             </div>
             <div>
               <Label htmlFor="industry">Industry</Label>
-              <Select value={compunknownInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
+              <Select value={companyInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select industry" />
                 </SelectTrigger>
@@ -174,7 +175,7 @@ export function ROICalculator({
               <Label htmlFor="useCase">Primary Use Case</Label>
               <Input
                 id="useCase"
-                value={compunknownInfo.useCase}
+                value={companyInfo.useCase}
                 onChange={(e) => setCompanyInfo(prev => ({ ...prev, useCase: e.target.value }))}
                 placeholder="e.g., Process automation, Customer service, Data analysis"
               />
@@ -388,6 +389,19 @@ export function ROICalculator({
             )}
             <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isRunning} onClick={() => handleCalculate(false)}>
               Re-run Analysis
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              onClick={() => {
+                setResult(null)
+                setCompanyInfo({ companySize: defaults?.companySize || "", industry: defaults?.industry || "", useCase: defaults?.useCase || "" })
+                setFormData({ initialInvestment: 5000, monthlyRevenue: 10000, monthlyExpenses: 6500, timePeriod: 12 })
+                setCurrentStep('company-info')
+                try { localStorage.removeItem(cacheKey) } catch {}
+              }}
+            >
+              Reset
             </Button>
             {onCancel && (
               <Button variant="ghost" className="w-full" onClick={onCancel}>

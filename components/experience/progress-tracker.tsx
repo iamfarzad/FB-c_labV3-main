@@ -52,6 +52,11 @@ export function markCapabilityUsed(key: CapabilityKey) {
     const set = new Set<CapabilityKey>(raw ? (JSON.parse(raw) as CapabilityKey[]) : [])
     set.add(key)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(set)))
+    // Notify listeners (StageRail, ProgressTracker) to update immediately
+    try {
+      const evt = new CustomEvent('chat-capability-used', { detail: { capability: key } })
+      window.dispatchEvent(evt)
+    } catch {}
   } catch {}
 }
 
@@ -66,6 +71,18 @@ export function ProgressTracker({ className }: { className?: string }) {
         setUsed(new Set(raw ? (JSON.parse(raw) as CapabilityKey[]) : []))
       } catch {}
     }
+  }, [])
+
+  // Live updates on capability-used events
+  useEffect(() => {
+    function onUsed() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        setUsed(new Set(raw ? (JSON.parse(raw) as CapabilityKey[]) : []))
+      } catch {}
+    }
+    try { window.addEventListener('chat-capability-used', onUsed as EventListener) } catch {}
+    return () => { try { window.removeEventListener('chat-capability-used', onUsed as EventListener) } catch {} }
   }, [])
 
   const total = useMemo(() => Object.keys(CAPABILITIES).length, [])
