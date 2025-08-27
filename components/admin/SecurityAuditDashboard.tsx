@@ -84,15 +84,15 @@ export function SecurityAuditDashboard() {
   }, [])
 
   const getStatusIcon = (status: string) => {
-    if (status.includes('✅')) return <ShieldCheck className="w-4 h-4 text-green-500" />
-    if (status.includes('❌')) return <ShieldAlert className="w-4 h-4 text-red-500" />
-    return <Shield className="w-4 h-4 text-yellow-500" />
+    if (status.includes('✅')) return <ShieldCheck className="w-4 h-4 text-success" />
+    if (status.includes('❌')) return <ShieldAlert className="w-4 h-4 text-error" />
+    return <Shield className="w-4 h-4 text-warning" />
   }
 
   const getStatusColor = (status: string) => {
-    if (status.includes('✅')) return 'bg-green-100 text-green-800 border-green-200'
-    if (status.includes('❌')) return 'bg-red-100 text-red-800 border-red-200'
-    return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+    if (status.includes('✅')) return 'bg-success/10 text-success border-success/20'
+    if (status.includes('❌')) return 'bg-error/10 text-error border-error/20'
+    return 'bg-warning/10 text-warning border-warning/20'
   }
 
   return (

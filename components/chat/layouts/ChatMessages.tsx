@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, Edit, Languages, ExternalLink } from 'lucide-react'
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 import { FbcIcon } from '@/components/ui/fbc-icon'
 import { 
   Conversation, 
@@ -25,7 +25,7 @@ import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/componen
 import { Task, TaskTrigger, TaskContent, TaskItem } from '@/components/ai-elements/task'
 import { WebPreview, WebPreviewNavigation, WebPreviewUrl, WebPreviewBody } from '@/components/ai-elements/web-preview'
 import { Loader } from '@/components/ai-elements/loader'
-import { Message as ChatMessage } from '@/core/types/chat'
+import { Message as ChatMessage } from '@/src/core/types/chat'
 import { useTools } from '@/hooks/useTools-ui'
 
 interface ChatMessagesProps {
@@ -207,15 +207,15 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
             <ReasoningContent>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <div className="w-1 h-1 rounded-full bg-success" />
                   <span>Analyzing business context and requirements</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <div className="w-1 h-1 rounded-full bg-success" />
                   <span>Identifying key performance indicators and metrics</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-green-500" />
+                  <div className="w-1 h-1 rounded-full bg-success" />
                   <span>Researching industry benchmarks and best practices</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -328,11 +328,11 @@ function MessageComponent({ message, isLast, isLoading, sessionId, onExecuteTool
                 <div className="flex items-center gap-2 ml-auto">
                   <div className={cn(
                     'px-2 py-1 rounded text-xs font-medium',
-                    message.videoToAppCard.status === 'completed' ? 'bg-green-100 text-green-800' :
-                    message.videoToAppCard.status === 'analyzing' ? 'bg-blue-100 text-blue-800' :
-                    message.videoToAppCard.status === 'generating' ? 'bg-orange-100 text-orange-800' :
-                    message.videoToAppCard.status === 'error' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'
+                    message.videoToAppCard.status === 'completed' ? 'bg-success/10 text-success' :
+                    message.videoToAppCard.status === 'analyzing' ? 'bg-info/10 text-info' :
+                    message.videoToAppCard.status === 'generating' ? 'bg-warning/10 text-warning' :
+                    message.videoToAppCard.status === 'error' ? 'bg-error/10 text-error' :
+                    'bg-surfaceElevated text-text'
                   )}>
                     {message.videoToAppCard.status}
                   </div>

@@ -83,12 +83,12 @@ export function TokenCostAnalytics() {
 
   const getProviderColor = (provider: string) => {
     const colors: Record<string, string> = {
-      gemini: "bg-blue-500",
-      openai: "bg-green-500",
-      anthropic: "bg-purple-500",
-      groq: "bg-orange-500",
+      gemini: "bg-info",
+      openai: "bg-success",
+      anthropic: "bg-warning",
+      groq: "bg-error",
     }
-    return colors[provider] || "bg-gray-500"
+    return colors[provider] || "bg-surfaceElevated"
   }
 
   if (isLoading) {

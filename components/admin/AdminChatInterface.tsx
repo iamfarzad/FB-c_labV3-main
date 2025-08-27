@@ -16,7 +16,7 @@ import {
   Search, Eye, FileText, Download
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 interface AdminChatInterfaceProps {
   className?: string
@@ -348,8 +348,8 @@ DELIVERY STATUS:
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-            <Brain className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 bg-gradient-to-br from-brand to-brand-hover rounded-lg flex items-center justify-center">
+            <Brain className="w-4 h-4 text-surface" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground">AI Business Assistant</h3>
@@ -357,8 +357,8 @@ DELIVERY STATUS:
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="bg-green-100 text-green-700">
-            <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+          <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
+            <div className="w-2 h-2 bg-success rounded-full mr-1"></div>
             Connected
           </Badge>
 
@@ -447,7 +447,7 @@ DELIVERY STATUS:
           </Dialog>
 
           {selectedConversation && (
-            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+            <Badge variant="outline" className="text-xs bg-info/10 text-info border-info/20">
               {selectedConversation.name || selectedConversation.email}
             </Badge>
           )}
@@ -467,8 +467,8 @@ DELIVERY STATUS:
 
       {/* Conversation Context Display */}
       {selectedConversation && conversationContext && (
-        <div className="px-4 py-2 bg-blue-50 border-b border-blue-200">
-          <div className="flex items-center gap-2 text-sm text-blue-700">
+        <div className="px-4 py-2 bg-info/5 border-b border-info/20">
+          <div className="flex items-center gap-2 text-sm text-info">
             <MessageSquare className="w-4 h-4" />
             <span className="font-medium">Conversation Context Active:</span>
             <span>{selectedConversation.name || selectedConversation.email}</span>
@@ -561,7 +561,7 @@ DELIVERY STATUS:
               >
                 {message.role === "assistant" && (
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                    <AvatarFallback className="bg-gradient-to-br from-brand to-brand-hover text-surface">
                       <Bot className="w-4 h-4" />
                     </AvatarFallback>
                   </Avatar>
@@ -576,13 +576,13 @@ DELIVERY STATUS:
                   <Card className={cn(
                     "border-0 shadow-sm",
                     message.role === "user"
-                      ? "bg-blue-500 text-white"
+                      ? "bg-brand text-surface"
                       : "bg-card"
                   )}>
                     <CardContent className="p-3">
                       <div className={cn(
                         "whitespace-pre-wrap text-sm",
-                        message.role === "user" ? "text-white" : "text-foreground"
+                        message.role === "user" ? "text-surface" : "text-foreground"
                       )}>
                         {message.content}
                       </div>
@@ -622,7 +622,7 @@ DELIVERY STATUS:
             {isLoading && (
               <div className="flex gap-3 justify-start">
                 <Avatar className="w-8 h-8">
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                  <AvatarFallback className="bg-gradient-to-br from-brand to-brand-hover text-surface">
                     <Bot className="w-4 h-4" />
                   </AvatarFallback>
                 </Avatar>
@@ -630,7 +630,7 @@ DELIVERY STATUS:
                   <Card className="border-0 shadow-sm bg-card">
                     <CardContent className="p-3">
                       <div className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                        <Loader2 className="w-4 h-4 animate-spin text-info" />
                         <div>
                           <div className="text-sm font-medium text-foreground">Analyzing your data...</div>
                           <div className="text-xs text-muted-foreground">Gathering insights from dashboard</div>
@@ -645,18 +645,18 @@ DELIVERY STATUS:
             {error && (
               <div className="flex gap-3 justify-start">
                 <Avatar className="w-8 h-8">
-                  <AvatarFallback className="bg-red-100 text-red-600">
+                  <AvatarFallback className="bg-error/10 text-error">
                     <AlertCircle className="w-4 h-4" />
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 max-w-[85%] space-y-1">
-                  <Card className="border-0 shadow-sm bg-red-50 border border-red-200">
+                  <Card className="border-0 shadow-sm bg-error/5 border border-error/20">
                     <CardContent className="p-3">
                       <div className="flex items-center gap-2">
-                        <AlertCircle className="w-4 h-4 text-red-500" />
+                        <AlertCircle className="w-4 h-4 text-error" />
                         <div>
-                          <div className="text-sm font-medium text-red-700">Analysis Error</div>
-                          <div className="text-xs text-red-600">{error.message}</div>
+                          <div className="text-sm font-medium text-error">Analysis Error</div>
+                          <div className="text-xs text-error">{error.message}</div>
                         </div>
                       </div>
                     </CardContent>

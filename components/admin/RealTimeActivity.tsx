@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Activity, MessageSquare, User, Zap, Clock, MapPin, Globe } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { supabase } from '@/services/storage/supabase'
+import { supabase } from '@/src/services/storage/supabase'
 
 interface RealTimeActivityItem {
   id: string
@@ -77,15 +77,15 @@ export function RealTimeActivity() {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "lead_captured":
-        return <User className="w-4 h-4 text-green-500" />
+        return <User className="w-4 h-4 text-success" />
       case "ai_interaction":
-        return <MessageSquare className="w-4 h-4 text-blue-500" />
+        return <MessageSquare className="w-4 h-4 text-info" />
       case "tool_used":
-        return <Zap className="w-4 h-4 text-purple-500" />
+        return <Zap className="w-4 h-4 text-info" />
       case "error":
-        return <Activity className="w-4 h-4 text-red-500" />
+        return <Activity className="w-4 h-4 text-error" />
       default:
-        return <Activity className="w-4 h-4 text-gray-500" />
+        return <Activity className="w-4 h-4 text-textMuted" />
     }
   }
 
@@ -120,7 +120,7 @@ export function RealTimeActivity() {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Users</CardTitle>
             <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2" />
+              <div className="w-2 h-2 bg-success rounded-full animate-pulse mr-2" />
               <User className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
@@ -145,7 +145,7 @@ export function RealTimeActivity() {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Status</CardTitle>
             <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+              <div className="w-2 h-2 bg-success rounded-full mr-2" />
               <Globe className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
@@ -162,7 +162,7 @@ export function RealTimeActivity() {
           <CardTitle className="flex items-center gap-2">
             <Activity className="w-5 h-5" />
             Live Activity Feed
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
           </CardTitle>
           <CardDescription>Real-time updates from the F.B/c AI system</CardDescription>
         </CardHeader>
