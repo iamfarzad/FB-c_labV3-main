@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useMemo, useRef } from "react"
-import { cn } from "@/core/utils"
+import { cn } from "@/src/core/utils"
 
 export interface StageItem {
   id: string
@@ -68,7 +68,7 @@ export function RightStageRail({ stages, className, ariaLabel = "Conversation st
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "inline-block h-2 w-2 rounded-full",
-                  s.done ? "bg-green-500" : s.current ? "bg-[hsl(var(--accent))]" : "bg-muted-foreground/40"
+                  s.done ? "bg-success" : s.current ? "bg-accent" : "bg-muted-foreground/40"
                 )} />
                 <span className="text-sm">{s.label}</span>
               </div>

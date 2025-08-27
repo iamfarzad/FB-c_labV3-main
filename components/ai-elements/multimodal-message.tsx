@@ -6,7 +6,7 @@ import { Response } from './response';
 import { InlineCitation } from './inline-citation';
 import { Reasoning } from './reasoning';
 import { Suggestions, Suggestion } from './suggestion';
-import { cn } from '@/core/utils';
+import { cn } from '@/src/core/utils';
 
 export interface MultimodalMessageProps {
   role: 'user' | 'assistant';

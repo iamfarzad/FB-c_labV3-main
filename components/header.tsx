@@ -5,12 +5,16 @@ import { usePathname } from "next/navigation"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Menu, Languages, Check } from "@/core/icon-mapping"
+import { Menu, Languages, Check } from "@/src/core/icon-mapping"
 import { FbcIcon } from "@/components/ui/fbc-icon"
-// Temporarily hide text logo; keep orb icon only
-const FbcLogo = ({ className }: { className?: string }) => null as any
+
+const FbcLogo = ({ className }: { className?: string }) => (
+  <span className={cn("font-bold text-brand", className)}>
+    F.B/c
+  </span>
+)
 import { ThemeToggle } from "@/components/theme-toggle"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 import { useState } from "react"
 
 const navLinks = [

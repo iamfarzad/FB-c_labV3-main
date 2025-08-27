@@ -270,7 +270,7 @@ export default function TestDashboard() {
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">F.B/c AI System Test Dashboard</h1>
-        <p className="text-gray-600 mb-4">
+        <p className="text-textMuted mb-4">
           Comprehensive testing of all AI features and system components
         </p>
         
@@ -283,7 +283,7 @@ export default function TestDashboard() {
             {isRunning ? 'Running Tests...' : 'Run All Tests'}
           </Button>
           
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-textMuted">
             {passedTests}/{totalTests} tests passed
           </div>
         </div>
@@ -303,7 +303,7 @@ export default function TestDashboard() {
             </CardHeader>
             <CardContent>
               {test.details && (
-                <p className="text-sm text-gray-600 mb-2">{test.details}</p>
+                <p className="text-sm text-textMuted mb-2">{test.details}</p>
               )}
               {test.error && (
                 <p className="text-sm text-red-600 bg-red-50 p-2 rounded">
@@ -317,7 +317,7 @@ export default function TestDashboard() {
 
       <div className="mt-8 p-4 bg-gray-50 rounded-lg">
         <h3 className="font-semibold mb-2">Test Summary</h3>
-        <ul className="text-sm text-gray-600 space-y-1">
+        <ul className="text-sm text-textMuted space-y-1">
           <li>• <strong>Chat API:</strong> Tests the main conversational AI endpoint</li>
           <li>• <strong>Document Analysis:</strong> Tests PDF and text file processing</li>
           <li>• <strong>Image Analysis:</strong> Tests webcam and screenshot analysis</li>

@@ -6,7 +6,7 @@ import {
   businessContentTemplates, 
   findTemplateByKeywords, 
   generateBusinessContent 
-} from '@/core/business-content-templates'
+} from '@/src/core/business-content-templates'
 import type { BusinessInteractionData, UserBusinessContext } from '@/types/business-content'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

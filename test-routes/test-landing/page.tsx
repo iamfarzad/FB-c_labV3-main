@@ -22,7 +22,7 @@ export default function TestLandingPage() {
             <div className="relative z-10">
               <div className="absolute inset-0 -z-10">
                 <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full 
-                                bg-[conic-gradient(from_0deg,hsl(var(--accent)),transparent_60%)] 
+                                bg-gradient-conic from-brand to-transparent 
                                 opacity-30 blur-2xl animate-[spin_14s_linear_infinite]" />
                 <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20 animate-pulse" />
               </div>

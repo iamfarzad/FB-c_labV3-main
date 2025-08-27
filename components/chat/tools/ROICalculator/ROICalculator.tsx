@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
-import { Calculator, ArrowLeft, Check } from "@/core/icon-mapping"
+import { Calculator, ArrowLeft, Check } from "@/src/core/icon-mapping"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ToolCardWrapper } from "@/components/chat/ToolCardWrapper"
 
 import type { ROICalculatorProps, ROICalculationResult, WizardStep } from "./ROICalculator.types"
-import type { ChatMessage, ROIResultPayload } from '@/core/types/chat'
+import type { ChatMessage, ROIResultPayload } from '@/src/core/types/chat'
 import { markCapabilityUsed } from "@/components/experience/progress-tracker"
 
 // Type for the API response data
@@ -192,10 +192,10 @@ export function ROICalculator({
           <div className="space-y-4">
             <h3 className="font-semibold">Company Information</h3>
             <div>
-              <Label htmlFor="compunknownSize">Company Size</Label>
-              <Select value={compunknownInfo.compunknownSize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
+              <Label htmlFor="companySize">Company Size</Label>
+              <Select value={companyInfo.companySize} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, companySize: value }))}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select compunknown size" />
+                  <SelectValue placeholder="Select company size" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="startup">Startup (1-10 employees)</SelectItem>
@@ -207,7 +207,7 @@ export function ROICalculator({
             </div>
             <div>
               <Label htmlFor="industry">Industry</Label>
-              <Select value={compunknownInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
+              <Select value={companyInfo.industry} onValueChange={(value) => setCompanyInfo(prev => ({ ...prev, industry: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select industry" />
                 </SelectTrigger>
@@ -225,7 +225,7 @@ export function ROICalculator({
               <Label htmlFor="useCase">Primary Use Case</Label>
               <Input
                 id="useCase"
-                value={compunknownInfo.useCase}
+                value={companyInfo.useCase}
                 onChange={(e) => setCompanyInfo(prev => ({ ...prev, useCase: e.target.value }))}
                 placeholder="e.g., Process automation, Customer service, Data analysis"
               />

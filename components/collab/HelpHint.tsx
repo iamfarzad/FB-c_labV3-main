@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { cn } from "@/core/utils"
+import { cn } from "@/src/core/utils"
 
 export function HelpHint({ className }: { className?: string }) {
   return (

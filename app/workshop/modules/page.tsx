@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, Lock, CheckCircle, Circle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { getAllModules } from '@/core/education/modules'
+import { getAllModules } from '@/src/core/education/modules'
 import { useModuleProgress } from '@/hooks/workshop/use-module-progress'
 
 export default function ModulesPage() {

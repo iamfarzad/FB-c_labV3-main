@@ -3,7 +3,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { Folder, HeartHandshake, Sparkles } from "lucide-react"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 interface DatabaseWithRestApiProps {
   className?: string
@@ -108,7 +108,7 @@ export function DatabaseWithRestApi({
         <g stroke="currentColor" fill="none" strokeWidth="0.4">
           {/* First Button */}
           <g>
-            <rect fill="#18181B" x="14" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--text)" x="14" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="18" y="7.5"></DatabaseIcon>
             <text x="28" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.first || "GET"}
@@ -116,7 +116,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Second Button */}
           <g>
-            <rect fill="#18181B" x="60" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--text)" x="60" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="64" y="7.5"></DatabaseIcon>
             <text x="74" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.second || "POST"}
@@ -124,7 +124,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Third Button */}
           <g>
-            <rect fill="#18181B" x="108" y="5" width="34" height="10" rx="5"></rect>
+            <rect fill="var(--text)" x="108" y="5" width="34" height="10" rx="5"></rect>
             <DatabaseIcon x="112" y="7.5"></DatabaseIcon>
             <text x="122" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.third || "PUT"}
@@ -132,7 +132,7 @@ export function DatabaseWithRestApi({
           </g>
           {/* Fourth Button */}
           <g>
-            <rect fill="#18181B" x="150" y="5" width="40" height="10" rx="5"></rect>
+            <rect fill="var(--text)" x="150" y="5" width="40" height="10" rx="5"></rect>
             <DatabaseIcon x="154" y="7.5"></DatabaseIcon>
             <text x="165" y="12" fill="white" stroke="none" fontSize="5" fontWeight="500">
               {badgeTexts?.fourth || "DELETE"}
@@ -158,7 +158,7 @@ export function DatabaseWithRestApi({
           </mask>
           {/* Blue Grad */}
           <radialGradient id="db-blue-grad" fx="1">
-            <stop offset="0%" stopColor={lightColor || "#ff5b04"} />
+            <stop offset="0%" stopColor={lightColor || "hsl(var(--brand))"} />
             <stop offset="100%" stopColor="transparent" />
           </radialGradient>
         </defs>
@@ -168,24 +168,24 @@ export function DatabaseWithRestApi({
         {/* bottom shadow */}
         <div className="absolute -bottom-4 h-[100px] w-[62%] rounded-lg bg-accent/30" />
         {/* box title */}
-        <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border bg-[#101112] px-2 py-1 sm:-top-4 sm:py-1.5">
+        <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border bg-surface px-2 py-1 sm:-top-4 sm:py-1.5">
           <Sparkles className="size-3" />
           <span className="ml-2 text-[10px]">
             {title ? title : "Data exchange using a customized REST API"}
           </span>
         </div>
         {/* box outter circle */}
-        <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t bg-[#141516] font-semibold text-xs">
+        <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t bg-surface-elevated font-semibold text-xs">
           {circleText ? circleText : "SVG"}
         </div>
         {/* box content */}
         <div className="relative z-10 flex h-[150px] w-full items-center justify-center overflow-hidden rounded-lg border bg-background shadow-md">
           {/* Badges */}
-          <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-[#101112] px-3 text-xs border flex items-center gap-2 ">
+          <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-surface px-3 text-xs border flex items-center gap-2 ">
             <HeartHandshake className="size-4" />
             <span>{buttonTexts?.first || "LegionDev"}</span>
           </div>
-          <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-[#101112] px-3 text-xs sm:flex border items-center gap-2">
+          <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-surface px-3 text-xs sm:flex border items-center gap-2">
             <Folder className="size-4" />
             <span>{buttonTexts?.second || "v2_updates"}</span>
           </div>

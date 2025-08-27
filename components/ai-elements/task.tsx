@@ -1,7 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
-import { cn } from '@/core/utils';
+import { cn } from '@/src/core/utils';
 import {
   Collapsible,
   CollapsibleTrigger,

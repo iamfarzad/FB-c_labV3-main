@@ -3,7 +3,7 @@ import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
 import { existsSync } from "fs"
 // Import supabase
-import { getSupabaseStorage } from '@/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 
 export const dynamic = "force-dynamic"
 

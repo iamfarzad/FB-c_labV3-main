@@ -1,6 +1,6 @@
-import { intelligenceService } from '../core/intelligence'
-import { sessionInitSchema } from '../core/validation/index'
-import type { ContextSnapshot } from '../core/types/intelligence'
+import { intelligenceService } from '@/src/core/intelligence'
+import { sessionInitSchema } from '@/src/core/validation/index'
+import type { ContextSnapshot } from '@/src/core/types/intelligence'
 
 export interface IntelligenceRequest {
   action: 'init-session' | 'analyze-message' | 'research-lead'
@@ -32,7 +32,7 @@ export async function handleIntelligence(body: IntelligenceRequest): Promise<unk
 
       // Store in context if sessionId provided
       if (sessionId) {
-        const { ContextStorage } = await import('../core/context/context-storage')
+        const { ContextStorage } = await import('@/src/core/context/context-storage')
         const contextStorage = new ContextStorage()
 
         await contextStorage.update(sessionId, {
@@ -44,8 +44,8 @@ export async function handleIntelligence(body: IntelligenceRequest): Promise<unk
 
         // Optional: store embeddings for memory when enabled
         if (process.env.EMBEDDINGS_ENABLED === 'true') {
-          const { embedTexts } = await import('../core/embeddings/gemini')
-          const { upsertEmbeddings } = await import('../core/embeddings/query')
+          const { embedTexts } = await import('@/src/core/embeddings/gemini')
+          const { upsertEmbeddings } = await import('@/src/core/embeddings/query')
 
           const texts: string[] = []
           if (result.company?.summary) texts.push(String(result.company.summary))

@@ -18,7 +18,7 @@ import {
   ArrowRightIcon,
   SettingsIcon
 } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '@/src/core/utils';
 
 // Import our new components
 import { WebPreviewAnalysis } from './web-preview-analysis';
@@ -277,15 +277,15 @@ export const MultimodalWorkflow = ({
   const getStatusColor = (status: WorkflowStep['status']) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-success/10 text-success border-success/20';
       case 'running':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-info/10 text-info border-info/20';
       case 'failed':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-error/10 text-error border-error/20';
       case 'skipped':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-surfaceElevated text-text border-border';
       default:
-        return 'bg-gray-50 text-gray-600 border-gray-200';
+        return 'bg-surface text-textMuted border-border';
     }
   };
 
@@ -343,9 +343,9 @@ export const MultimodalWorkflow = ({
               <span>Progress: {completedSteps} / {totalSteps} steps</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-surfaceElevated rounded-full h-2">
               <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                className="bg-info h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -359,11 +359,11 @@ export const MultimodalWorkflow = ({
               <div key={step.id} className="flex items-start gap-3">
                 <div className={cn(
                   'flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium',
-                  step.status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
-                  step.status === 'running' ? 'bg-blue-500 border-blue-500 text-white animate-pulse' :
-                  step.status === 'failed' ? 'bg-red-500 border-red-500 text-white' :
-                  step.status === 'skipped' ? 'bg-gray-400 border-gray-400 text-white' :
-                  'bg-white border-gray-300 text-gray-600'
+                  step.status === 'completed' ? 'bg-success border-success text-surface' :
+                  step.status === 'running' ? 'bg-info border-info text-surface animate-pulse' :
+                  step.status === 'failed' ? 'bg-error border-error text-surface' :
+                  step.status === 'skipped' ? 'bg-surfaceElevated border-border text-surface' :
+                  'bg-surface border-border text-textMuted'
                 )}>
                   {step.status === 'completed' ? <CheckCircleIcon className="h-4 w-4" /> :
                    step.status === 'running' ? <ClockIcon className="h-4 w-4" /> :

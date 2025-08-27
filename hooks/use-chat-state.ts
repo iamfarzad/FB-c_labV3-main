@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react"
 import { useToast } from "@/components/ui/use-toast"
-import type { Message } from "@/core/types/chat"
+import type { Message } from "@/src/core/types/chat"
 
 interface UseChatStateOptions {
   sessionId?: string

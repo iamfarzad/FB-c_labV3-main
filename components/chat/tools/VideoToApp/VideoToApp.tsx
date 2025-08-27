@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Video, Sparkles, Loader2, Link, X } from "@/core/icon-mapping"
-import { cn } from '@/core/utils'
+import { Video, Sparkles, Loader2, Link, X } from "@/src/core/icon-mapping"
+import { cn } from '@/src/core/utils'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
@@ -196,19 +196,19 @@ export function VideoToApp({
                     <div className="bg-slate-50 p-4 rounded-lg">
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'analyze' ? 'bg-blue-500 animate-pulse' : progress !== 'idle' ? 'bg-green-500' : 'bg-slate-300')}></span>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'analyze' ? 'bg-info animate-pulse' : progress !== 'idle' ? 'bg-success' : 'bg-slate-300')}></span>
                           <span className={progress === 'analyze' ? 'text-blue-600 font-medium' : progress !== 'idle' ? 'text-green-600' : 'text-slate-500'}>
                             Analyze Video
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'spec' ? 'bg-blue-500 animate-pulse' : ['code', 'ready'].includes(progress) ? 'bg-green-500' : 'bg-slate-300')}></span>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'spec' ? 'bg-info animate-pulse' : ['code', 'ready'].includes(progress) ? 'bg-success' : 'bg-slate-300')}></span>
                           <span className={progress === 'spec' ? 'text-blue-600 font-medium' : ['code', 'ready'].includes(progress) ? 'text-green-600' : 'text-slate-500'}>
                             Generate Spec
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={cn('h-3 w-3 rounded-full', progress === 'code' ? 'bg-blue-500 animate-pulse' : progress === 'ready' ? 'bg-green-500' : 'bg-slate-300')}></span>
+                          <span className={cn('h-3 w-3 rounded-full', progress === 'code' ? 'bg-info animate-pulse' : progress === 'ready' ? 'bg-success' : 'bg-slate-300')}></span>
                           <span className={progress === 'code' ? 'text-blue-600 font-medium' : progress === 'ready' ? 'text-green-600' : 'text-slate-500'}>
                             Generate App
                           </span>
@@ -263,7 +263,7 @@ export function VideoToApp({
       </div>
 
       {/* Sidebar */}
-      <div className="w-80 bg-white border-l border-slate-200 p-4 space-y-4">
+      <div className="w-80 bg-surface border-l border-border p-4 space-y-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -274,7 +274,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>Video Analysis</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'bg-success/10 text-success' : 'bg-surfaceElevated text-textMuted'
                 )}>
                   {['analyze', 'spec', 'code', 'ready'].includes(progress) ? 'Complete' : 'Pending'}
                 </span>
@@ -282,7 +282,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>App Specification</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['spec', 'code', 'ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['spec', 'code', 'ready'].includes(progress) ? 'bg-success/10 text-success' : 'bg-surfaceElevated text-textMuted'
                 )}>
                   {['spec', 'code', 'ready'].includes(progress) ? 'Complete' : 'Pending'}
                 </span>
@@ -290,7 +290,7 @@ export function VideoToApp({
               <div className="flex items-center justify-between text-sm">
                 <span>Code Generation</span>
                 <span className={cn('px-2 py-1 rounded text-xs', 
-                  ['ready'].includes(progress) ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                  ['ready'].includes(progress) ? 'bg-success/10 text-success' : 'bg-surfaceElevated text-textMuted'
                 )}>
                   {progress === 'ready' ? 'Complete' : 'Pending'}
                 </span>
@@ -411,7 +411,7 @@ export function VideoToApp({
         {(
           <div className="flex h-10 items-center justify-between border-b px-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="h-2 w-2 rounded-full bg-success" />
               <span>Video → App</span>
             </div>
             <div className="flex items-center gap-2">

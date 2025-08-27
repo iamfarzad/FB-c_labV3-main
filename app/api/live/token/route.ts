@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { recordCapabilityUsed } from '@/core/context/capabilities'
+import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 
 // Simple per-session token cache + rate limit + idempotency
 const tokens = new Map<string, { token: string; expiresAt: number }>()

@@ -10,8 +10,8 @@ const DotMaterial = shaderMaterial(
   {
     time: 0,
     resolution: new THREE.Vector2(),
-    dotColor: new THREE.Color('#ff5b04'), // Will be overridden by theme
-    bgColor: new THREE.Color('#1a1a1a'),   // Will be overridden by theme
+    dotColor: new THREE.Color('hsl(var(--brand))'), // Will be overridden by theme
+    bgColor: new THREE.Color('hsl(var(--bg))'),   // Using theme background
     mouseTrail: null,
     render: 0,
     rotation: 0,
@@ -114,8 +114,8 @@ function Scene() {
     // Default colors for server-side rendering
     if (typeof window === 'undefined') {
       return {
-        dotColor: '#ff5b04',
-        bgColor: '#1a1a1a',
+        dotColor: 'hsl(var(--brand))',
+        bgColor: 'hsl(var(--bg))',
         dotOpacity: 0.05
       }
     }
@@ -124,19 +124,19 @@ function Scene() {
     const root = document.documentElement
     const computedStyle = getComputedStyle(root)
 
-    const dotColor = computedStyle.getPropertyValue('--brand').trim() || '#ff5b04'
-    const bgColor = computedStyle.getPropertyValue('--bg').trim() || '#0b1620'
+    const dotColor = computedStyle.getPropertyValue('--brand').trim() || 'hsl(var(--brand))'
+    const bgColor = computedStyle.getPropertyValue('--bg').trim() || 'hsl(var(--bg))'
 
     // Convert HSL to hex for Three.js
     const hslToHex = (hsl: string) => {
       if (hsl.startsWith('#')) return hsl
       // Simple conversion for common values
-      if (hsl.includes('20 100% 51%')) return '#ff5b04' // brand color
-      if (hsl.includes('0 0% 96%')) return '#f5f5f5' // light background
-      if (hsl.includes('0 0% 10%')) return '#1a1a1a' // dark background
-      if (hsl.includes('0 0% 100%')) return '#ffffff' // white
+      if (hsl.includes('20 100% 51%')) return 'hsl(var(--brand))' // brand color
+      if (hsl.includes('0 0% 96%')) return 'hsl(var(--bg))' // light background
+      if (hsl.includes('0 0% 10%')) return 'hsl(var(--bg))' // dark background
+      if (hsl.includes('0 0% 100%')) return 'hsl(var(--surface))' // surface
       if (hsl.startsWith('#')) return hsl // already hex
-      return '#ff5b04' // brand fallback
+      return 'hsl(var(--brand))' // brand fallback
     }
 
     const dotColorHex = hslToHex(dotColor)

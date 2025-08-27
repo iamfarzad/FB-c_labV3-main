@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { recordCapabilityUsed } from '@/core/context/capabilities'
+import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 
 const rl = new Map<string, { count: number; reset: number }>()
 const idem = new Map<string, { expires: number; body: unknown }>()

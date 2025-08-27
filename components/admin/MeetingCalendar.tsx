@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar, Clock, User, Building, Video, RefreshCw, CheckCircle, XCircle, AlertCircle } from "lucide-react"
-import { type Meeting, MeetingScheduler } from "@/core/meeting-scheduler"
+import { type Meeting, MeetingScheduler } from "@/src/core/meeting-scheduler"
 
 export function MeetingCalendar() {
   const [meetings, setMeetings] = useState<Meeting[]>([])
@@ -202,7 +202,7 @@ export function MeetingCalendar() {
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="h-20 bg-gray-200 rounded"></div>
+                  <div className="h-20 bg-surfaceElevated rounded"></div>
                 </div>
               ))}
             </div>

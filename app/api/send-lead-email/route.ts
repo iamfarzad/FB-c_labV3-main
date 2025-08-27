@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { getSupabaseStorage } from '@/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { z } from 'zod'
 
 // Initialize Resend with fallback for build time

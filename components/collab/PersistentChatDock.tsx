@@ -8,7 +8,7 @@ import { Sources, SourcesTrigger, SourcesContent, Source } from "@/components/ai
 import { PromptInput, PromptInputToolbar, PromptInputTools, PromptInputTextarea, PromptInputSubmit } from "@/components/ai-elements/prompt-input"
 import { useChatState } from "@/hooks/use-chat-state"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
-import { Video, Monitor, Camera } from "@/core/icon-mapping"
+import { Video, Monitor, Camera } from "@/src/core/icon-mapping"
 
 type FeatureType = "home" | "chat" | "webcam" | "screenshare" | "workshop" | "pdf" | "learning"
 

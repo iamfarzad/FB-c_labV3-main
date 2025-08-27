@@ -1,5 +1,5 @@
 // Reverting to initial simple implementation to resolve runtime errors.
-import { supabase } from '@/core/supabase/client';
+import { supabase } from '@/src/core/supabase/client';
 
 export class UnifiedAIService {
   // This can be expanded later once core functionality is stable.

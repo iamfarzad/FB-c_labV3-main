@@ -58,9 +58,9 @@ export function LeadsList({ searchTerm, period }: LeadsListProps) {
   }, [searchTerm, period, intentFilter])
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "bg-green-500"
-    if (score >= 60) return "bg-yellow-500"
-    return "bg-red-500"
+    if (score >= 80) return "bg-success"
+    if (score >= 60) return "bg-warning"
+    return "bg-error"
   }
 
   const getStatusBadge = (status: string) => {

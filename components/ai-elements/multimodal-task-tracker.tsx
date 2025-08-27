@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Loader } from './loader';
 import { CheckCircleIcon, ClockIcon, AlertCircleIcon, PlayIcon, PauseIcon } from 'lucide-react';
-import { cn } from '@/core/utils';
-import { multimodalClient } from '@/core/multimodal-client';
+import { cn } from '@/src/core/utils';
+import { multimodalClient } from '@/src/core/multimodal-client';
 
 export interface AnalysisTask {
   id: string;
@@ -223,13 +223,13 @@ export const MultimodalTaskTracker = ({
   const getStatusColor = (status: AnalysisTask['status']) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-success/10 text-success border-success/20';
       case 'running':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-info/10 text-info border-info/20';
       case 'failed':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-error/10 text-error border-error/20';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-surfaceElevated text-text border-border';
     }
   };
 
@@ -243,12 +243,12 @@ export const MultimodalTaskTracker = ({
         <TaskTrigger title={`Analysis Tasks (${tasks.length})`}>
           <div className="flex items-center gap-2 ml-2">
             {activeTasks.length > 0 && (
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              <Badge variant="secondary" className="bg-info/10 text-info">
                 {activeTasks.length} running
               </Badge>
             )}
             {failedTasks.length > 0 && (
-              <Badge variant="secondary" className="bg-red-100 text-red-800">
+              <Badge variant="secondary" className="bg-error/10 text-error">
                 {failedTasks.length} failed
               </Badge>
             )}

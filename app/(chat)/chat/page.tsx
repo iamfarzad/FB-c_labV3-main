@@ -12,7 +12,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/hooks/useChat-ui'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
 import { useStage } from '@/contexts/stage-context'
-import { Message } from '@/core/types/chat'
+import { Message } from '@/src/core/types/chat'
 
 // Import VerticalProcessChain from the correct location
 import { VerticalProcessChain } from '@/components/chat/activity/VerticalProcessChain'

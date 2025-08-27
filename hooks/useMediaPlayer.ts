@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { getMediaService, MediaItem, MediaPlaybackOptions } from '@/services/media';
+import { getMediaService, MediaItem, MediaPlaybackOptions } from '@/src/services/media';
 
 // Check if we're in a browser environment
 const isBrowser = typeof window !== 'undefined';

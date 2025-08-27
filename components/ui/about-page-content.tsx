@@ -58,7 +58,7 @@ export function AboutPageContent() {
           <div className="relative">
             <div className="absolute inset-0 -z-10">
               <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full
-                              bg-[conic-gradient(from_0deg,hsl(var(--accent)),transparent_60%)]
+                              bg-gradient-conic from-brand to-transparent
                               opacity-25 blur-xl animate-[spin_18s_linear_infinite]" />
               <div className="absolute left-1/2 top-1/2 h-60 w-60 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20" />
             </div>

@@ -6,9 +6,9 @@ import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from './tool';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader } from './loader';
-import { multimodalClient } from '@/core/multimodal-client';
+import { multimodalClient } from '@/src/core/multimodal-client';
 import { ExternalLinkIcon, SearchIcon, GlobeIcon } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '@/src/core/utils';
 
 export interface WebPreviewAnalysisProps {
   sessionId: string;

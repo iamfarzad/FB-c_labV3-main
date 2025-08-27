@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { handleIntelligence } from '@/api/intelligence/handler'
-import type { ToolRunResult } from '@/core/types/intelligence'
+import { handleIntelligence } from '@/src/api/intelligence/handler'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
 
 export async function POST(request: NextRequest) {
   try {

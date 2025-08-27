@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 import type { WorkshopModule, WorkshopStep } from "./education-modules"
 import { QuizQuestion } from "./education-modules"
 import { useToast } from "@/components/ui/use-toast"
@@ -126,7 +126,7 @@ export function GamifiedSection({ module, sessionId, className, onAskAI }: Props
           </div>
           <div className="flex items-center gap-2">
             {module.steps.length > 0 && completedIds.size >= module.steps.length && (
-              <div className="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-[11px] text-green-600">Completed</div>
+              <div className="rounded-full border border-success/30 bg-success/10 px-2 py-1 text-[11px] text-success">Completed</div>
             )}
             <ProgressTracker />
             <div className="rounded-full border border-border/40 px-2 py-1 text-xs text-muted-foreground">XP {moduleXp}</div>

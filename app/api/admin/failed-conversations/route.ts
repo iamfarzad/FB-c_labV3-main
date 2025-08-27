@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFailedConversations } from '@/core/db/conversations'
+import { getFailedConversations } from '@/src/core/db/conversations'
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,9 +1,9 @@
-import { getSupabaseStorage } from '@/services/storage/supabase'
-import { EmailService } from '@/core/email-service'
-import { MeetingScheduler } from "@/core/meeting-scheduler"
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { EmailService } from '@/src/core/email-service'
+import { MeetingScheduler } from "@/src/core/meeting-scheduler"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { recordCapabilityUsed } from "@/core/context/capabilities"
+import { recordCapabilityUsed } from "@/src/core/context/capabilities"
 const rl = new Map<string, { count: number; reset: number }>()
 const idem = new Map<string, { expires: number; body: unknown }>()
 function checkRate(key: string, max: number, windowMs: number) {

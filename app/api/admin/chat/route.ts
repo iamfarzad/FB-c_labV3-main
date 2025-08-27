@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { adminChatService } from '@/core/admin/admin-chat-service'
-import { getProvider } from '@/core/ai'
+import { adminChatService } from '@/src/core/admin/admin-chat-service'
+import { getProvider } from '@/src/core/ai'
 
 export async function POST(request: NextRequest) {
   try {

@@ -155,7 +155,7 @@ export default function WebSocketTestPage() {
 
           <div className="space-y-2">
             <h3 className="font-semibold">Messages:</h3>
-            <div className="bg-gray-100 p-4 rounded max-h-96 overflow-y-auto">
+            <div className="bg-surfaceElevated p-4 rounded max-h-96 overflow-y-auto">
               {messages.length === 0 ? (
                 <p className="text-gray-500">No messages yet...</p>
               ) : (
@@ -170,7 +170,7 @@ export default function WebSocketTestPage() {
 
           <div className="space-y-2">
             <h3 className="font-semibold">Environment:</h3>
-            <div className="bg-gray-100 p-4 rounded">
+            <div className="bg-surfaceElevated p-4 rounded">
               <p><strong>WebSocket URL:</strong> {process.env.NEXT_PUBLIC_LIVE_SERVER_URL || 'wss://fb-consulting-websocket.fly.dev'}</p>
               <p><strong>Current URL:</strong> {typeof window !== 'undefined' ? window.location.href : 'N/A'}</p>
               <p><strong>Protocol:</strong> {typeof window !== 'undefined' ? window.location.protocol : 'N/A'}</p>

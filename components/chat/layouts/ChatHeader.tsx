@@ -5,7 +5,7 @@ import { RotateCcw, Mic } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FbcIcon } from '@/components/ui/fbc-icon'
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 interface ChatHeaderProps {
   sessionId?: string | null
@@ -36,8 +36,8 @@ export function ChatHeader({
           <div className="flex items-center gap-2">
             <p className="text-xs text-muted-foreground">Intelligent business consulting</p>
             {sessionId && (
-              <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-600 border-green-500/20">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse" />
+              <Badge variant="secondary" className="text-xs bg-success/10 text-success border-success/20">
+                <div className="w-1.5 h-1.5 bg-success rounded-full mr-1 animate-pulse" />
                 Connected
               </Badge>
             )}

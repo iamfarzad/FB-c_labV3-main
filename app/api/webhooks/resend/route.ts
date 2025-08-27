@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getSupabaseStorage } from '@/services/storage/supabase'
-import { logServerActivity } from "@/core/server-activity-logger"
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { logServerActivity } from "@/src/core/server-activity-logger"
 
 // Type definitions for Resend webhook payload
 interface ResendWebhookData {

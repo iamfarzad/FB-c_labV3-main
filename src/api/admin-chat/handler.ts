@@ -1,5 +1,5 @@
 import { handleChat } from '../chat/handler'
-import type { ChatRequest } from '@/core/types/chat'
+import type { ChatRequest } from '@/src/core/types/chat'
 
 export interface AdminChatOptions {
   userId?: string

@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 // ============================================================================
 // UNIFIED ACTIVITY SYSTEM (No Separate Files)
@@ -236,8 +236,8 @@ export function ChatSidebar({
             <div key={a.id} className="flex items-center gap-2 text-xs">
               <div className={cn(
                 'w-2 h-2 rounded-full',
-                a.status==='completed' && 'bg-green-500',
-                a.status==='failed' && 'bg-red-500',
+                a.status==='completed' && 'bg-success',
+                a.status==='failed' && 'bg-error',
                 a.status==='in_progress' && 'bg-accent animate-pulse',
                 a.status==='pending' && 'bg-muted/40'
               )}/>
@@ -265,13 +265,13 @@ export function ChatSidebar({
                   className={cn(
                     'flex items-center gap-2 text-xs p-2 rounded-md border transition-all duration-base ease-smooth',
                     s.current ? 'bg-accent/10 border-accent/30' :
-                    s.done ? 'bg-green-500/5 border-green-500/20' :
-                    'border-border/50 hover:bg-white/5'
+                    s.done ? 'bg-success/5 border-success/20' :
+                    'border-border/50 hover:bg-surface/5'
                   )}
                 >
                   <div className={cn(
                     'w-2 h-2 rounded-full',
-                    s.done ? 'bg-green-500' :
+                    s.done ? 'bg-success' :
                     s.current ? 'bg-accent' : 'bg-muted/40'
                   )}/>
                   <span className={cn(
@@ -290,7 +290,7 @@ export function ChatSidebar({
                   <span>Progress</span>
                   <span>{Math.round(stageProgress)}%</span>
                 </div>
-                <div className="w-full bg-white/5 rounded-full h-1.5">
+                <div className="w-full bg-surface/5 rounded-full h-1.5">
                   <div className="bg-accent h-1.5 rounded-full transition-all duration-base ease-smooth"
                        style={{ width: `${stageProgress}%` }}/>
                 </div>

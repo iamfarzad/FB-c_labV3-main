@@ -5,16 +5,16 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 const modelData = [
-  { year: 2018, name: "BERT", parameters: 0.345, description: "Bidirectional Encoder Representations from Transformers", achievements: "Bidirectional context", color: "bg-blue-500/70", architecture: { layers: 24, hiddenSize: 1024, attentionHeads: 16, type: "Encoder-only" } },
+  { year: 2018, name: "BERT", parameters: 0.345, description: "Bidirectional Encoder Representations from Transformers", achievements: "Bidirectional context", color: "bg-info/70", architecture: { layers: 24, hiddenSize: 1024, attentionHeads: 16, type: "Encoder-only" } },
   { year: 2019, name: "GPT-2", parameters: 1.5, description: "Generative Pre-trained Transformer 2", achievements: "Coherent paragraphs", color: "bg-purple-500/70", architecture: { layers: 48, hiddenSize: 1600, attentionHeads: 25, type: "Decoder-only" } },
-  { year: 2020, name: "GPT-3", parameters: 175, description: "Emergent few-shot learning", achievements: "Few-shot abilities", color: "bg-blue-500/70", architecture: { layers: 96, hiddenSize: 12288, attentionHeads: 96, type: "Decoder-only" } },
+  { year: 2020, name: "GPT-3", parameters: 175, description: "Emergent few-shot learning", achievements: "Few-shot abilities", color: "bg-info/70", architecture: { layers: 96, hiddenSize: 12288, attentionHeads: 96, type: "Decoder-only" } },
   { year: 2021, name: "Gopher", parameters: 280, description: "DeepMind LLM", achievements: "Knowledge tasks", color: "bg-purple-500/70", architecture: { layers: 80, hiddenSize: 16384, attentionHeads: 128, type: "Decoder-only" } },
-  { year: 2022, name: "PaLM", parameters: 540, description: "Pathways Language Model", achievements: "Reasoning across languages", color: "bg-blue-500/70", architecture: { layers: 118, hiddenSize: 18432, attentionHeads: 144, type: "Decoder-only" } },
+  { year: 2022, name: "PaLM", parameters: 540, description: "Pathways Language Model", achievements: "Reasoning across languages", color: "bg-info/70", architecture: { layers: 118, hiddenSize: 18432, attentionHeads: 144, type: "Decoder-only" } },
   { year: 2022, name: "Chinchilla", parameters: 70, description: "Compute-optimal training", achievements: "Smaller but better trained", color: "bg-purple-500/70", architecture: { layers: 80, hiddenSize: 8192, attentionHeads: 64, type: "Decoder-only" } },
-  { year: 2023, name: "GPT-4", parameters: 1000, description: "Multimodal", achievements: "Human-level performance", color: "bg-blue-500/70", architecture: { layers: 120, hiddenSize: 24576, attentionHeads: 192, type: "Decoder-only" } },
+  { year: 2023, name: "GPT-4", parameters: 1000, description: "Multimodal", achievements: "Human-level performance", color: "bg-info/70", architecture: { layers: 120, hiddenSize: 24576, attentionHeads: 192, type: "Decoder-only" } },
 ]
 
 export default function LLMParameterGrowth() {
@@ -55,7 +55,7 @@ export default function LLMParameterGrowth() {
     const drawNode = (x: number, y: number, color: string) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, nodeRadius, 0, Math.PI * 2); ctx.fill() }
     // input
     const inputX = padding, inputY = height / 2
-    for (let i = 0; i < inputNodes; i++) { const y = inputY - ((inputNodes - 1) / 2 - i) * 40; drawNode(inputX, y, "#34d399") }
+    for (let i = 0; i < inputNodes; i++) { const y = inputY - ((inputNodes - 1) / 2 - i) * 40; drawNode(inputX, y, "var(--success)") }
     // hidden
     for (let layer = 0; layer < hiddenLayers; layer++) {
       const x = padding + layerSpacing * (layer + 1)
@@ -64,7 +64,7 @@ export default function LLMParameterGrowth() {
         ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 0.5
         if (layer === 0) { for (let j = 0; j < inputNodes; j++) { const prevY = inputY - ((inputNodes - 1) / 2 - j) * 40; ctx.beginPath(); ctx.moveTo(inputX + nodeRadius, prevY); ctx.lineTo(x - nodeRadius, y); ctx.stroke() } }
         else { for (let j = 0; j < hiddenNodes; j++) { const prevY = height / 2 - ((hiddenNodes - 1) / 2 - j) * 30; const prevX = padding + layerSpacing * layer; ctx.beginPath(); ctx.moveTo(prevX + nodeRadius, prevY); ctx.lineTo(x - nodeRadius, y); ctx.stroke() } }
-        drawNode(x, y, "#3b82f6")
+        drawNode(x, y, "var(--info)")
       }
     }
     // output
@@ -74,7 +74,7 @@ export default function LLMParameterGrowth() {
       const prevX = padding + layerSpacing * hiddenLayers
       ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 0.5
       for (let j = 0; j < hiddenNodes; j++) { const prevY = height / 2 - ((hiddenNodes - 1) / 2 - j) * 30; ctx.beginPath(); ctx.moveTo(prevX + nodeRadius, prevY); ctx.lineTo(outputX - nodeRadius, y); ctx.stroke() }
-      drawNode(outputX, y, "#ec4899")
+      drawNode(outputX, y, "var(--warning)")
     }
   }, [activeTab, canvasRef, selectedModel, visibleModels])
 

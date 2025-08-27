@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { motion } from 'framer-motion'
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 import { Avatar, AvatarFallback } from '../avatar'
 import { Badge } from '../badge'
 

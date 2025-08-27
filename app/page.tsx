@@ -84,13 +84,13 @@ export default function HomePage() {
             Start Your AI Project
             <ArrowRight className="ml-2 h-4 w-4" />
           </BookCallButton>
-          <Button asChild variant="outline" size="lg" className="border-foreground dark:border-white text-foreground dark:text-white hover:bg-foreground/10 dark:hover:bg-white/10 backdrop-blur-sm">
+          <Button asChild variant="outline" size="lg" className="border-foreground dark:border-surface text-foreground dark:text-surface hover:bg-foreground/10 dark:hover:bg-surface/10 backdrop-blur-sm">
             <Link href="/chat" className="flex items-center">
               <FbcIcon className="mr-2 h-4 w-4" />
               Talk with F.B/c AI
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="lg" className="text-foreground dark:text-white hover:text-foreground/80 dark:hover:text-white/80">
+          <Button asChild variant="ghost" size="lg" className="text-foreground dark:text-surface hover:text-foreground/80 dark:hover:text-surface/80">
             <Link href="/about">Learn My Story</Link>
           </Button>
         </div>

@@ -51,8 +51,8 @@ export function AdminHeader() {
             </div>
             <Separator orientation="vertical" className="h-6 sm:h-8 hidden md:block" />
             <div className="hidden md:flex items-center gap-2">
-              <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
+                <div className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse"></div>
                 Live
               </Badge>
               <span className="text-sm text-muted-foreground">Production Ready</span>

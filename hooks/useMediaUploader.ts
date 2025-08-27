@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { MediaService, MediaItem } from '@/services/media';
+import { MediaService, MediaItem } from '@/src/services/media';
 
 export interface UploadOptions {
   endpoint: string;

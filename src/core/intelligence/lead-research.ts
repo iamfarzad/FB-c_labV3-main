@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai'
 import { GoogleGroundingProvider, GroundedAnswer } from './providers/search/google-grounding'
-import { recordCapabilityUsed } from '@/core/context/capabilities'
-import { supabaseService, createLeadSummary } from '@/core/supabase/client'
+import { recordCapabilityUsed } from '@/src/core/context/capabilities'
+import { supabaseService, createLeadSummary } from '@/src/core/supabase/client'
 import { finalizeLeadSession } from '../workflows/finalizeLeadSession'
 import type { LeadContext } from '../types/conversations'
 

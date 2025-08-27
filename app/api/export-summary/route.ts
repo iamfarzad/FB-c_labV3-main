@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
-import { getSupabaseStorage } from '@/services/storage/supabase';
-import { logServerActivity } from '@/core/server-activity-logger';
-import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/core/pdf-generator-puppeteer';
+import { getSupabaseStorage } from '@/src/services/storage/supabase';
+import { logServerActivity } from '@/src/core/server-activity-logger';
+import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/src/core/pdf-generator-puppeteer';
 import fs from 'fs';
-import { recordCapabilityUsed } from '@/core/context/capabilities';
+import { recordCapabilityUsed } from '@/src/core/context/capabilities';
 
 export const dynamic = 'force-dynamic';
 

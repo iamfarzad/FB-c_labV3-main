@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
-import { Monitor, Brain, Loader2, X } from "@/core/icon-mapping"
+import { Monitor, Brain, Loader2, X } from "@/src/core/icon-mapping"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -241,8 +241,8 @@ export function ScreenShare({
             
             {/* Status Badge */}
             <div className="absolute top-4 left-4">
-              <Badge variant={screenState === "sharing" ? "default" : "destructive"} className="bg-red-600">
-                <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+              <Badge variant={screenState === "sharing" ? "default" : "destructive"} className="bg-error">
+                <div className="w-2 h-2 bg-surface rounded-full mr-2 animate-pulse"></div>
                 {screenState === "sharing" ? "Live" : screenState}
               </Badge>
             </div>
@@ -276,7 +276,7 @@ export function ScreenShare({
       </div>
 
       {/* Sidebar */}
-      <div className="w-80 bg-white border-l border-slate-200 p-4 space-y-4">
+      <div className="w-80 bg-surface border-l border-border p-4 space-y-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -363,9 +363,9 @@ export function ScreenShare({
         </Card>
 
         {error && (
-          <Card className="border-red-200 bg-red-50">
+          <Card className="border-error/20 bg-error/5">
             <CardContent className="pt-4">
-              <p className="text-red-600 text-sm">{error}</p>
+              <p className="text-error text-sm">{error}</p>
             </CardContent>
           </Card>
         )}
@@ -403,7 +403,7 @@ export function ScreenShare({
       <div className="flex h-full w-full flex-col overflow-hidden">
         <div className="flex h-10 items-center justify-between border-b px-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-green-500" />
+            <span className="h-2 w-2 rounded-full bg-success" />
             <span>Screen Share</span>
           </div>
           <div className="flex items-center gap-2">

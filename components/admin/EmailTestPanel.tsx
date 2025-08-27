@@ -74,14 +74,14 @@ export function EmailTestPanel() {
         </div>
 
         {testResults && (
-          <Alert className={testResults.success ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
+          <Alert className={testResults.success ? "border-success/20 bg-success/5" : "border-error/20 bg-error/5"}>
             <div className="flex items-center gap-2">
               {testResults.success ? (
-                <CheckCircle className="w-4 h-4 text-green-600" />
+                <CheckCircle className="w-4 h-4 text-success" />
               ) : (
-                <XCircle className="w-4 h-4 text-red-600" />
+                <XCircle className="w-4 h-4 text-error" />
               )}
-              <AlertDescription className={testResults.success ? "text-green-800" : "text-red-800"}>
+              <AlertDescription className={testResults.success ? "text-success" : "text-error"}>
                 {testResults.message}
               </AlertDescription>
             </div>

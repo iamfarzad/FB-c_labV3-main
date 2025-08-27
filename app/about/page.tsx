@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Award, BookOpen, Heart, MessageSquare, Target } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MotionCard } from "@/components/ui/motion-card"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
@@ -67,7 +68,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="absolute inset-0 -z-10">
                 <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full 
-                                bg-[conic-gradient(from_0deg,theme(colors.accent.DEFAULT),transparent_60%)] 
+                                bg-gradient-conic from-brand to-transparent 
                                 opacity-25 blur-xl animate-[spin_18s_linear_infinite]" />
                 <div className="absolute left-1/2 top-1/2 h-60 w-60 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20" />
               </div>

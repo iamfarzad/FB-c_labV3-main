@@ -329,7 +329,7 @@ export function EmailCampaignManager() {
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="h-16 bg-gray-200 rounded"></div>
+                  <div className="h-16 bg-surfaceElevated rounded"></div>
                 </div>
               ))}
             </div>

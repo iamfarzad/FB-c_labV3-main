@@ -1,4 +1,4 @@
-import { getSupabaseStorage } from '@/services/storage/supabase'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 
 export default async function ArtifactPage({ params }: { params: { id: string } }) {
   const supabase = getSupabaseStorage().getClient()

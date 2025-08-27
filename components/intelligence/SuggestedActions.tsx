@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookCallButton } from '@/components/meeting/BookCallButton'
-import type { Suggestion } from '@/core/types/intelligence'
+import type { Suggestion } from '@/src/core/types/intelligence'
 
 interface Props {
   sessionId?: string | null
@@ -93,7 +93,7 @@ export function SuggestedActions({ sessionId, stage = 'BACKGROUND_RESEARCH', onR
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                className="rounded-full h-9 px-4 bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.90)] text-white"
+                className="rounded-full h-9 px-4 bg-accent hover:bg-accent/90 text-surface"
                 data-testid="generate-pdf"
               >
                 <FileText className="mr-2 h-4 w-4" /> Share Summary

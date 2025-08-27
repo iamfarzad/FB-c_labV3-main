@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useMemo, useRef, useCallback } from "react"
-import { cn } from "@/core/utils"
+import { cn } from "@/src/core/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export interface LeftToolItem {

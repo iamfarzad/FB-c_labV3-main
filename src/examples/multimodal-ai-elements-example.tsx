@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { MultimodalConversation, MultimodalMessage } from '@/components/ai-elements/multimodal-message';
 import { MultimodalTool, useMultimodalTool } from '@/components/ai-elements/multimodal-tool';
-import { multimodalClient } from '@/core/multimodal-client';
+import { multimodalClient } from '@/src/core/multimodal-client';
 
 export const MultimodalAIElementsExample = () => {
   const sessionId = 'example-session-' + Date.now();

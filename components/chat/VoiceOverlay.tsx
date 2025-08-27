@@ -4,7 +4,7 @@ import * as React from "react"
 import { useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { X } from "@/core/icon-mapping"
+import { X } from "@/src/core/icon-mapping"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 import { useWebSocketVoice } from '@/hooks/use-websocket-voice'
@@ -144,7 +144,7 @@ export function VoiceOverlay({ open, onCancel, onAccept }: VoiceOverlayProps) {
           <div className="h-full w-full flex flex-col items-center justify-center gap-10 px-6">
             {/* Connection status */}
             <div className="absolute top-6 right-6 inline-flex items-center gap-2 rounded-full border bg-card/70 px-3 py-1 text-xs">
-              <span className={`h-2 w-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-yellow-500'}`} />
+              <span className={`h-2 w-2 rounded-full ${isConnected ? 'bg-success' : 'bg-warning'}`} />
               {isConnected ? (isRecording ? 'Listening…' : 'Connected') : 'Connecting…'}
             </div>
             {/* Orb */}

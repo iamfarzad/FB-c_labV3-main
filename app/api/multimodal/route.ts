@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { multimodalContextManager } from '@/core/context/multimodal-context'
+import { multimodalContextManager } from '@/src/core/context/multimodal-context'
 import { z } from 'zod'
 
 // Unified multimodal request schema

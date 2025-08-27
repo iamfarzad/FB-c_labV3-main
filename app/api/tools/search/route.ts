@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGroundingProvider } from '@/core/intelligence/providers/search/google-grounding'
-import { recordCapabilityUsed } from '@/core/context/capabilities'
+import { GoogleGroundingProvider } from '@/src/core/intelligence/providers/search/google-grounding'
+import { recordCapabilityUsed } from '@/src/core/context/capabilities'
 
 const groundingProvider = new GoogleGroundingProvider()
 

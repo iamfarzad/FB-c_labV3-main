@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import type { ChatMessage } from '@/core/types/chat'
+import type { ChatMessage } from '@/src/core/types/chat'
 
 interface UseChatOptions {
   mode?: 'public' | 'admin'

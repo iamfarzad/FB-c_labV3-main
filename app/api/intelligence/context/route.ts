@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { ToolRunResult } from '@/core/types/intelligence'
-import { ContextStorage } from '@/core/context/context-storage'
+import type { ToolRunResult } from '@/src/core/types/intelligence'
+import { ContextStorage } from '@/src/core/context/context-storage'
 import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'

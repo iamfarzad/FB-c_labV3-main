@@ -20,8 +20,8 @@ import {
   CheckCircle,
   Zap,
 } from "lucide-react"
-import { cn } from '@/core/utils'
-import type { ActivityItem } from "@/core/types/chat"
+import { cn } from '@/src/core/utils'
+import type { ActivityItem } from "@/src/core/types/chat"
 
 interface FixedVerticalProcessChainProps {
   activities: ActivityItem[]
@@ -43,7 +43,7 @@ const ProcessNode = ({ activity, index, isLatest, onHover, onLeave }: ProcessNod
       "relative flex items-center justify-center rounded-full border transition-all duration-300 ease-out"
 
     const statusStyles = {
-      in_progress: "w-6 h-6 bg-white border-2 border-muted-foreground/60 shadow-lg animate-pulse",
+      in_progress: "w-6 h-6 bg-surface border-2 border-muted-foreground/60 shadow-lg animate-pulse",
       completed: "w-4 h-4 bg-muted-foreground/40 border border-muted-foreground/30",
       failed: "w-4 h-4 bg-muted-foreground/30 border border-muted-foreground/20 opacity-40",
       pending: "w-3 h-3 bg-muted-foreground/30 border border-muted-foreground/20 opacity-40",

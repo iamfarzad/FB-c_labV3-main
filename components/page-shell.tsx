@@ -1,5 +1,5 @@
 import type React from "react"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 interface PageShellProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode

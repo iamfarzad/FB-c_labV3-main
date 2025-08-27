@@ -54,11 +54,11 @@ import {
   List as PhosphorMenu,
 
   // Additional icons from Lucide approach
-  BarChart3 as PhosphorBarChart,
+  ChartBar as PhosphorBarChart, // BarChart3 doesn't exist, use ChartBar
   Star as PhosphorStar,
   CircleNotch as PhosphorLoader, // Alias for Loader
   Wrench as PhosphorWrench,
-  Activity as PhosphorActivity,
+  // Activity doesn't exist in Phosphor, will use Lucide fallback
   House as PhosphorHome,
   Users as PhosphorUsers,
   Calendar as PhosphorCalendar,
@@ -75,7 +75,8 @@ import {
   Search,
   Mail,
   Globe,
-  Database
+  Database,
+  Activity // Activity not available in Phosphor, use Lucide
 } from 'lucide-react'
 
 // Export mapped icons with their original Lucide names for easy replacement
@@ -136,7 +137,7 @@ export {
   PhosphorStar as Star,
   PhosphorLoader as Loader,
   PhosphorWrench as Wrench,
-  PhosphorActivity as Activity,
+  // PhosphorActivity as Activity, // Not available, using Lucide fallback
   PhosphorHome as Home,
   PhosphorUsers as Users,
   PhosphorCalendar as Calendar,
@@ -150,7 +151,8 @@ export {
   Search,
   Mail,
   Globe,
-  Database
+  Database,
+  Activity // Using Lucide Activity since not available in Phosphor
 }
 
 // Icon mapping object for programmatic access

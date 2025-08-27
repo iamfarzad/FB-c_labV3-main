@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenAI, Modality } from '@google/genai'
-import { createOptimizedConfig } from '@/core/gemini-config-enhanced'
-import { getSafetySettings, filterContent, sanitizeInput } from '@/core/config/safety'
-import { multimodalContextManager } from '@/core/context/multimodal-context'
+import { createOptimizedConfig } from '@/src/core/gemini-config-enhanced'
+import { getSafetySettings, filterContent, sanitizeInput } from '@/src/core/config/safety'
+import { multimodalContextManager } from '@/src/core/context/multimodal-context'
 
 interface LiveSessionRequest {
   action: 'start' | 'send' | 'end' | 'probe'

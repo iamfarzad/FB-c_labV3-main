@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 export interface PillInputProps {
   value: string

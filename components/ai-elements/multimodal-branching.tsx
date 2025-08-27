@@ -16,8 +16,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { PlusIcon, GitBranchIcon, CompareIcon, CheckCircleIcon } from 'lucide-react';
-import { cn } from '@/core/utils';
-import { multimodalClient } from '@/core/multimodal-client';
+import { cn } from '@/src/core/utils';
+import { multimodalClient } from '@/src/core/multimodal-client';
 
 export interface AnalysisBranch {
   id: string;
@@ -159,13 +159,13 @@ export const MultimodalBranching = ({
   const getBranchStatusColor = (status: AnalysisBranch['status']) => {
     switch (status) {
       case 'active':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-info/10 text-info border-info/20';
       case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-success/10 text-success border-success/20';
       case 'abandoned':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-surfaceElevated text-text border-border';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-surfaceElevated text-text border-border';
     }
   };
 
@@ -295,7 +295,7 @@ export const MultimodalBranching = ({
             {activeBranches.length > 0 && (
               <div>
                 <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-info rounded-full"></div>
                   Active Branches ({activeBranches.length})
                 </h4>
                 <div className="space-y-2">
@@ -304,7 +304,7 @@ export const MultimodalBranching = ({
                       key={branch.id}
                       className={cn(
                         'border rounded-lg p-3 cursor-pointer hover:bg-accent/5 transition-colors',
-                        branch.id === currentBranch?.id && 'border-blue-500 bg-blue-50'
+                        branch.id === currentBranch?.id && 'border-info bg-info/5'
                       )}
                       onClick={() => selectBranch(branch)}
                     >

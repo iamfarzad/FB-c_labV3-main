@@ -70,7 +70,7 @@ export function ConversationsList({ searchTerm, period }: ConversationsListProps
   const getEmailStatusBadge = (status: string | null) => {
     switch (status) {
       case 'sent':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Sent</Badge>
+        return <Badge variant="default" className="bg-success/10 text-success">Sent</Badge>
       case 'failed':
         return <Badge variant="destructive">Failed</Badge>
       case 'pending':

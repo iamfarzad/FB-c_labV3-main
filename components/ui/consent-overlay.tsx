@@ -17,8 +17,11 @@ export function ConsentOverlay({ isVisible, onSubmit, isLoading = false }: Conse
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (email.trim() && companyUrl.trim()) {
-      onSubmit({ email: email.trim(), companyUrl: companyUrl.trim() })
+    if (email.trim()) {
+      onSubmit({ 
+        email: email.trim(), 
+        companyUrl: companyUrl.trim() || undefined 
+      })
     }
   }
 
@@ -48,21 +51,20 @@ export function ConsentOverlay({ isVisible, onSubmit, isLoading = false }: Conse
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="company">Company Website</Label>
+              <Label htmlFor="company">Company Website (Optional)</Label>
               <Input
                 id="company"
                 type="url"
                 placeholder="https://yourcompany.com"
                 value={companyUrl}
                 onChange={(e) => setCompanyUrl(e.target.value)}
-                required
                 data-testid="company-input"
               />
             </div>
             <div className="pt-2">
               <Button
                 type="submit"
-                disabled={isLoading || !email.trim() || !companyUrl.trim()}
+                disabled={isLoading || !email.trim()}
                 className="w-full"
                 data-testid="consent-allow"
               >

@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { cn } from '@/core/utils'
+import { cn } from '@/src/core/utils'
 
 interface FbcIconProps {
   className?: string
@@ -20,12 +20,12 @@ export function FbcIcon({ className }: FbcIconProps) {
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
         <defs>
           <radialGradient id="orbGradient" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
-            <stop offset="0%" stopColor="hsl(var(--color-light-silver))" />
-            <stop offset="100%" stopColor="hsl(var(--color-light-silver-darker))" />
+            <stop offset="0%" stopColor="hsl(var(--surface))" />
+            <stop offset="100%" stopColor="hsl(var(--border))" />
           </radialGradient>
           <radialGradient id="orbGradientDark" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
-            <stop offset="0%" stopColor="hsl(var(--color-gunmetal-lighter))" />
-            <stop offset="100%" stopColor="hsl(var(--color-gunmetal))" />
+            <stop offset="0%" stopColor="hsl(var(--surface-elevated))" />
+            <stop offset="100%" stopColor="hsl(var(--text-muted))" />
           </radialGradient>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
@@ -56,7 +56,7 @@ export function FbcIcon({ className }: FbcIconProps) {
           fill="none"
           strokeWidth="4"
           strokeLinecap="round"
-          className="stroke-orange-accent"
+          className="stroke-brand"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
@@ -67,7 +67,7 @@ export function FbcIcon({ className }: FbcIconProps) {
           cx="50"
           cy="50"
           r="4"
-          className="fill-orange-accent/80"
+          className="fill-brand/80"
           style={{ filter: "url(#glow)" }}
           animate={{ scale: [1, 1.1, 1] }}
           transition={{

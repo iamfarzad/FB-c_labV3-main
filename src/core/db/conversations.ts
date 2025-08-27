@@ -1,4 +1,4 @@
-import { supabaseService } from '@/core/supabase/client'
+import { supabaseService } from '@/src/core/supabase/client'
 import type { ConversationRecord } from '../types/conversations'
 import type { Database } from '../database.types'
 

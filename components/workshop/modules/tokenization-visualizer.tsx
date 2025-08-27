@@ -39,7 +39,7 @@ export default function TokenizationVisualizer() {
               <div className="bg-card border rounded-xl p-6 shadow-sm">
                 <div className="flex flex-wrap gap-2">
                   {tokens.map((tok, i) => (
-                    <span key={`${tok}-${i}`} className="px-2 py-1 rounded bg-blue-500/20 text-blue-700 dark:text-blue-300 text-sm border border-blue-500/30">{tok}</span>
+                    <span key={`${tok}-${i}`} className="px-2 py-1 rounded bg-info/20 text-info dark:text-info text-sm border border-info/30">{tok}</span>
                   ))}
                 </div>
                 <div className="mt-4 text-sm text-muted-foreground">Tokens: {tokens.length} • Approx. chars: {text.length}</div>

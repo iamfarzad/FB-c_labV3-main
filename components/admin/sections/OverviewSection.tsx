@@ -144,7 +144,9 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => // Log removed}
+              onClick={() => {
+                // Add functionality here
+              }}
             >
               <Plus className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -170,7 +172,9 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => // Log removed}
+              onClick={() => {
+                // Add functionality here
+              }}
             >
               <Mail className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -183,7 +187,9 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => // Log removed}
+              onClick={() => {
+                // Add functionality here
+              }}
             >
               <TrendingUp className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -211,25 +217,25 @@ export function OverviewSection() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">API Health</span>
-                <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
+                <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                   Healthy
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Database</span>
-                <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
+                <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                   Connected
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">AI Services</span>
-                <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
+                <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                   Online
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Email Service</span>
-                <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
+                <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                   Active
                 </Badge>
               </div>
@@ -247,17 +253,17 @@ export function OverviewSection() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-info rounded-full"></div>
                 <span className="text-sm text-muted-foreground">New lead captured</span>
                 <span className="text-xs text-muted-foreground/60 ml-auto">2m ago</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-success rounded-full"></div>
                 <span className="text-sm text-muted-foreground">Meeting scheduled</span>
                 <span className="text-xs text-muted-foreground/60 ml-auto">5m ago</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-warning rounded-full"></div>
                 <span className="text-sm text-muted-foreground">Email campaign sent</span>
                 <span className="text-xs text-muted-foreground/60 ml-auto">12m ago</span>
               </div>

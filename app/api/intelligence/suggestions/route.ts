@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { ToolRunResult, ContextSnapshot, IntentResult } from '@/core/types/intelligence'
+import type { ToolRunResult, ContextSnapshot, IntentResult } from '@/src/core/types/intelligence'
 import { z } from 'zod'
-import { ContextStorage } from '@/core/context/context-storage'
-import { suggestTools } from '@/core/intelligence/tool-suggestion-engine'
+import { ContextStorage } from '@/src/core/context/context-storage'
+import { suggestTools } from '@/src/core/intelligence/tool-suggestion-engine'
 import { withApiGuard } from '@/app/api-utils/withApiGuard'
 
 const contextStorage = new ContextStorage()

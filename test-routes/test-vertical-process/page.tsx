@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { VerticalProcessChain } from '@/components/chat/activity/VerticalProcessChain'
 // Using regular VerticalProcessChain - fixed positioning handled via CSS
-import type { ActivityItem } from '@/core/types/chat'
+import type { ActivityItem } from '@/src/core/types/chat'
 
 export default function TestVerticalProcessPage() {
   const [activities, setActivities] = useState<ActivityItem[]>([])
@@ -129,7 +129,7 @@ export default function TestVerticalProcessPage() {
               <h3 className="text-lg font-semibold text-foreground mb-3">Node States</h3>
               <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border-2 border-muted-foreground/60 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-surface border-2 border-muted-foreground/60 flex items-center justify-center">
                     <div className="w-3 h-3 text-foreground">●</div>
                   </div>
                   <span>Active Process (pulsing, large)</span>
