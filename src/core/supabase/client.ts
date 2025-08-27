@@ -10,7 +10,15 @@ const isClient = typeof window !== 'undefined'
 const hasRequiredVars = supabaseUrl && supabaseAnonKey
 
 if (!hasRequiredVars) {
-  // Error: Missing required Supabase environment variables
+  // During build time or when env vars are missing, provide a clear error message
+  const errorMessage = 'Missing required Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+
+  // Only throw in development/production runtime, not during build
+  if (typeof window !== 'undefined' || process.env.NODE_ENV === 'production') {
+    throw new Error(errorMessage)
+  }
+
+  console.warn(errorMessage)
 }
 
 // Create a safe Supabase client that handles missing environment variables

@@ -145,23 +145,62 @@ let defaultInstance: SupabaseStorage | null = null
 export function getSupabaseStorage(): SupabaseStorage {
   if (!defaultInstance) {
     if (!SupabaseStorage.isConfigured()) {
-      throw new Error('Supabase not configured - missing environment variables')
+      // During build time, provide a fallback that won't break the build
+      const isBuildTime = typeof window === 'undefined' && !process.env.NODE_ENV
+      if (isBuildTime) {
+        // Return a mock instance for build time
+        defaultInstance = createMockSupabaseStorage()
+      } else {
+        throw new Error('Supabase not configured - missing environment variables')
+      }
+    } else {
+      defaultInstance = SupabaseStorage.createFromEnv()
     }
-    defaultInstance = SupabaseStorage.createFromEnv()
   }
   return defaultInstance
 }
 
-// Create and export instances
-const config = {
-  url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',
-  anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '',
-  serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY
+// Mock Supabase storage for build time
+function createMockSupabaseStorage(): SupabaseStorage {
+  return {
+    select: async () => ({ data: [], error: null }),
+    insert: async () => ({ data: null, error: null }),
+    update: async () => ({ data: null, error: null }),
+    delete: async () => ({ data: null, error: null }),
+    getClient: () => ({
+      from: () => ({
+        select: () => ({ data: [], error: null }),
+        insert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null })
+      })
+    }),
+    getServiceClient: () => ({
+      from: () => ({
+        select: () => ({ data: [], error: null }),
+        insert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null })
+      })
+    })
+  } as any
 }
 
-export const supabaseStorage = new SupabaseStorage(config)
+// Create and export instances only if configured
+let supabaseStorage: SupabaseStorage | null = null
+
+if (SupabaseStorage.isConfigured()) {
+  const config = {
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',
+    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '',
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY
+  }
+  supabaseStorage = new SupabaseStorage(config)
+}
+
+export { supabaseStorage }
 
 // Legacy exports for compatibility
-export const getSupabase = () => supabaseStorage.client
+export const getSupabase = () => supabaseStorage?.client
 export const supabaseService = supabaseStorage
-export const supabase = supabaseStorage.client
+export const supabase = supabaseStorage?.client
