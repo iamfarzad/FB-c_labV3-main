@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import URLContextService from '@/src/core/services/url-context-service'
-import { recordCapabilityUsed } from '@/src/core/context/capabilities'
-import { validateOutboundUrl, checkAllowedDomain, headPreflight } from '@/src/core/security/url-guards'
+import URLContextService from '@/core/services/url-context-service'
+import { recordCapabilityUsed } from '@/core/context/capabilities'
+import { validateOutboundUrl, checkAllowedDomain, headPreflight } from '@/core/security/url-guards'
 
 // Force dynamic rendering and disable caching
 export const dynamic = 'force-dynamic'

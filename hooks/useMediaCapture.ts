@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { getMediaService, MediaType, MediaCaptureOptions, MediaItem, MediaService } from '@/src/services/media';
+import { getMediaService, MediaType, MediaCaptureOptions, MediaItem, MediaService } from '@/services/media';
 
 interface UseMediaCaptureProps extends Omit<MediaCaptureOptions, 'onDataAvailable'> {
   onStart?: () => void;

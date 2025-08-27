@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
-import { handleIntelligence } from '@/src/api/intelligence/handler'
-import type { IntelligenceRequest } from '@/src/api/intelligence/handler'
+import { handleIntelligence } from '@/api/intelligence/handler'
+import type { IntelligenceRequest } from '@/api/intelligence/handler'
 
 export async function POST(req: NextRequest) {
   try {

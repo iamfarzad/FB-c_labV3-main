@@ -355,7 +355,7 @@ export const THEME_METADATA = {
  * USAGE GUIDELINES:
  *
  * ✅ CORRECT USAGE:
- * import { getColor, getSemanticColors, designTokens } from '@/src/core/theme/tokens'
+ * import { getColor, getSemanticColors, designTokens } from '@/core/theme/tokens'
  * const brandColor = getColor('light', 'brand')
  * const semanticColors = getSemanticColors('light')
  *
@@ -366,7 +366,7 @@ export const THEME_METADATA = {
  * <div className="bg-brand hover:bg-brand-hover">
  *
  * ✅ DESIGN TOKENS:
- * import { typography, spacing, borderRadius } from '@/src/core/theme/tokens'
+ * import { typography, spacing, borderRadius } from '@/core/theme/tokens'
  * const fontSize = typography.fontSize.base
  * const padding = spacing[4]
  *

@@ -5,7 +5,7 @@ import {
   extractKeyTopics,
   type EducationalInteractionData,
   type VideoLearningContext,
-} from "@/src/core/educational-gemini-service"
+} from "@/core/educational-gemini-service"
 
 export async function POST(request: NextRequest) {
   try {

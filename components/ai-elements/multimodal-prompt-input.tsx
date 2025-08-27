@@ -9,7 +9,7 @@ import {
   PromptInputSubmit
 } from './prompt-input';
 import { ToolMenu } from '@/components/chat/ToolMenu';
-import { multimodalClient } from '@/src/core/multimodal-client';
+import { multimodalClient } from '@/core/multimodal-client';
 
 export interface MultimodalPromptInputProps {
   onSubmit?: (content: string, modality?: string, data?: unknown) => void;

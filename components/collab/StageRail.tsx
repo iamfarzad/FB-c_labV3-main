@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { cn, uiSpacing } from "@/src/core/utils"
+import { cn, uiSpacing } from "@/core/utils"
 
 type Context = { stage?: number; exploredCount?: number; total?: number }
 

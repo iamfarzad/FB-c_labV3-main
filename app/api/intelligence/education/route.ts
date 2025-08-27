@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import type { ToolRunResult } from '@/src/core/types/intelligence'
+import type { ToolRunResult } from '@/core/types/intelligence'
 import { z } from 'zod'
 import { withApiGuard } from '@/app/api-utils/withApiGuard'
-import { ContextStorage } from '@/src/core/context/context-storage'
+import { ContextStorage } from '@/core/context/context-storage'
 
 const Body = z.object({
   moduleId: z.string().min(1),

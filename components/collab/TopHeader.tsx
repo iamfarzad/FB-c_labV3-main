@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { cn } from "@/src/core/utils"
+import { cn } from "@/core/utils"
 import { FbcIcon } from "@/components/ui/fbc-icon"
 
 interface TopHeaderProps {

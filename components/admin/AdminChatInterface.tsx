@@ -16,7 +16,7 @@ import {
   Search, Eye, FileText, Download
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 interface AdminChatInterfaceProps {
   className?: string

@@ -31,7 +31,7 @@ import {
 } from '@/components/ai-elements/prompt-input'
 import { ToolMenu } from '@/components/chat/ToolMenu'
 import { ROICalculator } from '@/components/chat/tools/ROICalculator'
-import type { StructuredChatMessage } from '@/src/core/types/chat'
+import type { StructuredChatMessage } from '@/core/types/chat'
 import { ToolCardWrapper } from '@/components/chat/ToolCardWrapper'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'

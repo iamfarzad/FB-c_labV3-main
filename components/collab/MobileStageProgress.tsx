@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { cn } from "@/src/core/utils"
+import { cn } from "@/core/utils"
 
 interface MobileStageProgressProps {
   stages: Array<{ id: string; label: string; done?: boolean; current?: boolean }>

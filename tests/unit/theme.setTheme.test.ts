@@ -1,4 +1,4 @@
-import { setTheme } from '@/src/core/theme/setTheme';
+import { setTheme } from '@/core/theme/setTheme';
 
 // Mock localStorage
 const localStorageMock = {

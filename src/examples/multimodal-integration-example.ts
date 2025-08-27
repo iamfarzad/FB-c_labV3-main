@@ -3,7 +3,7 @@
  * Demonstrates how all modalities work together seamlessly
  */
 
-import { multimodalClient, MultimodalClient } from '@/src/core/multimodal-client'
+import { multimodalClient, MultimodalClient } from '@/core/multimodal-client'
 
 // Example: Complete multimodal session
 export async function exampleMultimodalSession() {

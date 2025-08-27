@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Loader } from './loader';
 import { CheckCircleIcon, ClockIcon, AlertCircleIcon, PlayIcon, PauseIcon } from 'lucide-react';
-import { cn } from '@/src/core/utils';
-import { multimodalClient } from '@/src/core/multimodal-client';
+import { cn } from '@/core/utils';
+import { multimodalClient } from '@/core/multimodal-client';
 
 export interface AnalysisTask {
   id: string;

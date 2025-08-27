@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 export function VideoToAppLauncher({ className }: { className?: string }) {
   const [url, setUrl] = useState("")

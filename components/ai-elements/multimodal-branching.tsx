@@ -16,8 +16,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { PlusIcon, GitBranchIcon, CompareIcon, CheckCircleIcon } from 'lucide-react';
-import { cn } from '@/src/core/utils';
-import { multimodalClient } from '@/src/core/multimodal-client';
+import { cn } from '@/core/utils';
+import { multimodalClient } from '@/core/multimodal-client';
 
 export interface AnalysisBranch {
   id: string;

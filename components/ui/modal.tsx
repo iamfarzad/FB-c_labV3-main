@@ -18,7 +18,7 @@ import {
   DrawerFooter,
 } from "@/components/ui/drawer"
 import { useIsMobile } from "./use-mobile"
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 interface ModalProps {
   isOpen: boolean

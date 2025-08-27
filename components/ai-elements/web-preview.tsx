@@ -16,7 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { cn } from '@/src/core/utils';
+import { cn } from '@/core/utils';
 
 export type WebPreviewContextValue = {
   url: string;

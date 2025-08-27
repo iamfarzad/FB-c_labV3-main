@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Activity, MessageSquare, User, Zap, Clock, MapPin, Globe } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { supabase } from '@/src/services/storage/supabase'
+import { supabase } from '@/services/storage/supabase'
 
 interface RealTimeActivityItem {
   id: string

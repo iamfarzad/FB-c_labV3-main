@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
-import { createOptimizedConfig } from "@/src/core/gemini-config-enhanced"
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { createOptimizedConfig } from "@/core/gemini-config-enhanced"
+import { getSupabaseStorage } from '@/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 

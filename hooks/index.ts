@@ -12,7 +12,7 @@ export type {
   MediaMetadata,
   MediaCaptureOptions,
   MediaPlaybackOptions,
-} from '@/src/services/media';
+} from '@/services/media';
 
 // Re-export uploader types
 export type {

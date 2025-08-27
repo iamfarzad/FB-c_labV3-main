@@ -1,7 +1,7 @@
-import { chatService } from '@/src/core/chat/service'
-import { sseFromAsyncIterable } from '@/src/core/stream/sse'
-import { chatRequestSchema } from '@/src/core/validation'
-import type { ChatRequest } from '@/src/core/types/chat'
+import { chatService } from '@/core/chat/service'
+import { sseFromAsyncIterable } from '@/core/stream/sse'
+import { chatRequestSchema } from '@/core/validation'
+import type { ChatRequest } from '@/core/types/chat'
 
 export async function handleChat(body: unknown) {
   // Validate request using new validation schema

@@ -207,7 +207,7 @@ function checkContrastRatio(): number {
  * USAGE GUIDELINES:
  *
  * ✅ CORRECT USAGE:
- * import { setTheme, getCurrentTheme } from '@/src/core/theme/setTheme'
+ * import { setTheme, getCurrentTheme } from '@/core/theme/setTheme'
  *
  * // Initialize on app start
  * useEffect(() => {

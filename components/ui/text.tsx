@@ -1,4 +1,4 @@
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 import { HTMLAttributes } from "react"
 
 interface TextProps extends HTMLAttributes<HTMLParagraphElement> {

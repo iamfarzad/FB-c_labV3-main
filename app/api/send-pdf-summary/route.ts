@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { generatePdfWithPuppeteer, generatePdfPath } from '@/core/pdf-generator-puppeteer'
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/services/storage/supabase'
 import fs from 'fs'
 
 export const dynamic = 'force-dynamic'

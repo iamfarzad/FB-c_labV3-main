@@ -1,4 +1,4 @@
-import { getSupabaseStorage } from '@/src/services/storage/supabase'
+import { getSupabaseStorage } from '@/services/storage/supabase'
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
@@ -71,7 +71,7 @@ export async function POST(
     }
 
     // Perform new grounded search
-    const { GroundedSearchService } = await import('@/src/core/grounded-search-service')
+    const { GroundedSearchService } = await import('@/core/grounded-search-service')
     const groundedSearchService = new GroundedSearchService()
     
     const searchResults = await groundedSearchService.searchLead({

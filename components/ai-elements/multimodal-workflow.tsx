@@ -18,7 +18,7 @@ import {
   ArrowRightIcon,
   SettingsIcon
 } from 'lucide-react';
-import { cn } from '@/src/core/utils';
+import { cn } from '@/core/utils';
 
 // Import our new components
 import { WebPreviewAnalysis } from './web-preview-analysis';

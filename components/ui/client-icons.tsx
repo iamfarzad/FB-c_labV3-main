@@ -1,7 +1,7 @@
 'use client'
 
 // Client-side icon components to avoid SSR issues with Phosphor Icons
-import { Brain, Zap, Sparkles, Target } from "@/src/core/icon-mapping"
+import { Brain, Zap, Sparkles, Target } from "@/core/icon-mapping"
 
 export const ClientBrain = Brain
 export const ClientZap = Zap

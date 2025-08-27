@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from '@/src/core/auth'
+import { verifyToken } from '@/core/auth'
 
 export async function authMiddleware(request: NextRequest): Promise<NextResponse | null> {
   const authHeader = request.headers.get('Authorization');
@@ -69,4 +69,4 @@ export async function adminAuthMiddleware(request: NextRequest): Promise<NextRes
 }
 
 // Re-export getCurrentUser from core for convenience in middleware
-export { getCurrentUser } from '@/src/core/auth'
+export { getCurrentUser } from '@/core/auth'

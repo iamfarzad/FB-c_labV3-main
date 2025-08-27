@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
-import { handleChat } from '@/src/api/chat/handler'
-import type { ChatRequest } from '@/src/core/types/chat'
+import { handleChat } from '@/api/chat/handler'
+import type { ChatRequest } from '@/core/types/chat'
 
 export async function POST(req: NextRequest) {
   try {

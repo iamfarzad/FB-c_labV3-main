@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Video, Sparkles, Loader2, Link, X } from "@/src/core/icon-mapping"
-import { cn } from '@/src/core/utils'
+import { Video, Sparkles, Loader2, Link, X } from "@/core/icon-mapping"
+import { cn } from '@/core/utils'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"

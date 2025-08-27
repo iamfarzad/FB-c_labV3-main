@@ -1,7 +1,7 @@
 'use client'
 import React, { useMemo } from 'react'
 import { ICONS, STATUS_STYLES, ActivityStatus, ActivityType } from './constants'
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 export type ActivityItem = {
   id: string

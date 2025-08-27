@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { supabase } from '@/src/services/storage/supabase'
-import type { ActivityItem } from "@/src/core/types/chat"
+import { supabase } from '@/services/storage/supabase'
+import type { ActivityItem } from "@/core/types/chat"
 
 export function useRealTimeActivities() {
   const [activities, setActivities] = useState<ActivityItem[]>([])

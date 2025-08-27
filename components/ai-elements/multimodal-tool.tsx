@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from './tool';
-import { multimodalClient } from '@/src/core/multimodal-client';
+import { multimodalClient } from '@/core/multimodal-client';
 import type { ToolUIPart } from 'ai';
 
 // Extended tool types for multimodal integration

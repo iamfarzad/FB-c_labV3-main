@@ -4,8 +4,8 @@ import * as React from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
-import { Plus, FileText, ImageIcon, Camera, Monitor, Calculator, Video } from "@/src/core/icon-mapping"
-import { cn } from '@/src/core/utils'
+import { Plus, FileText, ImageIcon, Camera, Monitor, Calculator, Video } from "@/core/icon-mapping"
+import { cn } from '@/core/utils'
 
 export interface ToolMenuProps {
   onUploadDocument?: () => void

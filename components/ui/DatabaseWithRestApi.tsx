@@ -3,7 +3,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { Folder, HeartHandshake, Sparkles } from "lucide-react"
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 
 interface DatabaseWithRestApiProps {
   className?: string

@@ -37,7 +37,7 @@ export const testConfig = {
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/$1',
       '^@/components/(.*)$': '<rootDir>/components/$1',
-      '^@/src/(.*)$': '<rootDir>/src/$1',
+      '^@/(.*)$': '<rootDir>/src/$1',
       '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
       '^@/types/(.*)$': '<rootDir>/types/$1',
       '^@/utils/(.*)$': '<rootDir>/src/core/utils/$1',

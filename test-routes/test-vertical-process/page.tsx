@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { VerticalProcessChain } from '@/components/chat/activity/VerticalProcessChain'
 // Using regular VerticalProcessChain - fixed positioning handled via CSS
-import type { ActivityItem } from '@/src/core/types/chat'
+import type { ActivityItem } from '@/core/types/chat'
 
 export default function TestVerticalProcessPage() {
   const [activities, setActivities] = useState<ActivityItem[]>([])

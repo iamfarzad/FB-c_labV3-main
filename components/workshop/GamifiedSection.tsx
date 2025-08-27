@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ProgressTracker } from "@/components/experience/progress-tracker"
-import { cn } from '@/src/core/utils'
+import { cn } from '@/core/utils'
 import type { WorkshopModule, WorkshopStep } from "./education-modules"
 import { QuizQuestion } from "./education-modules"
 import { useToast } from "@/components/ui/use-toast"

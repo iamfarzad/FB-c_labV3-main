@@ -7,7 +7,7 @@ import ReactMarkdown, { type Options } from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import { cn } from '@/src/core/utils';
+import { cn } from '@/core/utils';
 import 'katex/dist/katex.min.css';
 import hardenReactMarkdown from 'harden-react-markdown';
 

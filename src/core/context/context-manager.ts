@@ -1,4 +1,4 @@
-import { ContextStorage } from '@/src/core/context/context-storage'
+import { ContextStorage } from '@/core/context/context-storage'
 
 export async function getMergedContext(sessionId: string) {
   const storage = new ContextStorage()
@@ -17,7 +17,7 @@ export async function getMergedContext(sessionId: string) {
   return snapshot
 }
 
-import { getSupabase } from '@/src/core/supabase/server'
+import { getSupabase } from '@/core/supabase/server'
 import { ContextSnapshotSchema, type ContextSnapshot } from './context-schema'
 
 export async function getContextSnapshot(sessionId: string): Promise<ContextSnapshot | null> {

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { WebcamCaptureSchema } from '@/src/core/services/tool-service'
-import { isMockEnabled } from '@/src/core/mock-control'
-import { recordCapabilityUsed } from '@/src/core/context/capabilities'
+import { WebcamCaptureSchema } from '@/core/services/tool-service'
+import { isMockEnabled } from '@/core/mock-control'
+import { recordCapabilityUsed } from '@/core/context/capabilities'
 import { GoogleGenAI } from '@google/genai'
-import { createOptimizedConfig } from '@/src/core/gemini-config-enhanced'
-import { selectModelForFeature, estimateTokens } from '@/src/core/model-selector'
-import { enforceBudgetAndLog } from '@/src/core/token-usage-logger'
-import { checkDemoAccess, DemoFeature } from '@/src/core/demo-budget-manager'
-import { multimodalContextManager } from '@/src/core/context/multimodal-context'
+import { createOptimizedConfig } from '@/core/gemini-config-enhanced'
+import { selectModelForFeature, estimateTokens } from '@/core/model-selector'
+import { enforceBudgetAndLog } from '@/core/token-usage-logger'
+import { checkDemoAccess, DemoFeature } from '@/core/demo-budget-manager'
+import { multimodalContextManager } from '@/core/context/multimodal-context'
 
 export async function POST(req: NextRequest) {
   try {
