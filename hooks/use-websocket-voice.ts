@@ -476,7 +476,7 @@ export function useWebSocketVoice(): WebSocketVoiceHook {
             const stateText = currentState !== undefined
               ? ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED'][currentState]
               : 'UNKNOWN';
-            console.log(`WebSocket state changed to: ${stateName}`);
+            // Log removed
             lastState = currentState;
           }
 

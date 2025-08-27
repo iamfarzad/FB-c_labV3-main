@@ -125,7 +125,7 @@ export function measureThemeSwitch(): Promise<number> {
       requestAnimationFrame(() => {
         const end = performance.now()
         const duration = end - start
-        console.log(`Theme switch (${currentTheme} → ${nextTheme}) took: ${duration.toFixed(2)}ms`)
+        // Log removed took: ${duration.toFixed(2)}ms`)
 
         // Switch back for the demo
         setTheme(currentTheme)

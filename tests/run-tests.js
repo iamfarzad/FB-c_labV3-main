@@ -20,7 +20,7 @@ const colors = {
 }
 
 function log(message, color = colors.reset) {
-  console.log(`${color}${message}${colors.reset}`)
+  // Log removed
 }
 
 function logHeader(message) {

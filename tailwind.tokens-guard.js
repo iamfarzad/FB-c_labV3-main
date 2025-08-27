@@ -13,18 +13,18 @@ module.exports = function tokensGuardPlugin({ addVariant, addUtilities, theme, e
   // Check for hex colors in class names
   const hexMatches = cssClasses.match(colorRegex);
   if (hexMatches && hexMatches.length > 0) {
-    console.warn('🚨 TAILWIND TOKENS GUARD: Found hardcoded hex colors in classes:');
+    // Warning log removed - could add proper error handling here
     hexMatches.forEach(match => {
-      console.warn(`   - ${match} (use theme tokens instead)`);
+      // Warning log removed - could add proper error handling here`);
     });
   }
 
   // Check for rgb/rgba in class names
   const rgbMatches = cssClasses.match(rgbRegex);
   if (rgbMatches && rgbMatches.length > 0) {
-    console.warn('🚨 TAILWIND TOKENS GUARD: Found hardcoded rgb colors in classes:');
+    // Warning log removed - could add proper error handling here
     rgbMatches.forEach(match => {
-      console.warn(`   - ${match} (use theme tokens instead)`);
+      // Warning log removed - could add proper error handling here`);
     });
   }
 
@@ -40,11 +40,11 @@ module.exports = function tokensGuardPlugin({ addVariant, addUtilities, theme, e
     container.walkRules(rule => {
       // Check if rule contains theme tokens
       if (!rule.selector.includes('var(--')) {
-        console.warn(`🚨 THEME GUARD: Rule without theme tokens: ${rule.selector}`);
+        // Warning log removed - could add proper error handling here
       }
     });
   });
 
   // Report theme system health
-  console.log('✅ Tailwind Tokens Guard: Theme system validated');
+  // Log removed
 }

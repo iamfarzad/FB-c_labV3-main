@@ -53,7 +53,7 @@ function processFile(filePath) {
 
     if (modified) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`✅ Fixed types in: ${filePath}`);
+      // Log removed
     }
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
@@ -85,16 +85,16 @@ function findTypeScriptFiles(dir) {
 // Main execution
 if (require.main === module) {
   const projectRoot = path.resolve(__dirname, '..');
-  console.log('🔧 Starting TypeScript \'any\' type fixes...');
+  // Log removed
 
   // Find TypeScript files
   const files = findTypeScriptFiles(projectRoot);
 
-  console.log(`Found ${files.length} TypeScript files to process`);
+  // Log removed
 
   files.forEach(processFile);
 
-  console.log('✅ TypeScript \'any\' type fixes complete!');
+  // Log removed
 }
 
 module.exports = { processFile, findTypeScriptFiles };

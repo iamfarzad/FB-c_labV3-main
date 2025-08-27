@@ -7,6 +7,9 @@ import { AdminSidebar } from "./layout/AdminSidebar"
 import { OverviewSection } from "./sections/OverviewSection"
 import { EmailCampaignManager } from "./EmailCampaignManager"
 import { LeadsList } from "./LeadsList"
+import { ConversationsList } from "./ConversationsList"
+import { FailedConversationsList } from "./FailedConversationsList"
+import { SecurityAuditDashboard } from "./SecurityAuditDashboard"
 import { InteractionAnalytics } from "./InteractionAnalytics"
 import { AIPerformanceMetrics } from "./AIPerformanceMetrics"
 import { RealTimeActivity } from "./RealTimeActivity"
@@ -29,11 +32,16 @@ import {
   Search,
   Filter,
   Download,
+  MessageSquare,
+  AlertCircle,
+  Shield,
 } from "lucide-react"
 
 type DashboardSection =
   | "overview"
   | "leads"
+  | "conversations"
+  | "failed-leads"
   | "meetings"
   | "emails"
   | "costs"
@@ -41,10 +49,13 @@ type DashboardSection =
   | "ai-performance"
   | "activity"
   | "ai-assistant"
+  | "security"
 
 const navigationItems = [
   { id: "overview", label: "Overview", icon: Home, description: "System overview and key metrics" },
   { id: "leads", label: "Leads", icon: Users, description: "Lead management and scoring" },
+  { id: "conversations", label: "Conversations", icon: MessageSquare, description: "View all lead conversations with research data" },
+  { id: "failed-leads", label: "Failed Leads", icon: AlertCircle, description: "View failed email deliveries with full context" },
   { id: "meetings", label: "Meetings", icon: Calendar, description: "Meeting scheduling and tracking" },
   { id: "emails", label: "Emails", icon: Mail, description: "Email campaigns and automation" },
   { id: "costs", label: "Costs", icon: DollarSign, description: "AI usage and cost tracking" },
@@ -52,6 +63,7 @@ const navigationItems = [
   { id: "ai-performance", label: "AI Performance", icon: Zap, description: "AI model performance metrics" },
   { id: "activity", label: "Activity", icon: Activity, description: "Real-time system activity" },
   { id: "ai-assistant", label: "AI Assistant", icon: Brain, description: "AI-powered business intelligence" },
+  { id: "security", label: "Security Audit", icon: Shield, description: "Monitor data security and access controls" },
 ]
 
 export function AdminDashboard() {
@@ -63,6 +75,12 @@ export function AdminDashboard() {
         return <OverviewSection />
       case "leads":
         return <LeadsList searchTerm="" period="last_30_days" />
+      case "conversations":
+        return <ConversationsList searchTerm="" period="last_30_days" />
+      case "failed-leads":
+        return <FailedConversationsList />
+      case "security":
+        return <SecurityAuditDashboard />
       case "meetings":
         return <MeetingCalendar />
       case "emails":

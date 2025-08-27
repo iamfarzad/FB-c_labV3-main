@@ -1,6 +1,9 @@
 import { GoogleGenAI } from '@google/genai'
 import { GoogleGroundingProvider, GroundedAnswer } from './providers/search/google-grounding'
 import { recordCapabilityUsed } from '@/src/core/context/capabilities'
+import { supabaseService, createLeadSummary } from '@/src/core/supabase/client'
+import { finalizeLeadSession } from '../workflows/finalizeLeadSession'
+import type { LeadContext } from '../types/conversations'
 
 export interface ResearchResult {
   company: CompanyContext
@@ -41,6 +44,99 @@ export class LeadResearchService {
   constructor() {
     this.genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
     this.groundingProvider = new GoogleGroundingProvider()
+  }
+
+  /**
+   * Public method to persist research data to database
+   * Call this at session end to ensure data consistency for PDF/email services
+   */
+  async saveResearchToDatabase(
+    email: string,
+    name?: string,
+    companyUrl?: string,
+    sessionId?: string
+  ): Promise<string | null> {
+    try {
+      const researchResult = this.cache.get(this.generateCacheKey(email, name, companyUrl))
+      if (!researchResult) {
+        return null // No research data in cache
+      }
+
+      return await this.persistResearchToDatabase(email, name, companyUrl, researchResult, sessionId)
+    } catch (error) {
+      // Error: Failed to save research to database
+      return null
+    }
+  }
+
+  /**
+   * Complete session workflow - research, PDF generation, and email sending
+   * Call this when a lead conversation session ends
+   */
+  async completeSession(
+    email: string,
+    name?: string,
+    companyUrl?: string,
+    sessionId?: string
+  ): Promise<any> {
+    try {
+      // Get research data from cache
+      const researchResult = this.cache.get(this.generateCacheKey(email, name, companyUrl))
+      if (!researchResult) {
+        throw new Error('No research data found in cache')
+      }
+
+      // Generate summary from research data
+      const summary = this.generateSummaryFromResearch(researchResult)
+
+      // Prepare lead context for workflow
+      const leadContext: LeadContext = {
+        name: name || email.split('@')[0],
+        email,
+        summary,
+        leadScore: researchResult.confidence * 100,
+        researchJson: {
+          company: researchResult.company,
+          person: researchResult.person,
+          intelligence: {
+            keywords: researchResult.citations?.map(c => c.title).slice(0, 5) || [],
+            confidence: researchResult.confidence
+          },
+          session: {
+            id: sessionId,
+            stage: 'solution_presentation',
+            score: Math.round(researchResult.confidence * 100),
+            timestamp: new Date().toISOString()
+          }
+        }
+      }
+
+      // Execute the complete workflow
+      const result = await finalizeLeadSession(leadContext)
+
+      // Clear cache after successful completion
+      this.cache.delete(this.generateCacheKey(email, name, companyUrl))
+
+      return result
+    } catch (error) {
+      // Error: Session completion failed
+      throw error
+    }
+  }
+
+  /**
+   * Generate summary from research data
+   */
+  private generateSummaryFromResearch(research: ResearchResult): string {
+    const company = research.company
+    const person = research.person
+
+    return `Lead research completed for ${person.fullName || 'Unknown'} at ${company.name || 'Unknown Company'}.
+Company: ${company.industry || 'Unknown industry'}, ${company.size || 'Unknown size'}
+Role: ${research.role}
+Confidence: ${Math.round(research.confidence * 100)}%
+Key findings: ${company.summary || 'Analysis completed'}
+Citations: ${research.citations?.length || 0} sources reviewed`
   }
 
   async researchLead(email: string, name?: string, companyUrl?: string, sessionId?: string): Promise<ResearchResult> {
@@ -111,7 +207,8 @@ export class LeadResearchService {
       return researchResult
 
     } catch (error) {
-    console.error('Lead research failed', error)
+      // Log error for debugging (remove in production)
+      // Error: Lead research failed
 
       // Return fallback result
       const fallbackDomain = email.split('@')[1] || 'unknown.com'
@@ -285,5 +382,81 @@ Be thorough and accurate. If information is not available, use null for that fie
 
   private generateCacheKey(email: string, name?: string, companyUrl?: string): string {
     return `${email}|${name || ''}|${companyUrl || ''}`
+  }
+
+  /**
+   * Persist the full research data to database at session end
+   * This ensures PDF and email services have consistent data
+   */
+  async persistResearchToDatabase(
+    email: string,
+    name: string | undefined,
+    companyUrl: string | undefined,
+    researchResult: ResearchResult,
+    sessionId?: string
+  ): Promise<string> {
+    try {
+      // Create or update lead summary with research data
+      const leadData = {
+        email,
+        name: name || email.split('@')[0],
+        company: researchResult.company.name,
+        industry: researchResult.company.industry,
+        company_size: researchResult.company.size,
+        notes: `Research completed with ${researchResult.confidence * 100}% confidence. Role: ${researchResult.role}`,
+        status: 'qualified',
+        lead_score: Math.round(researchResult.confidence * 100),
+        user_id: null // Will be set by createLeadSummary
+      }
+
+      // Create the lead summary
+      const lead = await createLeadSummary(leadData)
+
+      // Store the full research JSON in search results for retrieval by PDF/email services
+      const researchRecord = {
+        lead_id: lead.id,
+        source: 'lead_research',
+        url: researchResult.company.website || researchResult.company.domain,
+        title: `Research Data for ${researchResult.person.fullName}`,
+        snippet: `Company: ${researchResult.company.name}, Role: ${researchResult.role}`,
+        raw: researchResult
+      }
+
+      await supabaseService
+        .from('lead_search_results')
+        .insert(researchRecord)
+
+      // Action logged
+      return lead.id
+    } catch (error) {
+      // Error: Failed to persist research data
+      throw error
+    }
+  }
+
+  /**
+   * Get persisted research data from database
+   * Used by PDF and email services
+   */
+  async getPersistedResearch(leadId: string): Promise<ResearchResult | null> {
+    try {
+      const { data, error } = await supabaseService
+        .from('lead_search_results')
+        .select('raw')
+        .eq('lead_id', leadId)
+        .eq('source', 'lead_research')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (error || !data?.raw) {
+        return null
+      }
+
+      return data.raw as ResearchResult
+    } catch (error) {
+      // Error: Failed to retrieve research data
+      return null
+    }
   }
 }

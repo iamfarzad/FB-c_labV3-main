@@ -1,5 +1,5 @@
 // Test script to check CSS variables and actual colors
-console.log('=== CSS Variables Check ===');
+// Log removed
 
 // Get the root element
 const root = document.documentElement;
@@ -32,27 +32,27 @@ const brandColors = [
   '--color-light-silver'
 ];
 
-console.log('Brand Colors:');
+// Log removed
 brandColors.forEach(colorVar => {
   const value = getCSSVar(colorVar);
-  console.log(`${colorVar}: ${value}`);
+  // Log removed
 
   // If it's HSL, convert to hex for comparison
   if (value.includes('%')) {
     const hsl = value.split(' ').map(v => parseFloat(v));
     if (hsl.length === 3) {
       const hex = hslToHex(hsl[0], hsl[1], hsl[2]);
-      console.log(`  → Hex: ${hex}`);
+      // Log removed
     }
   }
 });
 
 // Check if dark mode is active
 const isDark = document.body.classList.contains('dark');
-console.log(`\nCurrent theme: ${isDark ? 'dark' : 'light'}`);
+// Log removed
 
 // Check some actual element colors
-console.log('\n=== Element Colors ===');
+// Log removed
 const testElements = [
   { selector: 'body', description: 'Body background' },
   { selector: 'h1, h2, h3', description: 'Headings' },
@@ -65,8 +65,8 @@ testElements.forEach(({ selector, description }) => {
   if (element) {
     const bgColor = getComputedStyle(element).backgroundColor;
     const textColor = getComputedStyle(element).color;
-    console.log(`${description}:`);
-    console.log(`  Background: ${bgColor}`);
-    console.log(`  Text: ${textColor}`);
+    // Log removed
+    // Log removed
+    // Log removed
   }
 });

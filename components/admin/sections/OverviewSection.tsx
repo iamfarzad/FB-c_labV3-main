@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { EmailTestPanel } from "@/components/admin/EmailTestPanel"
-import { Users, Calendar, Mail, DollarSign, Activity, TrendingUp, Zap, Plus } from "lucide-react"
+import { Users, Calendar, Mail, DollarSign, Activity, TrendingUp, Zap, Plus, MessageSquare, AlertCircle } from "lucide-react"
 import { BookCallButton } from '@/components/meeting/BookCallButton'
 
 const metrics = [
@@ -40,6 +40,22 @@ const metrics = [
     icon: DollarSign,
     color: "orange",
   },
+  {
+    title: "Conversations",
+    value: "156",
+    change: "+23%",
+    changeType: "positive",
+    icon: MessageSquare,
+    color: "indigo",
+  },
+  {
+    title: "Failed Deliveries",
+    value: "12",
+    change: "-5%",
+    changeType: "positive",
+    icon: AlertCircle,
+    color: "red",
+  },
 ]
 
 const quickActions = [
@@ -47,20 +63,26 @@ const quickActions = [
     title: "Add New Lead",
     description: "Capture a new lead",
     icon: Plus,
-    action: () => console.log('Action triggered'),
+    action: () => // Log removed,
   },
   // Button will be swapped at render to open MeetingOverlay
   {
     title: "Send Email",
     description: "Create email campaign",
     icon: Mail,
-    action: () => console.log('Action triggered'),
+    action: () => // Log removed,
   },
   {
     title: "View Analytics",
     description: "Check performance",
     icon: TrendingUp,
-    action: () => console.log('Action triggered'),
+    action: () => // Log removed,
+  },
+  {
+    title: "View Conversations",
+    description: "See all lead conversations",
+    icon: MessageSquare,
+    action: () => // Log removed,
   },
 ]
 
@@ -114,7 +136,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.log('Button clicked')}
+              onClick={() => // Log removed}
             >
               <Plus className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -140,7 +162,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.log('Button clicked')}
+              onClick={() => // Log removed}
             >
               <Mail className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">
@@ -153,7 +175,7 @@ export function OverviewSection() {
             <Button
               variant="outline"
               className="h-auto p-4 flex flex-col items-center gap-3 hover:bg-accent/5 bg-transparent border border-border/30 hover:border-accent/30"
-              onClick={() => console.log('Button clicked')}
+              onClick={() => // Log removed}
             >
               <TrendingUp className="w-6 h-6 text-muted-foreground" />
               <div className="text-center">

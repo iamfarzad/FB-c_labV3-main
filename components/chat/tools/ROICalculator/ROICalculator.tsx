@@ -134,6 +134,44 @@ export function ROICalculator({
     } finally { setIsRunning(false) }
   }
 
+  const resetForm = () => {
+    // Reset all form state
+    setCurrentStep("company-info")
+    setFormData({
+      initialInvestment: 5000,
+      monthlyRevenue: 10000,
+      monthlyExpenses: 6500,
+      timePeriod: 12
+    })
+    setCompanyInfo({
+      companySize: defaults?.companySize || "",
+      industry: defaults?.industry || "",
+      useCase: defaults?.useCase || ""
+    })
+    setLastHash(null)
+    setIsRunning(false)
+    setResult(null)
+
+    // Clear localStorage cache
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(cacheKey)
+        // Clear any other cached results that might exist
+        const keys = Object.keys(localStorage).filter(key => key.startsWith('fbc:roi:'))
+        keys.forEach(key => localStorage.removeItem(key))
+      } catch {}
+    }
+
+    // Reset progress tracker (exploredCount = 0)
+    if (typeof window !== 'undefined') {
+      try {
+        window.dispatchEvent(new CustomEvent('roi-reset'))
+      } catch {}
+    }
+
+    toast({ title: "Form Reset", description: "All fields have been cleared. Start fresh!" })
+  }
+
   const renderStep = () => {
     switch (currentStep) {
       case "company-info":
@@ -388,6 +426,9 @@ export function ROICalculator({
             )}
             <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isRunning} onClick={() => handleCalculate(false)}>
               Re-run Analysis
+            </Button>
+            <Button variant="outline" className="w-full" onClick={resetForm} disabled={isRunning}>
+              Reset Form
             </Button>
             {onCancel && (
               <Button variant="ghost" className="w-full" onClick={onCancel}>

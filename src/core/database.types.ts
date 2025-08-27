@@ -244,8 +244,193 @@ export interface Database {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          id: string
+          name: string | null
+          email: string | null
+          summary: string | null
+          lead_score: number | null
+          research_json: Json | null
+          pdf_url: string | null
+          email_status: string | null
+          email_retries: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          name?: string | null
+          email?: string | null
+          summary?: string | null
+          lead_score?: number | null
+          research_json?: Json | null
+          pdf_url?: string | null
+          email_status?: string | null
+          email_retries?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string | null
+          email?: string | null
+          summary?: string | null
+          lead_score?: number | null
+          research_json?: Json | null
+          pdf_url?: string | null
+          email_status?: string | null
+          email_retries?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      failed_emails: {
+        Row: {
+          id: string
+          conversation_id: string
+          failed_at: string
+          failure_reason: string | null
+          retries: number
+          email_content: Json | null
+          recipient_email: string
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          failed_at?: string
+          failure_reason?: string | null
+          retries?: number
+          email_content?: Json | null
+          recipient_email: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          failed_at?: string
+          failure_reason?: string | null
+          retries?: number
+          email_content?: Json | null
+          recipient_email?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "failed_emails_conversation_id_fkey"
+            columns: ["conversation_id"]
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      admin_conversations: {
+        Row: {
+          id: string
+          conversation_id: string | null
+          admin_id: string | null
+          session_id: string
+          message_type: 'user' | 'assistant' | 'system'
+          message_content: string
+          message_metadata: Json | null
+          embeddings: number[] | null
+          context_leads: string[] | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          conversation_id?: string | null
+          admin_id?: string | null
+          session_id: string
+          message_type: 'user' | 'assistant' | 'system'
+          message_content: string
+          message_metadata?: Json | null
+          embeddings?: number[] | null
+          context_leads?: string[] | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          conversation_id?: string | null
+          admin_id?: string | null
+          session_id?: string
+          message_type?: 'user' | 'assistant' | 'system'
+          message_content?: string
+          message_metadata?: Json | null
+          embeddings?: number[] | null
+          context_leads?: string[] | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_conversations_conversation_id_fkey"
+            columns: ["conversation_id"]
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      admin_sessions: {
+        Row: {
+          id: string
+          admin_id: string | null
+          session_name: string | null
+          last_activity: string | null
+          context_summary: string | null
+          is_active: boolean
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          admin_id?: string | null
+          session_name?: string | null
+          last_activity?: string | null
+          context_summary?: string | null
+          is_active?: boolean
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          admin_id?: string | null
+          session_name?: string | null
+          last_activity?: string | null
+          context_summary?: string | null
+          is_active?: boolean
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
+      failed_conversations: {
+        Row: {
+          failed_id: string | null
+          failed_at: string | null
+          retries: number | null
+          failure_reason: string | null
+          conversation_id: string | null
+          name: string | null
+          email: string | null
+          summary: string | null
+          lead_score: number | null
+          research_json: Json | null
+          pdf_url: string | null
+          email_status: string | null
+          conversation_created_at: string | null
+        }
+        Relationships: []
+      }
       daily_token_usage: {
         Row: {
           user_id: string | null

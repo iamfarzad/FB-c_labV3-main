@@ -86,7 +86,7 @@ export function VideoLearningToolClient({
                   sessionStorage.setItem(`video2app_${sessionId}`, JSON.stringify(data))
                 }
               }}
-              onAppGenerated={(url) => console.log('App generated:', url)}
+              onAppGenerated={(url) => // Log removed}
               className="h-full"
             />
           </div>
@@ -144,7 +144,7 @@ export function VideoLearningToolClient({
                   sessionStorage.setItem(`video2app_${sessionId}`, JSON.stringify(data))
                 }
               }}
-              onAppGenerated={(url) => console.log('App generated:', url)}
+              onAppGenerated={(url) => // Log removed}
               className="min-h-[600px]"
             />
           </CardContent>

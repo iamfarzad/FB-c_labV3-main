@@ -1,23 +1,37 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Loader2, User, Bot, Send, Brain, MessageSquare, 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+  Loader2, User, Bot, Send, Brain, MessageSquare,
   Lightbulb, Copy, Check, Clock, AlertCircle, Sparkles,
-  TrendingUp, Users, Calendar, Mail, DollarSign, Activity
+  TrendingUp, Users, Calendar, Mail, DollarSign, Activity,
+  Search, Eye, FileText, Download
 } from "lucide-react"
-import { useChat } from "@/hooks/useChat-ui"
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from '@/src/core/utils'
 
 interface AdminChatInterfaceProps {
   className?: string
+}
+
+interface Conversation {
+  id: string
+  name: string | null
+  email: string | null
+  summary: string | null
+  leadScore: number | null
+  researchJson: any
+  pdfUrl: string | null
+  emailStatus: string | null
+  createdAt: string | null
 }
 
 const QUICK_ACTIONS = [
@@ -26,6 +40,12 @@ const QUICK_ACTIONS = [
     description: "Analyze lead performance",
     icon: Users,
     prompt: "Analyze our recent leads and provide insights on conversion rates and scoring"
+  },
+  {
+    title: "Conversation Insights",
+    description: "Get conversation analysis",
+    icon: MessageSquare,
+    prompt: "Analyze recent conversations and provide insights on lead quality and engagement patterns"
   },
   {
     title: "Performance Review",
@@ -61,11 +81,15 @@ const QUICK_ACTIONS = [
 
 const SUGGESTED_PROMPTS = [
   "What are our top performing leads this month?",
+  "Analyze recent conversations and identify patterns",
   "Draft a follow-up email for qualified leads",
+  "Review conversation quality and lead scoring trends",
   "Analyze our meeting conversion rates",
   "Suggest cost optimization strategies",
   "Review our AI response accuracy",
-  "What insights can you provide about user engagement?"
+  "What insights can you provide about user engagement?",
+  "Generate conversation insights for a specific lead",
+  "Analyze PDF generation success rates"
 ]
 
 export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
@@ -74,30 +98,194 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-    const {
-    messages,
-    isLoading, 
-    error,
-    send: sendMessage,
-    clear: clearMessages
-  } = useChat({ 
-    mode: 'admin',
-    onFinish: (message) => {
+  // Conversation context state
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+  const [conversationContext, setConversationContext] = useState<string>("")
+  const [showConversationSelector, setShowConversationSelector] = useState(false)
+
+    const [messages, setMessages] = useState<Array<{role: 'user' | 'assistant', content: string, timestamp: Date}>>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [input, setInput] = useState('')
+  const [currentSessionId, setCurrentSessionId] = useState<string>('')
+  const [adminId] = useState<string>('admin') // In production, get from auth context
+
+  // Initialize session on mount
+  useEffect(() => {
+    const initializeSession = async () => {
+      const sessionId = `admin-session-${Date.now()}`
+      setCurrentSessionId(sessionId)
+
+      try {
+        await fetch('/api/admin/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId,
+            adminId,
+            sessionName: `Admin Session ${new Date().toLocaleDateString()}`
+          })
+        })
+      } catch (error) {
+        console.error('Failed to initialize session:', error)
+      }
+    }
+
+    initializeSession()
+  }, [adminId])
+
+  // Load conversations from API
+  const loadConversations = async () => {
+    try {
+      const response = await fetch('/api/admin/conversations?period=last_30_days')
+      if (response.ok) {
+        const data = await response.json()
+        setConversations(data)
+      }
+    } catch (error) {
+      console.error('Failed to load conversations:', error)
+    }
+  }
+
+  // Build conversation context for AI
+  const buildConversationContext = (conversation: Conversation): string => {
+    const research = conversation.researchJson
+    const company = research?.company || {}
+    const person = research?.person || {}
+    const intelligence = research?.intelligence || {}
+
+    return `
+CONVERSATION CONTEXT:
+Lead: ${conversation.name || 'Unknown'} (${conversation.email})
+Lead Score: ${conversation.leadScore}/100
+Summary: ${conversation.summary || 'No summary available'}
+
+COMPANY RESEARCH:
+- Name: ${company.name || 'Unknown'}
+- Industry: ${company.industry || 'Unknown'}
+- Website: ${company.website || 'Unknown'}
+- Size: ${company.size || 'Unknown'}
+- Summary: ${company.summary || 'No company summary'}
+
+PERSON RESEARCH:
+- Name: ${person.fullName || 'Unknown'}
+- Role: ${person.role || 'Unknown'}
+- Seniority: ${person.seniority || 'Unknown'}
+- LinkedIn: ${person.profileUrl || 'Unknown'}
+
+INTELLIGENCE:
+- Confidence: ${intelligence.confidence || 0}%
+- Keywords: ${intelligence.keywords?.join(', ') || 'None'}
+- HQ: ${intelligence.hq || 'Unknown'}
+
+DELIVERY STATUS:
+- PDF Generated: ${conversation.pdfUrl ? 'Yes' : 'No'}
+- Email Status: ${conversation.emailStatus || 'Pending'}
+- Email Retries: ${conversation.emailRetries || 0}
+    `.trim()
+  }
+
+  // Handle conversation selection
+  const handleConversationSelect = (conversation: Conversation) => {
+    setSelectedConversation(conversation)
+    setConversationContext(buildConversationContext(conversation))
+    setShowConversationSelector(false)
+    toast({
+      title: "Conversation Loaded",
+      description: `Context loaded for ${conversation.name || conversation.email}`,
+    })
+  }
+
+  // Enhanced send message with conversation context using persistent storage
+  const sendMessageWithContext = async (message: string) => {
+    if (!currentSessionId) {
+      setError('No active session. Please refresh and try again.')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    // Add user message to local state immediately for better UX
+    const userMessage = {
+      role: 'user' as const,
+      content: message,
+      timestamp: new Date()
+    }
+    setMessages(prev => [...prev, userMessage])
+
+    try {
+      const conversationIds = selectedConversation ? [selectedConversation.id] : []
+
+      const response = await fetch('/api/admin/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          sessionId: currentSessionId,
+          conversationIds,
+          adminId
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to send message')
+      }
+
+      const data = await response.json()
+
+      // Add AI response to local state
+      const assistantMessage = {
+        role: 'assistant' as const,
+        content: data.response,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, assistantMessage])
+
+      // Show success toast
       toast({
         title: "AI Analysis Complete",
-        description: "Insights generated based on current dashboard data",
+        description: `Response generated${data.leadsReferenced > 0 ? ` with ${data.leadsReferenced} lead(s) referenced` : ''}`,
       })
-    },
-    onError: (error) => {
+
+    } catch (error: any) {
+      console.error('Failed to send message:', error)
+      setError(error.message || 'Failed to send message')
+
+      // Add error message to chat
+      const errorMessage = {
+        role: 'assistant' as const,
+        content: `I apologize, but I encountered an error: ${error.message || 'Unknown error'}. Please try again.`,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+
       toast({
-        title: "Analysis Error",
-        description: error.message,
+        title: "Message Error",
+        description: error.message || 'Failed to send message',
         variant: "destructive"
       })
+    } finally {
+      setIsLoading(false)
     }
-  })
+  }
 
-  const [input, setInput] = useState('')
+  // Clear messages from current session
+  const clearMessages = async () => {
+    setMessages([])
+    setError(null)
+    toast({
+      title: "Chat Cleared",
+      description: "Conversation history cleared from this session",
+    })
+  }
+
+  // Load conversations on mount
+  useEffect(() => {
+    loadConversations()
+  }, [])
   
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -106,7 +294,7 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim() && !isLoading) {
-      await sendMessage(input.trim())
+      await sendMessageWithContext(input.trim())
       setInput('')
     }
   }
@@ -121,12 +309,12 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
 
   const handleQuickAction = async (prompt: string) => {
     setInput(prompt)
-    await sendMessage(prompt)
+    await sendMessageWithContext(prompt)
   }
 
   const handleSuggestedPrompt = async (prompt: string) => {
     setInput(prompt)
-    await sendMessage(prompt)
+    await sendMessageWithContext(prompt)
   }
 
   const copyMessage = async (content: string, messageId: string) => {
@@ -173,6 +361,97 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
             <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
             Connected
           </Badge>
+
+          {/* Conversation Context Selector */}
+          <Dialog open={showConversationSelector} onOpenChange={setShowConversationSelector}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs gap-1"
+              >
+                <MessageSquare className="w-3 h-3" />
+                {selectedConversation ? 'Change Context' : 'Load Conversation'}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[70vh]">
+              <DialogHeader>
+                <DialogTitle>Select Conversation Context</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 max-h-[50vh] overflow-y-auto">
+                {conversations.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No conversations found. Try refreshing or check if conversations are being saved.
+                  </div>
+                ) : (
+                  conversations.map((conversation) => {
+                    const researchData = conversation.researchJson
+                    const company = researchData?.company || {}
+                    const person = researchData?.person || {}
+
+                    return (
+                      <Card
+                        key={conversation.id}
+                        className={cn(
+                          "cursor-pointer transition-colors hover:bg-muted/50",
+                          selectedConversation?.id === conversation.id && "ring-2 ring-primary"
+                        )}
+                        onClick={() => handleConversationSelect(conversation)}
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h4 className="font-medium">
+                                  {conversation.name || conversation.email || 'Unknown Lead'}
+                                </h4>
+                                <Badge variant="outline" className="text-xs">
+                                  {conversation.leadScore || 0}/100
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {company.name || 'Unknown Company'} • {person.role || 'Unknown Role'}
+                              </p>
+                              <p className="text-xs text-muted-foreground line-clamp-2">
+                                {conversation.summary || 'No summary available'}
+                              </p>
+                            </div>
+                            <div className="text-right text-xs text-muted-foreground">
+                              <div className="flex items-center gap-1 mb-1">
+                                {conversation.pdfUrl ? (
+                                  <Check className="w-3 h-3 text-green-500" />
+                                ) : (
+                                  <Clock className="w-3 h-3 text-yellow-500" />
+                                )}
+                                PDF
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {conversation.emailStatus === 'sent' ? (
+                                  <Check className="w-3 h-3 text-green-500" />
+                                ) : conversation.emailStatus === 'failed' ? (
+                                  <AlertCircle className="w-3 h-3 text-red-500" />
+                                ) : (
+                                  <Clock className="w-3 h-3 text-yellow-500" />
+                                )}
+                                Email
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )
+                  })
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {selectedConversation && (
+            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+              {selectedConversation.name || selectedConversation.email}
+            </Badge>
+          )}
+
           {messages.length > 0 && (
             <Button
               variant="outline"
@@ -185,6 +464,20 @@ export function AdminChatInterface({ className }: AdminChatInterfaceProps) {
           )}
         </div>
       </div>
+
+      {/* Conversation Context Display */}
+      {selectedConversation && conversationContext && (
+        <div className="px-4 py-2 bg-blue-50 border-b border-blue-200">
+          <div className="flex items-center gap-2 text-sm text-blue-700">
+            <MessageSquare className="w-4 h-4" />
+            <span className="font-medium">Conversation Context Active:</span>
+            <span>{selectedConversation.name || selectedConversation.email}</span>
+            <Badge variant="outline" className="text-xs">
+              {selectedConversation.leadScore}/100
+            </Badge>
+          </div>
+        </div>
+      )}
 
       {/* Quick Actions */}
       {messages.length === 0 && (

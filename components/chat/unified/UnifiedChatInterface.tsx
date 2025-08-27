@@ -273,7 +273,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                   <Suggestion 
                     key={`${message.id}-sug-${i}`} 
                     suggestion={suggestion} 
-                    onClick={() => console.log('Suggestion clicked')} 
+                    onClick={() => // Log removed} 
                   />
                 ))}
               </Suggestions>
@@ -301,7 +301,7 @@ const MessageComponent = memo<{ message: UnifiedMessage; isLast: boolean }>(
                 aria-label="Edit message"
                 variant="ghost"
                 size="sm"
-                onClick={() => console.log('Suggestion clicked')}
+                onClick={() => // Log removed}
               >
                 <Edit className="w-3 h-3" />
               </Action>

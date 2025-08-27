@@ -11,6 +11,7 @@ import { ConsentOverlay } from '@/components/ui/consent-overlay'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useChat } from '@/hooks/useChat-ui'
 import { useConversationalIntelligence } from '@/hooks/useConversationalIntelligence'
+import { useStage } from '@/contexts/stage-context'
 import { Message } from '@/src/core/types/chat'
 
 // Import VerticalProcessChain from the correct location
@@ -20,27 +21,36 @@ export default function ChatPage() {
   const [input, setInput] = useState('')
   const [openVoice, setOpenVoice] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const [stage, setStage] = useState('GREETING')
   const [activityLog, setActivityLog] = useState<any[]>([])
-  const [stageProgress, setStageProgress] = useState(0)
   const [showConsent, setShowConsent] = useState(false)
+  const [consentLoading, setConsentLoading] = useState(false)
+  const [hasValidConsent, setHasValidConsent] = useState(false)
 
-  // Stage progression configuration - using new standardized stages
-  const stages = [
-    { id: 'GREETING', label: 'Discovery & Setup', done: false, current: true },
-    { id: 'NAME_COLLECTION', label: 'Identity', done: false, current: false },
-    { id: 'EMAIL_CAPTURE', label: 'Consent & Context', done: false, current: false },
-    { id: 'BACKGROUND_RESEARCH', label: 'Research', done: false, current: false },
-    { id: 'PROBLEM_DISCOVERY', label: 'Requirements', done: false, current: false },
-    { id: 'SOLUTION_PRESENTATION', label: 'Solution', done: false, current: false },
-    { id: 'CALL_TO_ACTION', label: 'Next Step', done: false, current: false }
-  ]
+  // Use dynamic stage tracking
+  const {
+    stages,
+    currentStage,
+    nextStage,
+    completeStage,
+    getProgressPercentage
+  } = useStage()
 
   // Use the clean chat hook
-  const { messages, isLoading, error, send, clear } = useChat({ 
+  const { messages, isLoading, error, send, clear } = useChat({
     mode: 'public',
-            onError: (err) => { /* Chat error occurred */ },
-        onFinish: (msg) => { /* Message finished */ }
+    onError: (err) => {
+      // Error: Chat error occurred
+    },
+    onFinish: (msg) => {
+      // Auto-progress stages based on conversation flow
+      if (messages.length >= 2 && currentStage?.id === 'GREETING') {
+        nextStage() // Move from greeting to name collection
+      } else if (messages.length >= 6 && currentStage?.id === 'NAME_COLLECTION') {
+        nextStage() // Move to email capture
+      } else if (messages.length >= 10 && currentStage?.id === 'EMAIL_CAPTURE') {
+        nextStage() // Move to background research
+      }
+    }
   })
 
   // Intelligence system
@@ -57,6 +67,30 @@ export default function ChatPage() {
       const consentCookie = document.cookie.split(';').find(c => c.trim().startsWith('fbc-consent='))
       if (!consentCookie) {
         setShowConsent(true)
+        setHasValidConsent(false)
+        return
+      }
+
+      let validConsent = false
+      try {
+        const consentData = JSON.parse(decodeURIComponent(consentCookie.split('=')[1]))
+        if (consentData.allow && consentData.allowedDomains?.length > 0) {
+          validConsent = true
+          setHasValidConsent(true)
+        } else {
+          setShowConsent(true)
+          setHasValidConsent(false)
+          return
+        }
+      } catch {
+        // Invalid consent cookie, show consent overlay
+        setShowConsent(true)
+        setHasValidConsent(false)
+        return
+      }
+
+      // Only proceed with session initialization if we have valid consent
+      if (!validConsent) {
         return
       }
 
@@ -85,8 +119,14 @@ export default function ChatPage() {
   }, [])
 
   const handleSendMessage = async (message: string) => {
+    // Block messages until valid consent is given
+    if (!hasValidConsent) {
+      setShowConsent(true)
+      return
+    }
+
     setInput('')
-    
+
     // Add activity tracking
     const activityId = `activity-${Date.now()}`
     setActivityLog(prev => [...prev, {
@@ -137,7 +177,7 @@ export default function ChatPage() {
   }
 
   const handleConsentSubmit = async (data: { email: string; companyUrl: string }) => {
-    setShowConsent(false)
+    setConsentLoading(true)
 
     try {
       const response = await fetch('/api/consent', {
@@ -150,8 +190,17 @@ export default function ChatPage() {
         })
       })
 
-      if (response.ok) {
-        // Initialize session after consent
+      if (!response.ok) {
+        throw new Error(`Consent submission failed: ${response.status}`)
+      }
+
+      const consentResult = await response.json()
+
+      if (consentResult.ok) {
+        setHasValidConsent(true)
+        setShowConsent(false)
+
+        // Initialize session after successful consent
         const sessionResponse = await fetch('/api/intelligence/session-init', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -166,10 +215,19 @@ export default function ChatPage() {
           const sessionData = await sessionResponse.json()
           setSessionId(sessionData.sessionId)
           localStorage.setItem('intelligence-session-id', sessionData.sessionId)
+        } else {
+          console.error('Failed to initialize session after consent')
         }
+      } else {
+        throw new Error('Consent was not properly recorded')
       }
     } catch (error) {
       console.error('Consent submission failed:', error)
+      // Re-show consent overlay on error
+      setShowConsent(true)
+      setHasValidConsent(false)
+    } finally {
+      setConsentLoading(false)
     }
   }
 
@@ -283,8 +341,8 @@ export default function ChatPage() {
         <>
           <ConsentOverlay
             isVisible={showConsent}
-            onClose={() => setShowConsent(false)}
             onSubmit={handleConsentSubmit}
+            isLoading={consentLoading}
           />
           <VoiceOverlay
             open={openVoice}
