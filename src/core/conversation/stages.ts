@@ -11,4 +11,9 @@ export const StageInstructions: Record<string, string> = {
 export const STAGES = ['GREETING', 'INTENT', 'QUALIFY', 'ACTION'] as const
 export type Stage = typeof STAGES[number]
 
+export const STAGE_ORDER = ['GREETING', 'INTENT', 'QUALIFY', 'ACTION'] as const
+
+export function indexToStage(index: number): Stage {
+  return STAGES[index] || 'GREETING'
+}
 

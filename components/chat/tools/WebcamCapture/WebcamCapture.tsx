@@ -6,7 +6,7 @@ import { Camera, CameraOff, Mic, MicOff, Video, VideoOff, RotateCcw, Download, S
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { cn } from '@/src/core/utils'
 import type { WebcamCaptureProps, WebcamState, InputMode } from "./WebcamCapture.types"
 

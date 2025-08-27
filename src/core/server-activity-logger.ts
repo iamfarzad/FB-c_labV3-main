@@ -1,4 +1,4 @@
-import { getSupabase } from "@/src/core/supabase/server"
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import type { ActivityItem } from "@/src/core/types/chat"
 
 interface ServerActivityData {
@@ -15,7 +15,7 @@ interface ServerActivityData {
  */
 export async function logServerActivity(activityData: ServerActivityData): Promise<string> {
   try {
-    const serverSupabase = getSupabase()
+    const serverSupabase = getSupabaseStorage().getClient()
     
     const { data, error } = await serverSupabase
       .from("activities")

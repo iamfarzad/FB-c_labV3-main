@@ -1,6 +1,6 @@
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
-import { EmailService } from '@/src/services/email/resend'
-import { MeetingScheduler } from "@/src/services/meeting/meeting-scheduler"
+import { EmailService } from '@/src/core/email-service'
+import { MeetingScheduler } from "@/src/core/meeting-scheduler"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { recordCapabilityUsed } from "@/src/core/context/capabilities"

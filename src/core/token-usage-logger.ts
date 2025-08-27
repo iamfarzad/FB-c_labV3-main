@@ -3,7 +3,7 @@
  * Tracks AI model usage, costs, and enforces spending limits
  */
 
-import { getSupabase } from './supabase/server'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 import { createHash } from 'crypto'
 
 export interface TokenUsageLog {
@@ -46,7 +46,7 @@ export class TokenUsageLogger {
 
   async logTokenUsage(log: TokenUsageLog): Promise<void> {
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage().getClient()
       
       const { error } = await supabase
         .from('token_usage_logs')
@@ -77,7 +77,7 @@ export class TokenUsageLogger {
 
   async getUserPlanBudget(userId: string): Promise<UserPlanBudget | null> {
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage().getClient()
       
       // Get user's plan (default to demo plan if not found)
       const { data: userPlan } = await supabase
@@ -249,7 +249,7 @@ export class TokenUsageLogger {
     featureBreakdown: Record<string, { tokens: number; cost: number; requests: number }>
   }> {
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage().getClient()
       
       const now = new Date()
       let startDate: Date

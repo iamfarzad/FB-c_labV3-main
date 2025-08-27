@@ -48,51 +48,33 @@ module.exports = {
     // React specific rules
     'react/react-in-jsx-scope': 'off', // Not needed in Next.js
     'react/prop-types': 'off', // Using TypeScript for prop validation
+    'react/no-unescaped-entities': 'warn',
+    'react/jsx-uses-react': 'off',
+    'react/jsx-uses-vars': 'error',
+
+    // React Hooks rules
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
 
-    // General code quality rules
-    'no-console': 'warn', // Allow console in development
+    // Import rules
+    'import/no-unresolved': 'error',
+    'import/named': 'error',
+    'import/namespace': 'error',
+    'import/default': 'error',
+    'import/export': 'error',
+    'import/no-named-as-default': 'warn',
+    'import/no-named-as-default-member': 'warn',
+
+    // General rules
+    'no-console': 'warn',
     'no-debugger': 'error',
+    'no-unused-vars': 'off', // Turned off in favor of @typescript-eslint/no-unused-vars
     'prefer-const': 'error',
     'no-var': 'error',
-    'object-shorthand': 'warn',
-    'prefer-arrow-callback': 'warn',
-    'no-empty': 'warn',
-    'no-useless-catch': 'warn',
-    'no-control-regex': 'warn',
-    'no-useless-escape': 'warn',
-
-
-    // Next.js specific rules
-    '@next/next/no-html-link-for-pages': 'off', // Allow Link component
-
-    // Performance rules
-    'react/jsx-no-bind': ['warn', { allowArrowFunctions: true }],
   },
   settings: {
     react: {
       version: 'detect',
     },
-    'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true,
-      },
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
-    },
   },
-  ignorePatterns: [
-    'node_modules/',
-    '.next/',
-    'out/',
-    'build/',
-    'dist/',
-    'public/',
-    '*.config.js',
-    '*.config.ts',
-    'next-env.d.ts',
-    'tsconfig.tsbuildinfo',
-  ],
-};
+}

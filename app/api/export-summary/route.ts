@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getSupabaseStorage } from '@/src/services/storage/supabase';
-import { logServerActivity } from '@/src/core/monitoring/server-activity-logger';
+import { logServerActivity } from '@/src/core/server-activity-logger';
 import { generatePdfWithPuppeteer, generatePdfPath, sanitizeTextForPdf } from '@/src/core/pdf-generator-puppeteer';
 import fs from 'fs';
 import { recordCapabilityUsed } from '@/src/core/context/capabilities';

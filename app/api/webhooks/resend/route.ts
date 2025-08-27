@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getSupabaseStorage } from '@/src/services/storage/supabase'
-import { logServerActivity } from "@/src/core/monitoring/server-activity-logger"
+import { logServerActivity } from "@/src/core/server-activity-logger"
 
 // Webhook signature verification
 async function verifyWebhookSignature(payload: string, signature: string, secret: string): Promise<boolean> {

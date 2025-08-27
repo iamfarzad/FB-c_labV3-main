@@ -1,4 +1,4 @@
-import { getSupabase } from './supabase/server'
+import { getSupabaseStorage } from '@/src/services/storage/supabase'
 
 /**
  * Demo Budget Manager
@@ -76,7 +76,7 @@ export class DemoBudgetManager {
 
     // Try to load from database
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage().getClient()
       const { data: existingSession } = await supabase
         .from('demo_sessions')
         .select('*')
@@ -129,7 +129,7 @@ export class DemoBudgetManager {
 
     // Save to database
     try {
-      const supabase = getSupabase()
+      const supabase = getSupabaseStorage().getClient()
       await supabase.from('demo_sessions').insert({
         session_id: id,
         ip_address: ipAddress,
